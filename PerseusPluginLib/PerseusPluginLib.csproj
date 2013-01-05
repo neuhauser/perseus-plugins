@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5F1C1ABC-403D-4F96-A37D-B6CE1B791544}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PerseusPluginLib</RootNamespace>
+    <AssemblyName>PerseusPluginLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BasicLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\BasicLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Basic\CloneProcessing.cs" />
+    <Compile Include="Basic\ColumnCorrelations.cs" />
+    <Compile Include="Basic\CombineAnnotations.cs" />
+    <Compile Include="Basic\CombineByIdentifiersProcessing.cs" />
+    <Compile Include="Basic\CombineExpressionColumns.cs" />
+    <Compile Include="Basic\DensityEstimationProcessing.cs" />
+    <Compile Include="Basic\Quantiles.cs" />
+    <Compile Include="Basic\RowCorrelations.cs" />
+    <Compile Include="Basic\SummaryStatisticsColumns.cs" />
+    <Compile Include="Basic\SummaryStatisticsRows.cs" />
+    <Compile Include="Basic\TransformationProc.cs" />
+    <Compile Include="Combine\MatchingByName.cs" />
+    <Compile Include="Export\TabSeparatedExport.cs" />
+    <Compile Include="Impute\ReplaceMissingByConstant.cs" />
+    <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
+    <Compile Include="Load\GenericDataUpload.cs" />
+    <Compile Include="Load\PerseusLoadFileParam.cs" />
+    <Compile Include="Load\PerseusLoadFileParameterPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Load\PerseusLoadFileParameterPanel.Designer.cs" />
+    <Compile Include="Manual\MatrixDataTable.cs" />
+    <Compile Include="Manual\SelectRowsManually.cs" />
+    <Compile Include="Manual\SelectRowsManuallyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Manual\SelectRowsManuallyControl.Designer.cs" />
+    <Compile Include="Manual\SelectRowsManuallyResult.cs" />
+    <Compile Include="Rearrange\ChangeColumnType.cs" />
+    <Compile Include="Rearrange\ConvertMultiNumeric.cs" />
+    <Compile Include="Rearrange\ExpandMultiNumeric.cs" />
+    <Compile Include="Rearrange\RenameColumns.cs" />
+    <Compile Include="Rearrange\RenameColumnsRegexp.cs" />
+    <Compile Include="Rearrange\ReorderColumns.cs" />
+    <Compile Include="Filter\FilterCategoricalColumn.cs" />
+    <Compile Include="Filter\FilterNumericalColumn.cs" />
+    <Compile Include="Filter\FilterTextualColumn.cs" />
+    <Compile Include="Filter\FilterThreshold.cs" />
+    <Compile Include="PerseusPluginUtils.cs" />
+    <Compile Include="Filter\FilterValidValues.cs" />
+    <Compile Include="Norm\Divide.cs" />
+    <Compile Include="Norm\DivisionByColumn.cs" />
+    <Compile Include="Norm\Rank.cs" />
+    <Compile Include="Norm\ScaleToInterval.cs" />
+    <Compile Include="Norm\Subtract.cs" />
+    <Compile Include="Norm\SubtractColumn.cs" />
+    <Compile Include="Norm\SubtractRowCluster.cs" />
+    <Compile Include="Norm\UnitVector.cs" />
+    <Compile Include="Norm\WidthAdjustment.cs" />
+    <Compile Include="Norm\ZScore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Rearrange\SortByColumn.cs" />
+    <Compile Include="Rearrange\Transpose.cs" />
+    <Compile Include="Rearrange\UniqueValues.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PerseusApi\PerseusApi.csproj">
+      <Project>{E92A537F-69F8-47D1-81CD-F7292CC021D2}</Project>
+      <Name>PerseusApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Load\PerseusLoadFileParameterPanel.resx" />
+    <EmbeddedResource Include="Manual\SelectRowsManuallyControl.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\missingsButton.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sheepButton.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zscoreButton.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logButton.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trendline.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\density.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quantiles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\impute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\combineButton.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveGeneric.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\uploadGeneric.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
