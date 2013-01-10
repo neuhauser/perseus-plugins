@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
@@ -30,16 +33,66 @@ namespace PerseusPluginLib.Norm{
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
-			SingleChoiceParam access = param.GetSingleChoiceParam("Matrix access");
+			SingleChoiceWithSubParams access = param.GetSingleChoiceWithSubParams("Matrix access");
 			bool rows = access.Value == 0;
-			Zscore(rows, mdata);
+			int groupInd;
+			if (rows){
+				groupInd = access.GetSubParameters().GetSingleChoiceParam("Grouping").Value - 1;
+			} else{
+				groupInd = -1;
+			}
+			if (groupInd < 0){
+				Zscore(rows, mdata);
+			} else{
+				ZscoreGroups(mdata, groupInd);
+			}
+		}
+
+		private void ZscoreGroups(IMatrixData data, int groupInd){
+			string[][] catRow = data.CategoryRows[groupInd];
+			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
+			foreach (int[] inds in groupVals.Select(groupVal => GetIndices(catRow, groupVal))){
+				ZscoreGroup(data, inds);
+			}
+		}
+
+		private static void ZscoreGroup(IMatrixData data, IList<int> inds){
+			for (int i = 0; i < data.RowCount; i++) {
+				double[] vals = new double[inds.Count];
+				for (int j = 0; j < inds.Count; j++) {
+					double q = data[i, inds[j]];
+					vals[j] = q;
+				}
+				double stddev;
+				double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
+				foreach (int t in inds){
+					data[i, t] = (float)((data[i, t] - mean) / stddev);
+				}
+			}
+		}
+
+		private static int[] GetIndices(IList<string[]> catRow, string groupVal){
+			List<int> result = new List<int>();
+			for (int i = 0; i < catRow.Count; i++){
+				Array.Sort(catRow[i]);
+				if (Array.BinarySearch(catRow[i], groupVal) >= 0){
+					result.Add(i);
+				}
+			}
+			return result.ToArray();
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
 				new Parameters(new Parameter[]{
-					new SingleChoiceParam("Matrix access"){
+					new SingleChoiceWithSubParams("Matrix access"){
 						Values = new[]{"Rows", "Columns"},
+						SubParams =
+							new[]{
+								new Parameters(new SingleChoiceParam("Grouping")
+								{Values = ArrayUtils.Concat(new[]{"<No grouping>"}, mdata.CategoryRowNames)}),
+								new Parameters()
+							},
 						Help = "Specifies if the analysis is performed on the rows or the columns of the matrix."
 					}
 				});
