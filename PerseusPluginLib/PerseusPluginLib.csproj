@@ -59,7 +59,6 @@
     <Compile Include="Basic\RowCorrelations.cs" />
     <Compile Include="Basic\SummaryStatisticsColumns.cs" />
     <Compile Include="Basic\SummaryStatisticsRows.cs" />
-    <Compile Include="Basic\TransformationProc.cs" />
     <Compile Include="Combine\MatchingByName.cs" />
     <Compile Include="Export\TabSeparatedExport.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
