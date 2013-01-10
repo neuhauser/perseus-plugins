@@ -44,12 +44,18 @@ namespace PerseusPluginLib.Norm{
 			if (groupInd < 0){
 				Zscore(rows, mdata);
 			} else{
-				ZscoreGroups(mdata, groupInd);
+				string[][] catRow = mdata.CategoryRows[groupInd];
+				foreach (string[] t in catRow){
+					if (t.Length > 1){
+						processInfo.ErrString = "The groups are overlapping.";
+						return;
+					}
+				}
+				ZscoreGroups(mdata, catRow);
 			}
 		}
 
-		private void ZscoreGroups(IMatrixData data, int groupInd){
-			string[][] catRow = data.CategoryRows[groupInd];
+		private static void ZscoreGroups(IMatrixData data, IList<string[]> catRow) {
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
 			foreach (int[] inds in groupVals.Select(groupVal => GetIndices(catRow, groupVal))){
 				ZscoreGroup(data, inds);
