@@ -53,7 +53,6 @@
     <Compile Include="Basic\ColumnCorrelations.cs" />
     <Compile Include="Basic\CombineAnnotations.cs" />
     <Compile Include="Basic\CombineByIdentifiersProcessing.cs" />
-    <Compile Include="Basic\CombineExpressionColumns.cs" />
     <Compile Include="Basic\DensityEstimationProcessing.cs" />
     <Compile Include="Basic\Quantiles.cs" />
     <Compile Include="Basic\RowCorrelations.cs" />

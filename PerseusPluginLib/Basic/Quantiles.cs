@@ -12,7 +12,7 @@ namespace PerseusPluginLib.Basic{
 		public string Name { get { return "Quantiles"; } }
 		public string Heading { get { return "Basic"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return -7; } }
+		public float DisplayOrder { get { return -4; } }
 		public string HelpOutput { get { return "For each selected expression coulumn a categorical column is added containing the quantile information."; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }

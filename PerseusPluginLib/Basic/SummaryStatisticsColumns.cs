@@ -12,7 +12,7 @@ namespace PerseusPluginLib.Basic{
 		public string Name { get { return "Summary statistics (columns)"; } }
 		public string Heading { get { return "Basic"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return -8; } }
+		public float DisplayOrder { get { return -6; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }

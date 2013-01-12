@@ -44,7 +44,7 @@ namespace PerseusPluginLib.Basic{
 		public string Name { get { return "Summary statistics (rows)"; } }
 		public string Heading { get { return "Basic"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return -9; } }
+		public float DisplayOrder { get { return -5; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }

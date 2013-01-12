@@ -9,7 +9,7 @@ using PerseusPluginLib.Properties;
 namespace PerseusPluginLib.Basic{
 	public class DensityEstimationProcessing : IMatrixProcessing{
 		public string Name { get { return "Density estimation"; } }
-		public float DisplayOrder { get { return -6; } }
+		public float DisplayOrder { get { return -3; } }
 		public bool IsActive { get { return true; } }
 		public bool HasButton { get { return true; } }
 		public Image ButtonImage { get { return Resources.density_Image; } }

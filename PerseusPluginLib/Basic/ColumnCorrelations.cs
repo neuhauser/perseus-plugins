@@ -41,8 +41,9 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		private static CorrelationType GetCorrelationType(int value){
-			if (value == 0){
-				return CorrelationType.Pearson;
+			switch (value){
+				case 0:
+					return CorrelationType.Pearson;
 			}
 			if (value == 1){
 				return CorrelationType.Rsquared;
