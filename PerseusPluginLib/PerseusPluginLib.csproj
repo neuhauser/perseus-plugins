@@ -87,6 +87,8 @@
     <Compile Include="Filter\FilterNumericalColumn.cs" />
     <Compile Include="Filter\FilterTextualColumn.cs" />
     <Compile Include="Filter\FilterThreshold.cs" />
+    <Compile Include="Utils\ColumnNameInfo.cs" />
+    <Compile Include="Utils\INameInfo.cs" />
     <Compile Include="Utils\PerseusPluginUtils.cs" />
     <Compile Include="Filter\FilterValidValues.cs" />
     <Compile Include="Norm\Divide.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Rearrange\SortByColumn.cs" />
     <Compile Include="Rearrange\Transpose.cs" />
     <Compile Include="Rearrange\UniqueValues.cs" />
+    <Compile Include="Utils\RowNameInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PerseusApi\PerseusApi.csproj">
