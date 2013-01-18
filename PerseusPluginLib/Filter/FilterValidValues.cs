@@ -5,6 +5,7 @@ using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
 using PerseusPluginLib.Properties;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Filter{
 	public class FilterValidValues : IMatrixProcessing{

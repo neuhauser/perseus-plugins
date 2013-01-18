@@ -4,6 +4,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Filter{
 	public class FilterNumericalColumn : IMatrixProcessing{

@@ -87,7 +87,7 @@
     <Compile Include="Filter\FilterNumericalColumn.cs" />
     <Compile Include="Filter\FilterTextualColumn.cs" />
     <Compile Include="Filter\FilterThreshold.cs" />
-    <Compile Include="PerseusPluginUtils.cs" />
+    <Compile Include="Utils\PerseusPluginUtils.cs" />
     <Compile Include="Filter\FilterValidValues.cs" />
     <Compile Include="Norm\Divide.cs" />
     <Compile Include="Norm\DivisionByColumn.cs" />

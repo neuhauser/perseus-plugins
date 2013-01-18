@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using BasicLib.Param;
+using BasicLib.Util;
 using PerseusApi;
 
-namespace PerseusPluginLib{
+namespace PerseusPluginLib.Utils{
 	public static class PerseusPluginUtils{
 		internal static SingleChoiceParam GetFilterModeParam(){
 			return new SingleChoiceParam("Filter mode"){Values = new[]{"Reduce matrix", "Add categorical column"}};
@@ -70,24 +71,109 @@ namespace PerseusPluginLib{
 			}
 		}
 
-		public static int[][] GetExpressionColIndices(IList<string[]> groupCol, string[] groupNames){
+		public static string[][] CollapseCatCol(string[][] catCol, int[][] collapse) {
+			string[][] result = new string[collapse.Length][];
+			for (int i = 0; i < collapse.Length; i++) {
+				result[i] = CollapseCatCol(catCol, collapse[i]);
+			}
+			return result;
+		}
+
+		public static float[] CollapseNumCol(float[] numCol, int[][] collapse) {
+			float[] result = new float[collapse.Length];
+			for (int i = 0; i < collapse.Length; i++) {
+				result[i] = CollapseNumCol(numCol, collapse[i]);
+			}
+			return result;
+		}
+
+		private static string[] CollapseCatCol(IList<string[]> catCol, IEnumerable<int> collapse) {
+			HashSet<string> all = new HashSet<string>();
+			foreach (int x in collapse) {
+				all.UnionWith(catCol[x]);
+			}
+			string[] y = ArrayUtils.ToArray(all);
+			Array.Sort(y);
+			return y;
+		}
+
+		private static float CollapseNumCol(IList<float> numCol, IEnumerable<int> collapse) {
+			List<float> all = new List<float>();
+			foreach (int x in collapse) {
+				if (!Single.IsNaN(numCol[x]) && !Single.IsInfinity(numCol[x])) {
+					all.Add(numCol[x]);
+				}
+			}
+			float y = ArrayUtils.Median(all.ToArray());
+			return y;
+		}
+
+		public static int[][] GetExpressionColIndices(IList<string[]> groupCol, string[] groupNames) {
 			int[][] colInds = new int[groupNames.Length][];
-			for (int i = 0; i < colInds.Length; i++){
+			for (int i = 0; i < colInds.Length; i++) {
 				colInds[i] = GetExpressionColIndices(groupCol, groupNames[i]);
 			}
 			return colInds;
 		}
 
-		private static int[] GetExpressionColIndices(IList<string[]> groupCol, string groupName){
+		private static int[] GetExpressionColIndices(IList<string[]> groupCol, string groupName) {
 			List<int> result = new List<int>();
-			for (int i = 0; i < groupCol.Count; i++){
+			for (int i = 0; i < groupCol.Count; i++) {
 				string[] w = groupCol[i];
 				Array.Sort(w);
-				if (Array.BinarySearch(w, groupName) >= 0){
+				if (Array.BinarySearch(w, groupName) >= 0) {
 					result.Add(i);
 				}
 			}
 			return result.ToArray();
+		}
+
+		public static int[] GetIndicesOfCol(IMatrixData data, string categoryName, string value) {
+			int index = GetIndexOfCol(data, categoryName);
+			List<int> result = new List<int>();
+			for (int i = 0; i < data.ExpressionColumnCount; i++) {
+				string[] s = data.CategoryRows[index][i];
+				foreach (string s1 in s) {
+					if (s1.Equals(value)) {
+						result.Add(i);
+						break;
+					}
+				}
+			}
+			return result.ToArray();
+		}
+
+		public static int[] GetIndicesOf(IMatrixData data, string categoryName, string value) {
+			int index = GetIndexOf(data, categoryName);
+			List<int> result = new List<int>();
+			for (int i = 0; i < data.RowCount; i++) {
+				string[] s = data.CategoryColumns[index][i];
+				foreach (string s1 in s) {
+					if (s1.Equals(value)) {
+						result.Add(i);
+						break;
+					}
+				}
+			}
+			return result.ToArray();
+		}
+
+		private static int GetIndexOf(IMatrixData data, string categoryName) {
+			for (int i = 0; i < data.CategoryColumnNames.Count; i++) {
+				if (data.CategoryColumnNames[i].Equals(categoryName)) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		private static int GetIndexOfCol(IMatrixData data, string categoryName) {
+			for (int i = 0; i < data.CategoryRowNames.Count; i++) {
+				if (data.CategoryRowNames[i].Equals(categoryName)) {
+					return i;
+				}
+			}
+			return -1;
 		}
 	}
 }
