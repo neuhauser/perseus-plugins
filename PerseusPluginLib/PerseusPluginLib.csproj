@@ -60,6 +60,8 @@
     <Compile Include="Basic\SummaryStatisticsRows.cs" />
     <Compile Include="Combine\MatchingByName.cs" />
     <Compile Include="Export\TabSeparatedExport.cs" />
+    <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
+    <Compile Include="Group\CreateNumericalAnnotRow.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
     <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
     <Compile Include="Load\GenericDataUpload.cs" />
@@ -157,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\uploadGeneric.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\groupButton.Image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

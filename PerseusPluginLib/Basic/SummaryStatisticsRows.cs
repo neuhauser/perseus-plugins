@@ -22,8 +22,9 @@ namespace PerseusPluginLib.Basic{
 			new Tuple<string, DoubleArrayToArray, string>("Mean", ArrayUtils.Mean,
 				"Sum of all values divided by the number of values."),
 			new Tuple<string, DoubleArrayToArray, string>("Median", ArrayUtils.Median,
-				"For an odd number of values the middle value is taken. For an even number of values the average of the two values in the middle is calculated.")
-			, new Tuple<string, DoubleArrayToArray, string>("Standard deviation", ArrayUtils.StandardDeviation, ""),
+				"For an odd number of values the middle value is taken. For an even number of values the average of the two values in " +
+					"the middle is calculated."),
+			new Tuple<string, DoubleArrayToArray, string>("Standard deviation", ArrayUtils.StandardDeviation, ""),
 			new Tuple<string, DoubleArrayToArray, string>("Coefficient of variation", ArrayUtils.CoefficientOfVariation,
 				"The coefficient of variation is defined as the standard deviation divided by the mean."),
 			new Tuple<string, DoubleArrayToArray, string>("Median absolute deviation", ArrayUtils.MeanAbsoluteDeviation,
@@ -48,8 +49,7 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
-		public string HelpDescription {
-			get {
+		public string HelpDescription { get{
 			return
 				"A set of simple descriptive quantities are calculated that help summarizing the expression data in each row.";
 		} }
