@@ -6,6 +6,9 @@ namespace PerseusApi{
 		string Description { get; set; }
 		string Origin { get; set; }
 		DateTime CreationDate { get; set; }
+		/// <summary>
+		/// Name of the user who created this data item.
+		/// </summary>
 		string User { get; set; }
 	}
 }
