@@ -14,8 +14,6 @@ namespace PerseusPluginLib.Manual{
 			return new SelectRowsManuallyControl(mdata, newMatrix);
 		}
 
-		public string GetHeading(){
-			return "Select rows manually";
-		}
+		public string Heading { get { return "Select rows manually"; } }
 	}
 }

@@ -7,6 +7,6 @@
 		/// Heading to be displayed on the tab page created for the visual component of this <code>IAnalysisResult</code>.
 		/// </summary>
 		/// <returns></returns>
-		string GetHeading();
+		string Heading { get; }
 	}
 }
