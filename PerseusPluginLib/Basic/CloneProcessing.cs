@@ -14,7 +14,7 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
-		public int NumSupplTables { get { return 10; } }
+		public int NumSupplTables { get { return 1; } }
 		public string Name { get { return "Clone"; } }
 		public string Heading { get { return "Basic"; } }
 		public bool IsActive { get { return true; } }
