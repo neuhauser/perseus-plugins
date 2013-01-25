@@ -44,14 +44,13 @@ namespace PerseusPluginLib.Basic{
 			switch (value){
 				case 0:
 					return CorrelationType.Pearson;
+				case 1:
+					return CorrelationType.Rsquared;
+				case 2:
+					return CorrelationType.Spearman;
+				default:
+					throw new Exception("Never get here.");
 			}
-			if (value == 1){
-				return CorrelationType.Rsquared;
-			}
-			if (value == 2){
-				return CorrelationType.Spearman;
-			}
-			throw new Exception("Never get here.");
 		}
 
 		public float[,] GetMatrix(IMatrixData matrixData, CorrelationType type, int[] rows, int[] cols){
