@@ -79,14 +79,6 @@ namespace PerseusPluginLib.Utils{
 			return result;
 		}
 
-		public static float[] CollapseNumCol(float[] numCol, int[][] collapse) {
-			float[] result = new float[collapse.Length];
-			for (int i = 0; i < collapse.Length; i++) {
-				result[i] = CollapseNumCol(numCol, collapse[i]);
-			}
-			return result;
-		}
-
 		private static string[] CollapseCatCol(IList<string[]> catCol, IEnumerable<int> collapse) {
 			HashSet<string> all = new HashSet<string>();
 			foreach (int x in collapse) {
@@ -97,14 +89,41 @@ namespace PerseusPluginLib.Utils{
 			return y;
 		}
 
+		public static float[] CollapseNumCol(float[] numCol, int[][] collapse) {
+			float[] result = new float[collapse.Length];
+			for (int i = 0; i < collapse.Length; i++) {
+				result[i] = CollapseNumCol(numCol, collapse[i]);
+			}
+			return result;
+		}
+
 		private static float CollapseNumCol(IList<float> numCol, IEnumerable<int> collapse) {
 			List<float> all = new List<float>();
 			foreach (int x in collapse) {
-				if (!Single.IsNaN(numCol[x]) && !Single.IsInfinity(numCol[x])) {
+				if (!float.IsNaN(numCol[x]) && !float.IsInfinity(numCol[x])) {
 					all.Add(numCol[x]);
 				}
 			}
 			float y = ArrayUtils.Median(all.ToArray());
+			return y;
+		}
+
+		public static double[] CollapseNumCol(double[] numCol, int[][] collapse) {
+			double[] result = new double[collapse.Length];
+			for (int i = 0; i < collapse.Length; i++) {
+				result[i] = CollapseNumCol(numCol, collapse[i]);
+			}
+			return result;
+		}
+
+		private static double CollapseNumCol(IList<double> numCol, IEnumerable<int> collapse) {
+			List<double> all = new List<double>();
+			foreach (int x in collapse) {
+				if (!double.IsNaN(numCol[x]) && !double.IsInfinity(numCol[x])) {
+					all.Add(numCol[x]);
+				}
+			}
+			double y = ArrayUtils.Median(all.ToArray());
 			return y;
 		}
 
