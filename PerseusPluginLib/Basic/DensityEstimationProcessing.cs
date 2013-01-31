@@ -49,11 +49,6 @@ namespace PerseusPluginLib.Basic{
 				return;
 			}
 			int points = param.GetIntParam("Number of points").Value;
-			int modeInd = param.GetSingleChoiceParam("Mode").Value;
-			if (modeInd == 1 && colIndx.Length != 1){
-				processInfo.ErrString = "You can only compare single columns in the 'Create density matrix' mode.";
-				return;
-			}
 			for (int k = 0; k < colIndx.Length; k++){
 				float[] xvals = GetColumn(mdata, colIndx[k]);
 				float[] yvals = GetColumn(mdata, colIndy[k]);
@@ -68,16 +63,16 @@ namespace PerseusPluginLib.Basic{
 				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin) / points, points, yvals1, ymin,
 					(ymax - ymin)/points, points);
 				DensityEstimation.DivideByMaximum(values);
-				if (modeInd == 1){
-					values = InvertRows(values);
-					List<string> colNames = new List<string>();
-					for (int i = 0; i < values.GetLength(1); i++){
-						colNames.Add("" + i);
-					}
-					mdata.SetData(mdata.Name, colNames, values, new List<string>(), new List<string[]>(), new List<string>(),
-						new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(), new List<double[][]>());
-					return;
-				}
+				//if (modeInd == 1){
+				//	values = InvertRows(values);
+				//	List<string> colNames = new List<string>();
+				//	for (int i = 0; i < values.GetLength(1); i++){
+				//		colNames.Add("" + i);
+				//	}
+				//	mdata.SetData(mdata.Name, colNames, values, new List<string>(), new List<string[]>(), new List<string>(),
+				//		new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(), new List<double[][]>());
+				//	return;
+				//}
 				double[] xmat = new double[points];
 				for (int i = 0; i < points; i++){
 					xmat[i] = xmin + i*(xmax - xmin)/points;
@@ -178,13 +173,6 @@ namespace PerseusPluginLib.Basic{
 			int[] sel2 = vals.Length > 1 ? new[]{1} : (vals.Length > 0 ? new[]{0} : new int[0]);
 			return
 				new Parameters(new Parameter[]{
-					new SingleChoiceParam("Mode"){
-						Values = new[]{"Add density column", "Create density matrix"},
-						Help =
-							"Depending on the 'Mode' parameter the output is either a copy of the input matrix with two numerical" +
-								" columns added containing the density information, or a new matrix in which the expression values" +
-								" represent the third dimension of density values."
-					},
 					new MultiChoiceParam("Column 1", sel1){
 						Values = vals, Repeats = true,
 						Help =

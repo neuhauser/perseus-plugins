@@ -3,7 +3,6 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
-using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Filter{
 	public class FilterCategoricalColumn : IMatrixProcessing{
@@ -43,7 +42,7 @@ namespace PerseusPluginLib.Filter{
 					valids.Add(i);
 				}
 			}
-			PerseusPluginUtils.FilterRows(mdata, param, valids.ToArray());
+			mdata.ExtractExpressionRows(valids.ToArray());
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
@@ -58,8 +57,7 @@ namespace PerseusPluginLib.Filter{
 						Help =
 							"If 'Remove matching rows' is selected, rows having the value specified above will be removed while " +
 								"all other rows will be kept. If 'Keep matching rows' is selected, the opposite will happen."
-					},
-					PerseusPluginUtils.GetFilterModeParam()
+					}
 				});
 		}
 	}
