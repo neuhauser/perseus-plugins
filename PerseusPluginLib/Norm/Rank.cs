@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
@@ -42,26 +43,40 @@ namespace PerseusPluginLib.Norm{
 		public static void Rank1(bool rows, IMatrixData data){
 			if (rows){
 				for (int i = 0; i < data.RowCount; i++){
-					double[] vals = new double[data.ExpressionColumnCount];
+					List<double> vals = new List<double>();
+					List<int> indices = new List<int>();
 					for (int j = 0; j < data.ExpressionColumnCount; j++){
 						double q = data[i, j];
-						vals[j] = q;
+						if (!double.IsNaN(q)){
+							vals.Add(q);
+							indices.Add(j);
+						}
 					}
-					vals = ArrayUtils.Rank(vals);
+					double[] ranks = ArrayUtils.Rank(vals);
 					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						data[i, j] = (float) vals[j];
+						data[i, j] = float.NaN;
+					}
+					for (int j = 0; j < ranks.Length; j++){
+						data[i, indices[j]] = (float)ranks[j];
 					}
 				}
 			} else{
 				for (int j = 0; j < data.ExpressionColumnCount; j++){
-					double[] vals = new double[data.RowCount];
-					for (int i = 0; i < data.RowCount; i++){
+					List<double> vals = new List<double>();
+					List<int> indices = new List<int>();
+					for (int i = 0; i < data.RowCount; i++) {
 						double q = data[i, j];
-						vals[i] = q;
+						if (!double.IsNaN(q)) {
+							vals.Add(q);
+							indices.Add(i);
+						}
 					}
-					vals = ArrayUtils.Rank(vals);
-					for (int i = 0; i < data.RowCount; i++){
-						data[i, j] = (float) vals[i];
+					double[] ranks = ArrayUtils.Rank(vals);
+					for (int i = 0; i < data.RowCount; i++) {
+						data[i, j] = float.NaN;
+					}
+					for (int i = 0; i < ranks.Length; i++) {
+						data[indices[i], j] = (float)ranks[i];
 					}
 				}
 			}
