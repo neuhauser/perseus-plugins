@@ -77,7 +77,7 @@ namespace PerseusPluginLib.Norm{
 			}
 		}
 
-		private static int[] GetIndices(IList<string[]> catRow, string groupVal){
+		internal static int[] GetIndices(IList<string[]> catRow, string groupVal){
 			List<int> result = new List<int>();
 			for (int i = 0; i < catRow.Count; i++){
 				Array.Sort(catRow[i]);
@@ -99,7 +99,7 @@ namespace PerseusPluginLib.Norm{
 								{Values = ArrayUtils.Concat(new[]{"<No grouping>"}, mdata.CategoryRowNames)}),
 								new Parameters()
 							},
-						Help = "Specifies if the analysis is performed on the rows or the columns of the matrix."
+						Help = "Specifies if the z-scoring is performed on the rows or the columns of the matrix."
 					}
 				});
 		}
