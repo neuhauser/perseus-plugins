@@ -26,7 +26,7 @@ namespace PerseusPluginLib.Impute{
 		public int NumSupplTables { get { return 0; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
-		public string Name { get { return "Replace missing values by normal distribution"; } }
+		public string Name { get { return "Replace missing values from normal distribution"; } }
 		public string Heading { get { return "Imputation"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
