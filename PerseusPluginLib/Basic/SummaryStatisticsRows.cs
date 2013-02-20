@@ -7,8 +7,6 @@ using PerseusApi;
 using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Basic{
-	public delegate double DoubleArrayToArray(IList<double> x);
-
 	public class SummaryStatisticsRows : IMatrixProcessing{
 		//TODO
 		//Groeneveld & Meeden’s coefficient
@@ -19,28 +17,38 @@ namespace PerseusPluginLib.Basic{
 		//Trimmed mean
 		//Pearson's skewness coefficients
 		//Quantile based skewness measures
-		internal static Tuple<string, DoubleArrayToArray, string>[] procs = new[]{
-			new Tuple<string, DoubleArrayToArray, string>("Mean", ArrayUtils.Mean,
+		internal static Tuple<string, Func<IList<double>, double>, string>[] procs = new[]{
+			new Tuple<string, Func<IList<double>, double>, string>("Sum", ArrayUtils.Sum, "Sum of all values."),
+			new Tuple<string, Func<IList<double>, double>, string>("Mean", ArrayUtils.Mean,
 				"Sum of all values divided by the number of values."),
-			new Tuple<string, DoubleArrayToArray, string>("Median", ArrayUtils.Median,
+			new Tuple<string, Func<IList<double>, double>, string>("Median", ArrayUtils.Median,
 				"For an odd number of values the middle value is taken. For an even number of values the average of the two values in " +
 					"the middle is calculated."),
-			new Tuple<string, DoubleArrayToArray, string>("Standard deviation", ArrayUtils.StandardDeviation, ""),
-			new Tuple<string, DoubleArrayToArray, string>("Coefficient of variation", ArrayUtils.CoefficientOfVariation,
+			new Tuple<string, Func<IList<double>, double>, string>("Standard deviation", ArrayUtils.StandardDeviation, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("Coefficient of variation", ArrayUtils.CoefficientOfVariation,
 				"The coefficient of variation is defined as the standard deviation divided by the mean."),
-			new Tuple<string, DoubleArrayToArray, string>("Median absolute deviation", ArrayUtils.MeanAbsoluteDeviation,
+			new Tuple<string, Func<IList<double>, double>, string>("Median absolute deviation", ArrayUtils.MeanAbsoluteDeviation,
 				"This is the median of the absolute values of the difference of each value to the median."),
-			new Tuple<string, DoubleArrayToArray, string>("Minimum", ArrayUtils.Min, ""),
-			new Tuple<string, DoubleArrayToArray, string>("Maximum", ArrayUtils.Max, ""),
-			new Tuple<string, DoubleArrayToArray, string>("Range", ArrayUtils.Range, "Maximum minus minimum."),
-			new Tuple<string, DoubleArrayToArray, string>("Valid values", x => x.Count,
+			new Tuple<string, Func<IList<double>, double>, string>("Minimum", ArrayUtils.Min, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("Maximum", ArrayUtils.Max, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("Range", ArrayUtils.Range, "Maximum minus minimum."),
+			new Tuple<string, Func<IList<double>, double>, string>("Valid values", x => x.Count,
 				"The number of values are counted in each row that are neither infinite nor 'NaN'."),
-			new Tuple<string, DoubleArrayToArray, string>("Inter-quartile range", ArrayUtils.InterQuartileRange, ""),
-			new Tuple<string, DoubleArrayToArray, string>("1st quartile", ArrayUtils.FirstQuartile, ""),
-			new Tuple<string, DoubleArrayToArray, string>("3rd quartile", ArrayUtils.ThirdQuartile, ""),
-			new Tuple<string, DoubleArrayToArray, string>("Skewness", ArrayUtils.Skewness, ""),
-			new Tuple<string, DoubleArrayToArray, string>("Kurtosis", ArrayUtils.Kurtosis, "")
+			new Tuple<string, Func<IList<double>, double>, string>("Inter-quartile range", ArrayUtils.InterQuartileRange, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("1st quartile", ArrayUtils.FirstQuartile, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("3rd quartile", ArrayUtils.ThirdQuartile, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("Skewness", ArrayUtils.Skewness, ""),
+			new Tuple<string, Func<IList<double>, double>, string>("Kurtosis", ArrayUtils.Kurtosis, "")
 		};
+		internal static string[] procNames;
+
+		static SummaryStatisticsRows(){
+			procNames = new string[procs.Length];
+			for (int i = 0; i < procNames.Length; i++){
+				procNames[i] = procs[i].Item1;
+			}
+		}
+
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
 		public string Name { get { return "Summary statistics (rows)"; } }
@@ -69,16 +77,20 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
-			BoolWithSubParams bp = param.GetBoolWithSubParams("Within groups");
-			bool groups = bp.Value;
+			SingleChoiceWithSubParams xp = param.GetSingleChoiceWithSubParams("Expression column selection");
+			bool groups = xp.Value == 2;
 			string[] groupNames = null;
-			int[][] colInds = null;
+			int[][] colIndsGroups = null;
 			if (groups){
-				int groupRowInd = bp.GetSubParameters().GetSingleChoiceParam("Group").Value;
+				int groupRowInd = xp.GetSubParameters().GetSingleChoiceParam("Group").Value;
 				string[][] groupCol = mdata.CategoryRows[groupRowInd];
 				groupNames = ArrayUtils.UniqueValuesPreserveOrder(groupCol);
-				colInds = PerseusPluginUtils.GetExpressionColIndices(groupCol, groupNames);
+				colIndsGroups = PerseusPluginUtils.GetExpressionColIndices(groupCol, groupNames);
 			}
+			int[] useCols = xp.Value == 1
+				? xp.GetSubParameters().GetMultiChoiceParam("Columns").Value
+				: ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount);
+			HashSet<int> w = ArrayUtils.ToHashSet(param.GetMultiChoiceParam("Calculate").Value);
 			bool[] include = new bool[procs.Length];
 			double[][] columns = new double[procs.Length][];
 			double[][][] columnsG = null;
@@ -89,7 +101,7 @@ namespace PerseusPluginLib.Basic{
 				}
 			}
 			for (int i = 0; i < include.Length; i++){
-				include[i] = param.GetBoolParam(procs[i].Item1).Value;
+				include[i] = w.Contains(i);
 				if (include[i]){
 					columns[i] = new double[mdata.RowCount];
 					if (groups){
@@ -101,7 +113,7 @@ namespace PerseusPluginLib.Basic{
 			}
 			for (int i = 0; i < mdata.RowCount; i++){
 				List<double> v = new List<double>();
-				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
+				foreach (int j in useCols){
 					double x = mdata[i, j];
 					if (!double.IsNaN(x) && !double.IsInfinity(x)){
 						v.Add(x);
@@ -114,9 +126,10 @@ namespace PerseusPluginLib.Basic{
 				}
 				if (groups){
 					List<double>[] vg = new List<double>[groupNames.Length];
-					for (int j = 0; j < colInds.Length; j++){
-						for (int k = 0; k < colInds[j].Length; k++){
-							double x = mdata[i, colInds[j][k]];
+					for (int j = 0; j < colIndsGroups.Length; j++){
+						vg[j] = new List<double>();
+						for (int k = 0; k < colIndsGroups[j].Length; k++){
+							double x = mdata[i, colIndsGroups[j][k]];
 							if (!double.IsNaN(x) && !double.IsInfinity(x)){
 								vg[j].Add(x);
 							}
@@ -144,14 +157,20 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			List<Parameter> p = new List<Parameter>{
-				new BoolWithSubParams("Within groups")
-				{SubParamsTrue = new Parameters(new SingleChoiceParam("Group"){Values = mdata.CategoryRowNames})}
-			};
-			foreach (Tuple<string, DoubleArrayToArray, string> proc in procs){
-				p.Add(new BoolParam(proc.Item1){Value = true, Help = proc.Item3});
-			}
-			return new Parameters(p);
+			return
+				new Parameters(new List<Parameter>{
+					new SingleChoiceWithSubParams("Expression column selection"){
+						Values = new[]{"Use all expression columns", "Select columns", "Within groups"},
+						SubParams =
+							new[]{
+								new Parameters(),
+								new Parameters(new MultiChoiceParam("Columns", ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount))
+								{Values = mdata.ExpressionColumnNames, Repeats = false}),
+								new Parameters(new SingleChoiceParam("Group"){Values = mdata.CategoryRowNames})
+							}
+					},
+					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(procNames.Length)){Values = procNames}
+				});
 		}
 	}
 }

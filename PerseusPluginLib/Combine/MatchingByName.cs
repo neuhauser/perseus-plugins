@@ -87,25 +87,39 @@ namespace PerseusPluginLib.Combine{
 			}
 				{
 					int[] exCols = parameters.GetMultiChoiceParam("Expression columns").Value;
-					float[,] newExColumns = new float[matrixData1.RowCount,exCols.Length];
+					float[,] newExColumns = new float[matrixData1.RowCount, exCols.Length];
+					float[,] newQuality = new float[matrixData1.RowCount, exCols.Length];
+					bool[,] newIsImputed = new bool[matrixData1.RowCount, exCols.Length];
 					string[] newExColNames = new string[exCols.Length];
 					float[,] oldEx = matrixData2.ExpressionValues;
-					for (int i = 0; i < exCols.Length; i++){
+					float[,] oldQual = matrixData2.QualityValues;
+					bool[,] oldImp = matrixData2.IsImputed;
+					for (int i = 0; i < exCols.Length; i++) {
 						newExColNames[i] = matrixData2.ExpressionColumnNames[exCols[i]];
 						for (int j = 0; j < matrixData1.RowCount; j++){
 							int[] inds = indexMap[j];
 							List<double> values = new List<double>();
-							foreach (int ind in inds){
+							List<double> qual = new List<double>();
+							List<bool> imp = new List<bool>();
+							foreach (int ind in inds) {
 								double v = oldEx[ind, exCols[i]];
-								if (!double.IsNaN(v)){
+								if (!double.IsNaN(v) && !double.IsInfinity(v)){
 									values.Add(v);
+									double qx = oldQual[ind, exCols[i]];
+									if (!double.IsNaN(qx) && !double.IsInfinity(qx)){
+										qual.Add(qx);
+									}
+									bool isi = oldImp[ind, exCols[i]];
+									imp.Add(isi);
 								}
 							}
-							newExColumns[j, i] = values.Count == 0 ? float.NaN : (float) avExpression(values.ToArray());
+							newExColumns[j, i] = values.Count == 0 ? float.NaN : (float)avExpression(values.ToArray());
+							newQuality[j, i] = qual.Count == 0 ? float.NaN : (float)avExpression(qual.ToArray());
+							newIsImputed[j, i] = imp.Count != 0 && AvImp(imp.ToArray());
 						}
 					}
 					MakeNewNames(newExColNames, result.ExpressionColumnNames);
-					AddExpressionColumns(result, newExColNames, newExColumns);
+					AddExpressionColumns(result, newExColNames, newExColumns, newQuality, newIsImputed);
 				}
 				{
 					int[] numCols = parameters.GetMultiChoiceParam("Numerical columns").Value;
@@ -182,6 +196,15 @@ namespace PerseusPluginLib.Combine{
 				}
 			result.Origin = "Combination";
 			return result;
+		}
+
+		private static bool AvImp(IEnumerable<bool> b){
+			foreach (bool b1 in b){
+				if (b1){
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public static void SetAnnotationRows(IMatrixData result, IMatrixData mdata1, IMatrixData mdata2){
@@ -280,17 +303,25 @@ namespace PerseusPluginLib.Combine{
 			}
 		}
 
-		public static void AddExpressionColumns(IMatrixData data, string[] names, float[,] vals){
-			float[,] newVals = new float[data.RowCount,data.ExpressionColumnCount + vals.GetLength(1)];
-			for (int i = 0; i < data.RowCount; i++){
+		public static void AddExpressionColumns(IMatrixData data, string[] names, float[,] vals, float[,] qual, bool[,] imp) {
+			float[,] newVals = new float[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
+			float[,] newQual = new float[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
+			bool[,] newImp = new bool[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
+			for (int i = 0; i < data.RowCount; i++) {
 				for (int j = 0; j < data.ExpressionColumnCount; j++){
 					newVals[i, j] = data[i, j];
+					newQual[i, j] = data.QualityValues[i, j];
+					newImp[i, j] = data.IsImputed[i, j];
 				}
 				for (int j = 0; j < vals.GetLength(1); j++){
 					newVals[i, data.ExpressionColumnCount + j] = vals[i, j];
+					newQual[i, data.ExpressionColumnCount + j] = qual[i, j];
+					newImp[i, data.ExpressionColumnCount + j] = imp[i, j];
 				}
 			}
 			data.ExpressionValues = newVals;
+			data.QualityValues = newQual;
+			data.IsImputed = newImp;
 			data.ExpressionColumnNames.AddRange(names);
 			data.ExpressionColumnDescriptions.AddRange(names);
 		}

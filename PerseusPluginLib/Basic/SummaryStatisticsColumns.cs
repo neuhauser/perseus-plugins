@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
@@ -16,7 +15,7 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
-		public string HelpDescription {
+		public string HelpDescription{
 			get{
 				return
 					"A set of simple descriptive quantities are calculated that help summarizing the data in the selected expression or numerical columns.";
@@ -37,10 +36,11 @@ namespace PerseusPluginLib.Basic{
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
 			int[] cols = param.GetMultiChoiceParam("Columns").Value;
+			HashSet<int> w = ArrayUtils.ToHashSet(param.GetMultiChoiceParam("Calculate").Value);
 			bool[] include = new bool[SummaryStatisticsRows.procs.Length];
 			double[][] rowws = new double[SummaryStatisticsRows.procs.Length][];
 			for (int i = 0; i < include.Length; i++){
-				include[i] = param.GetBoolParam(SummaryStatisticsRows.procs[i].Item1).Value;
+				include[i] = w.Contains(i);
 				if (include[i]){
 					rowws[i] = new double[cols.Length];
 				}
@@ -136,19 +136,18 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			List<Parameter> p = new List<Parameter>{
-				new MultiChoiceParam("Columns"){
-					Value = ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount),
-					Values =
-						ArrayUtils.Concat(ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames),
-							mdata.MultiNumericColumnNames),
-					Help = "Specify here the columns for which the summary statistics quantities should be calculated."
-				}
-			};
-			foreach (Tuple<string, DoubleArrayToArray, string> proc in SummaryStatisticsRows.procs){
-				p.Add(new BoolParam(proc.Item1){Value = true, Help = proc.Item3});
-			}
-			return new Parameters(p);
+			return
+				new Parameters(new List<Parameter>{
+					new MultiChoiceParam("Columns"){
+						Value = ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount),
+						Values =
+							ArrayUtils.Concat(ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames),
+								mdata.MultiNumericColumnNames),
+						Help = "Specify here the columns for which the summary statistics quantities should be calculated."
+					},
+					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(SummaryStatisticsRows.procNames.Length))
+					{Values = SummaryStatisticsRows.procNames}
+				});
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace PerseusPluginLib.Rearrange{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
-		public string HelpDescription {
+		public string HelpDescription{
 			get{
 				return
 					"The order of the columns as they appear in the matrix can be changed. Columns can also be omitted. For example, " +
@@ -36,11 +36,7 @@ namespace PerseusPluginLib.Rearrange{
 			int[] multiNumColInds = param.GetMultiChoiceParam("Multi-numerical columns").Value;
 			int[] catColInds = param.GetMultiChoiceParam("Categorical columns").Value;
 			int[] textColInds = param.GetMultiChoiceParam("Text columns").Value;
-			data.ExpressionValues = ArrayUtils.ExtractColumns(data.ExpressionValues, exColInds);
-			data.QualityValues = ArrayUtils.ExtractColumns(data.QualityValues, exColInds);
-			data.IsImputed = ArrayUtils.ExtractColumns(data.IsImputed, exColInds);
-			data.ExpressionColumnNames = ArrayUtils.SubList(data.ExpressionColumnNames, exColInds);
-			data.ExpressionColumnDescriptions = ArrayUtils.SubList(data.ExpressionColumnDescriptions, exColInds);
+			data.ExtractExpressionColumns(exColInds);
 			data.NumericColumns = ArrayUtils.SubList(data.NumericColumns, numColInds);
 			data.NumericColumnNames = ArrayUtils.SubList(data.NumericColumnNames, numColInds);
 			data.NumericColumnDescriptions = ArrayUtils.SubList(data.NumericColumnDescriptions, numColInds);
@@ -53,12 +49,6 @@ namespace PerseusPluginLib.Rearrange{
 			data.StringColumns = ArrayUtils.SubList(data.StringColumns, textColInds);
 			data.StringColumnNames = ArrayUtils.SubList(data.StringColumnNames, textColInds);
 			data.StringColumnDescriptions = ArrayUtils.SubList(data.StringColumnDescriptions, textColInds);
-			for (int i = 0; i < data.CategoryRowCount; i++){
-				data.CategoryRows[i] = ArrayUtils.SubArray(data.CategoryRows[i], exColInds);
-			}
-			for (int i = 0; i < data.NumericRowCount; i++){
-				data.NumericRows[i] = ArrayUtils.SubArray(data.NumericRows[i], exColInds);
-			}
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){

@@ -32,20 +32,23 @@ namespace PerseusPluginLib.Rearrange{
 			int which = subParams.GetSingleChoiceParam("Target type").Value;
 			switch (sp.Value){
 				case 0:
+					ExpressionToNumeric(colInds, mdata);
+					break;
+				case 1:
 					if (which == 0){
 						NumericToCategorical(colInds, mdata);
 					} else{
 						NumericToExpression(colInds, mdata);
 					}
 					break;
-				case 1:
+				case 2:
 					if (which == 0){
 						CategoricalToNumeric(colInds, mdata);
 					} else{
 						CategoricalToString(colInds, mdata);
 					}
 					break;
-				case 2:
+				case 3:
 					StringToCategorical(colInds, mdata);
 					break;
 				default:
@@ -192,6 +195,15 @@ namespace PerseusPluginLib.Rearrange{
 			}
 		}
 
+		private static void ExpressionToNumeric(IList<int> colInds, IMatrixData mdata){
+			int[] remainingInds = ArrayUtils.Complement(colInds, mdata.NumericColumnCount);
+			foreach (int colInd in colInds){
+				double[] d = ArrayUtils.ToDoubles(mdata.GetExpressionColumn(colInd));
+				mdata.AddNumericColumn(mdata.ExpressionColumnNames[colInd], mdata.ExpressionColumnDescriptions[colInd], d);
+			}
+			mdata.ExtractExpressionColumns(remainingInds);
+		}
+
 		private static double[] ExtendNumericRow(IList<double> numericRow, int add){
 			double[] result = new double[numericRow.Count + add];
 			for (int i = 0; i < numericRow.Count; i++){
@@ -215,9 +227,10 @@ namespace PerseusPluginLib.Rearrange{
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			string[] choice = new[]{"Numerical", "Categorical", "String"};
-			List<Parameters> subParams = new List<Parameters>
-			{GetNumericSubParams(mdata), GetCategoricalSubParams(mdata), GetStringSubParams(mdata)};
+			string[] choice = new[]{"Expression", "Numerical", "Categorical", "String"};
+			List<Parameters> subParams = new List<Parameters>{
+				GetExpressionSubParams(mdata), GetNumericSubParams(mdata), GetCategoricalSubParams(mdata), GetStringSubParams(mdata)
+			};
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceWithSubParams("Source type")
@@ -238,6 +251,14 @@ namespace PerseusPluginLib.Rearrange{
 				new Parameters(new Parameter[]{
 					new MultiChoiceParam("Columns"){Values = mdata.CategoryColumnNames},
 					new SingleChoiceParam("Target type", 0){Values = new[]{"Numerical", "String"}}
+				});
+		}
+
+		private static Parameters GetExpressionSubParams(IMatrixData mdata){
+			return
+				new Parameters(new Parameter[]{
+					new MultiChoiceParam("Columns"){Values = mdata.ExpressionColumnNames},
+					new SingleChoiceParam("Target type", 0){Values = new[]{"Numerical"}}
 				});
 		}
 
