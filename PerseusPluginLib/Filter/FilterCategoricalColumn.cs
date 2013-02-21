@@ -3,11 +3,12 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Filter{
 	public class FilterCategoricalColumn : IMatrixProcessing{
-		public bool HasButton { get { return false; } }
-		public Image ButtonImage { get { return null; } }
+		public bool HasButton { get { return true; } }
+		public Image ButtonImage { get { return Resources.filter2; } }
 		public string HelpDescription { get { return "Those rows are kept or removed that have the specified value in the selected categorical column."; } }
 		public string HelpOutput { get { return "The filtered matrix."; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
