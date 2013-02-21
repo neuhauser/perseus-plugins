@@ -172,16 +172,24 @@ namespace PerseusPluginLib.Rearrange{
 					newEx[j][i] = (float) num[j][i];
 				}
 			}
-			float[,] newExp = new float[mdata.RowCount,mdata.ExpressionColumnCount + num.Length];
-			for (int i = 0; i < mdata.RowCount; i++){
+			float[,] newExp = new float[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
+			float[,] newQual = new float[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
+			bool[,] newIsImputed = new bool[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
+			for (int i = 0; i < mdata.RowCount; i++) {
 				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
 					newExp[i, j] = mdata[i, j];
+					newQual[i, j] = mdata.QualityValues[i, j];
+					newIsImputed[i, j] = mdata.IsImputed[i, j];
 				}
 				for (int j = 0; j < newEx.Length; j++){
 					newExp[i, j + mdata.ExpressionColumnCount] = newEx[j][i];
+					newQual[i, j + mdata.ExpressionColumnCount] = float.NaN;
+					newIsImputed[i, j + mdata.ExpressionColumnCount] = false;
 				}
 			}
 			mdata.ExpressionValues = newExp;
+			mdata.QualityValues = newQual;
+			mdata.IsImputed = newIsImputed;
 			mdata.ExpressionColumnNames.AddRange(names);
 			mdata.ExpressionColumnDescriptions.AddRange(descriptions);
 			mdata.NumericColumns = ArrayUtils.SubList(mdata.NumericColumns, inds);
