@@ -56,7 +56,8 @@
     <Compile Include="Basic\Quantiles.cs" />
     <Compile Include="Basic\SummaryStatisticsColumns.cs" />
     <Compile Include="Basic\SummaryStatisticsRows.cs" />
-    <Compile Include="Combine\MatchingByName.cs" />
+    <Compile Include="Combine\MatchingColumnsByName.cs" />
+    <Compile Include="Combine\MatchingRowsByName.cs" />
     <Compile Include="Export\TabSeparatedExport.cs" />
     <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />

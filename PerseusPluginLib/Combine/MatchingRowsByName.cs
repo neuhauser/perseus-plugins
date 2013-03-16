@@ -7,12 +7,10 @@ using PerseusApi;
 using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Combine{
-	public delegate double Average(double[] x);
-
-	public class MatchingByName : IMatrixCombination{
+	public class MatchingRowsByName : IMatrixCombination{
 		public bool HasButton { get { return true; } }
 		public Image ButtonImage { get { return Resources.combineButton_Image; } }
-		public string Name { get { return "Matching by name"; } }
+		public string Name { get { return "Matching rows by name"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return -5; } }
 		public string DataType1 { get { return "Base matrix"; } }
@@ -36,13 +34,13 @@ namespace PerseusPluginLib.Combine{
 			return 1;
 		}
 
-		public IMatrixData CombineData(IMatrixData matrixData1, IMatrixData matrixData2, Parameters parameters,
+		public IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters,
 			ProcessInfo processInfo){
 			bool indicator = parameters.GetBoolParam("Indicator").Value;
 			int otherCol = parameters.GetSingleChoiceParam("Matching column 2").Value;
-			Average avExpression = GetAveraging(parameters.GetSingleChoiceParam("Combine expression values").Value);
-			Average avNumerical = GetAveraging(parameters.GetSingleChoiceParam("Combine numerical values").Value);
-			string[] q = matrixData2.StringColumns[otherCol];
+			Func<double[], double> avExpression = GetAveraging(parameters.GetSingleChoiceParam("Combine expression values").Value);
+			Func<double[], double> avNumerical = GetAveraging(parameters.GetSingleChoiceParam("Combine numerical values").Value);
+			string[] q = mdata2.StringColumns[otherCol];
 			string[][] w = new string[q.Length][];
 			for (int i = 0; i < q.Length; i++){
 				string r = q[i].Trim();
@@ -59,7 +57,7 @@ namespace PerseusPluginLib.Combine{
 				}
 			}
 			int pgCol = parameters.GetSingleChoiceParam("Matching column 1").Value;
-			string[] d = matrixData1.StringColumns[pgCol];
+			string[] d = mdata1.StringColumns[pgCol];
 			string[][] x = new string[d.Length][];
 			for (int i = 0; i < d.Length; i++){
 				string r = d[i].Trim();
@@ -80,28 +78,28 @@ namespace PerseusPluginLib.Combine{
 				indexMap[i] = ArrayUtils.UniqueValues(indexMap[i]);
 				indicatorCol[i] = indexMap[i].Length > 0 ? new[]{"+"} : new string[0];
 			}
-			IMatrixData result = matrixData1.Copy();
-			SetAnnotationRows(result, matrixData1, matrixData2);
+			IMatrixData result = mdata1.Copy();
+			SetAnnotationRows(result, mdata1, mdata2);
 			if (indicator){
-				result.AddCategoryColumn(matrixData2.Name, "", indicatorCol);
+				result.AddCategoryColumn(mdata2.Name, "", indicatorCol);
 			}
 				{
 					int[] exCols = parameters.GetMultiChoiceParam("Expression columns").Value;
-					float[,] newExColumns = new float[matrixData1.RowCount, exCols.Length];
-					float[,] newQuality = new float[matrixData1.RowCount, exCols.Length];
-					bool[,] newIsImputed = new bool[matrixData1.RowCount, exCols.Length];
+					float[,] newExColumns = new float[mdata1.RowCount,exCols.Length];
+					float[,] newQuality = new float[mdata1.RowCount,exCols.Length];
+					bool[,] newIsImputed = new bool[mdata1.RowCount,exCols.Length];
 					string[] newExColNames = new string[exCols.Length];
-					float[,] oldEx = matrixData2.ExpressionValues;
-					float[,] oldQual = matrixData2.QualityValues;
-					bool[,] oldImp = matrixData2.IsImputed;
-					for (int i = 0; i < exCols.Length; i++) {
-						newExColNames[i] = matrixData2.ExpressionColumnNames[exCols[i]];
-						for (int j = 0; j < matrixData1.RowCount; j++){
+					float[,] oldEx = mdata2.ExpressionValues;
+					float[,] oldQual = mdata2.QualityValues;
+					bool[,] oldImp = mdata2.IsImputed;
+					for (int i = 0; i < exCols.Length; i++){
+						newExColNames[i] = mdata2.ExpressionColumnNames[exCols[i]];
+						for (int j = 0; j < mdata1.RowCount; j++){
 							int[] inds = indexMap[j];
 							List<double> values = new List<double>();
 							List<double> qual = new List<double>();
 							List<bool> imp = new List<bool>();
-							foreach (int ind in inds) {
+							foreach (int ind in inds){
 								double v = oldEx[ind, exCols[i]];
 								if (!double.IsNaN(v) && !double.IsInfinity(v)){
 									values.Add(v);
@@ -113,8 +111,8 @@ namespace PerseusPluginLib.Combine{
 									imp.Add(isi);
 								}
 							}
-							newExColumns[j, i] = values.Count == 0 ? float.NaN : (float)avExpression(values.ToArray());
-							newQuality[j, i] = qual.Count == 0 ? float.NaN : (float)avExpression(qual.ToArray());
+							newExColumns[j, i] = values.Count == 0 ? float.NaN : (float) avExpression(values.ToArray());
+							newQuality[j, i] = qual.Count == 0 ? float.NaN : (float) avExpression(qual.ToArray());
 							newIsImputed[j, i] = imp.Count != 0 && AvImp(imp.ToArray());
 						}
 					}
@@ -126,10 +124,10 @@ namespace PerseusPluginLib.Combine{
 					double[][] newNumericalColumns = new double[numCols.Length][];
 					string[] newNumColNames = new string[numCols.Length];
 					for (int i = 0; i < numCols.Length; i++){
-						double[] oldCol = matrixData2.NumericColumns[numCols[i]];
-						newNumColNames[i] = matrixData2.NumericColumnNames[numCols[i]];
-						newNumericalColumns[i] = new double[matrixData1.RowCount];
-						for (int j = 0; j < matrixData1.RowCount; j++){
+						double[] oldCol = mdata2.NumericColumns[numCols[i]];
+						newNumColNames[i] = mdata2.NumericColumnNames[numCols[i]];
+						newNumericalColumns[i] = new double[mdata1.RowCount];
+						for (int j = 0; j < mdata1.RowCount; j++){
 							int[] inds = indexMap[j];
 							List<double> values = new List<double>();
 							foreach (int ind in inds){
@@ -150,10 +148,10 @@ namespace PerseusPluginLib.Combine{
 					string[][][] newCatColumns = new string[catCols.Length][][];
 					string[] newCatColNames = new string[catCols.Length];
 					for (int i = 0; i < catCols.Length; i++){
-						string[][] oldCol = matrixData2.CategoryColumns[catCols[i]];
-						newCatColNames[i] = matrixData2.CategoryColumnNames[catCols[i]];
-						newCatColumns[i] = new string[matrixData1.RowCount][];
-						for (int j = 0; j < matrixData1.RowCount; j++){
+						string[][] oldCol = mdata2.CategoryColumns[catCols[i]];
+						newCatColNames[i] = mdata2.CategoryColumnNames[catCols[i]];
+						newCatColumns[i] = new string[mdata1.RowCount][];
+						for (int j = 0; j < mdata1.RowCount; j++){
 							int[] inds = indexMap[j];
 							List<string[]> values = new List<string[]>();
 							foreach (int ind in inds){
@@ -175,10 +173,10 @@ namespace PerseusPluginLib.Combine{
 					string[][] newStringColumns = new string[stringCols.Length][];
 					string[] newStringColNames = new string[stringCols.Length];
 					for (int i = 0; i < stringCols.Length; i++){
-						string[] oldCol = matrixData2.StringColumns[stringCols[i]];
-						newStringColNames[i] = matrixData2.StringColumnNames[stringCols[i]];
-						newStringColumns[i] = new string[matrixData1.RowCount];
-						for (int j = 0; j < matrixData1.RowCount; j++){
+						string[] oldCol = mdata2.StringColumns[stringCols[i]];
+						newStringColNames[i] = mdata2.StringColumnNames[stringCols[i]];
+						newStringColumns[i] = new string[mdata1.RowCount];
+						for (int j = 0; j < mdata1.RowCount; j++){
 							int[] inds = indexMap[j];
 							List<string> values = new List<string>();
 							foreach (int ind in inds){
@@ -286,7 +284,7 @@ namespace PerseusPluginLib.Combine{
 			return descriptions2[ind];
 		}
 
-		private static Average GetAveraging(int ind){
+		private static Func<double[], double> GetAveraging(int ind){
 			switch (ind){
 				case 0:
 					return ArrayUtils.Median;
@@ -303,11 +301,11 @@ namespace PerseusPluginLib.Combine{
 			}
 		}
 
-		public static void AddExpressionColumns(IMatrixData data, string[] names, float[,] vals, float[,] qual, bool[,] imp) {
-			float[,] newVals = new float[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
-			float[,] newQual = new float[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
-			bool[,] newImp = new bool[data.RowCount, data.ExpressionColumnCount + vals.GetLength(1)];
-			for (int i = 0; i < data.RowCount; i++) {
+		public static void AddExpressionColumns(IMatrixData data, string[] names, float[,] vals, float[,] qual, bool[,] imp){
+			float[,] newVals = new float[data.RowCount,data.ExpressionColumnCount + vals.GetLength(1)];
+			float[,] newQual = new float[data.RowCount,data.ExpressionColumnCount + vals.GetLength(1)];
+			bool[,] newImp = new bool[data.RowCount,data.ExpressionColumnCount + vals.GetLength(1)];
+			for (int i = 0; i < data.RowCount; i++){
 				for (int j = 0; j < data.ExpressionColumnCount; j++){
 					newVals[i, j] = data[i, j];
 					newQual[i, j] = data.QualityValues[i, j];

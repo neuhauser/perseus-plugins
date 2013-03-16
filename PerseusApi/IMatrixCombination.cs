@@ -8,7 +8,7 @@ namespace PerseusApi{
 		string DataType1 { get; }
 		string DataType2 { get; }
 
-		IMatrixData CombineData(IMatrixData matrixData1, IMatrixData matrixData2, Parameters parameters,
+		IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters,
 			ProcessInfo processInfo);
 
 		/// <summary>
