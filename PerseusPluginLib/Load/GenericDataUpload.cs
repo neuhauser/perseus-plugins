@@ -45,7 +45,7 @@ namespace PerseusPluginLib.Load{
 			string[] colNames;
 			Dictionary<string, string[]> annotationRows = new Dictionary<string, string[]>();
 			try{
-				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows);
+				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows, '\t');
 			} catch (Exception){
 				processInfo.ErrString = "Could not open the file '" + filename + "'. It is probably opened by another program.";
 				return;
@@ -289,7 +289,7 @@ namespace PerseusPluginLib.Load{
 			return
 				new Parameters(new Parameter[]{
 					new PerseusLoadFileParam("File"){
-						Filter = "Tab separated file (*.txt)|*.txt",
+						Filter = "Text (Tab delimited) (*.txt)|*.txt|CSV (Comma delimited) (*.csv)|*.csv",
 						Help = "Please specify here the name of the file to be uploaded including its full path."
 					}
 				});

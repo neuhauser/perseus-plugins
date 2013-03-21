@@ -94,7 +94,7 @@ namespace PerseusPluginLib.Load{
 			string[] colNames;
 			Dictionary<string, string[]> annotationRows = new Dictionary<string, string[]>();
 			try{
-				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows);
+				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows, '\t');
 			} catch (Exception){
 				MessageBox.Show("Could not open the file '" + filename + "'. It is probably opened by another program.");
 				return;
