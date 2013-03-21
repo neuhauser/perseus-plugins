@@ -91,10 +91,12 @@ namespace PerseusPluginLib.Load{
 				MessageBox.Show("File '" + filename + "' does not exist.");
 				return;
 			}
+			bool csv = filename.ToLower().EndsWith(".csv");
+			char separator = csv ? ',' : '\t';
 			string[] colNames;
 			Dictionary<string, string[]> annotationRows = new Dictionary<string, string[]>();
 			try{
-				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows, '\t');
+				colNames = TabSep.GetColumnNames(filename, commentPrefix, commentPrefixExceptions, annotationRows, separator);
 			} catch (Exception){
 				MessageBox.Show("Could not open the file '" + filename + "'. It is probably opened by another program.");
 				return;
