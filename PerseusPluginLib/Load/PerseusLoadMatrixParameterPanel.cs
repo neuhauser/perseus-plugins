@@ -6,7 +6,7 @@ using BasicLib.Parse;
 using BasicLib.Util;
 
 namespace PerseusPluginLib.Load{
-	public partial class PerseusLoadFileParameterPanel : UserControl{
+	public partial class PerseusLoadMatrixParameterPanel : UserControl{
 		private static readonly HashSet<string> commentPrefix = new HashSet<string>(new[]{"#", "!"});
 		private static readonly HashSet<string> commentPrefixExceptions = new HashSet<string>(new[]{"#N/A", "#n/a"});
 		private static readonly HashSet<string> categoricalCols =
@@ -28,11 +28,15 @@ namespace PerseusPluginLib.Load{
 				, "size", "p value", "benj. hoch. fdr", "score", "score for localization", "pep"
 			});
 		public string Filter { get; set; }
-		public PerseusLoadFileParameterPanel() : this(new string[0]) {}
+		public PerseusLoadMatrixParameterPanel() : this(new string[0]) {}
+		public PerseusLoadMatrixParameterPanel(IList<string> items) : this(items, null) {}
 
-		public PerseusLoadFileParameterPanel(IList<string> items){
+		public PerseusLoadMatrixParameterPanel(IList<string> items, string filename){
 			InitializeComponent();
 			multiListSelector1.Init(items, new[]{"Expression", "Numerical", "Categorical", "Text", "Multi-numerical"});
+			if (!string.IsNullOrEmpty(filename)){
+				UpdateFile(filename);
+			}
 		}
 
 		public string Filename { get { return textBox.Text; } }
@@ -81,8 +85,7 @@ namespace PerseusPluginLib.Load{
 			if (ofd.ShowDialog() != DialogResult.OK){
 				return;
 			}
-			textBox.Text = ofd.FileName;
-			string filename = textBox.Text;
+			string filename = ofd.FileName;
 			if (string.IsNullOrEmpty(filename)){
 				MessageBox.Show("Please specify a filename");
 				return;
@@ -91,6 +94,11 @@ namespace PerseusPluginLib.Load{
 				MessageBox.Show("File '" + filename + "' does not exist.");
 				return;
 			}
+			UpdateFile(filename);
+		}
+
+		internal void UpdateFile(string filename){
+			textBox.Text = filename;
 			bool csv = filename.ToLower().EndsWith(".csv");
 			char separator = csv ? ',' : '\t';
 			string[] colNames;

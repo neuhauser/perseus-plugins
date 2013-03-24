@@ -63,12 +63,12 @@
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
     <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
-    <Compile Include="Load\GenericDataUpload.cs" />
-    <Compile Include="Load\PerseusLoadFileParam.cs" />
-    <Compile Include="Load\PerseusLoadFileParameterPanel.cs">
+    <Compile Include="Load\GenericMatrixUpload.cs" />
+    <Compile Include="Load\PerseusLoadMatrixParam.cs" />
+    <Compile Include="Load\PerseusLoadMatrixParameterPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Load\PerseusLoadFileParameterPanel.Designer.cs" />
+    <Compile Include="Load\PerseusLoadMatrixParameterPanel.Designer.cs" />
     <Compile Include="Manual\MatrixDataTable.cs" />
     <Compile Include="Manual\SelectRowsManually.cs" />
     <Compile Include="Manual\SelectRowsManuallyControl.cs">
@@ -119,7 +119,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Load\PerseusLoadFileParameterPanel.resx" />
+    <EmbeddedResource Include="Load\PerseusLoadMatrixParameterPanel.resx" />
     <EmbeddedResource Include="Manual\SelectRowsManuallyControl.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,5 +1,5 @@
 namespace PerseusPluginLib.Load{
-	partial class PerseusLoadFileParameterPanel {
+	partial class PerseusLoadMatrixParameterPanel {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>

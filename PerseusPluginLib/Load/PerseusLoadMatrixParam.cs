@@ -5,12 +5,12 @@ using BasicLib.Util;
 
 namespace PerseusPluginLib.Load{
 	[Serializable]
-	public class PerseusLoadFileParam : Parameter{
+	public class PerseusLoadMatrixParam : Parameter{
 		public string Filter { get; set; }
 		public string[] Value { get; set; }
 		public string[] Default { get; private set; }
 
-		public PerseusLoadFileParam(string name) : base(name){
+		public PerseusLoadMatrixParam(string name) : base(name){
 			Value = new string[7];
 			for (int i = 0; i < 7; i++){
 				Value[i] = "";
@@ -26,6 +26,11 @@ namespace PerseusPluginLib.Load{
 				return Value;
 			}
 		}
+		public override bool IsDropTarget { get { return true; } }
+
+		public override void Drop(string x){
+			UpdateFile(x);
+		}
 
 		public override void ResetValue(){
 			Value = Default;
@@ -38,12 +43,12 @@ namespace PerseusPluginLib.Load{
 		public override bool IsModified { get { return !Value.Equals(Default); } }
 
 		public override void SetValueFromControl(){
-			PerseusLoadFileParameterPanel tb = (PerseusLoadFileParameterPanel) control;
+			PerseusLoadMatrixParameterPanel tb = (PerseusLoadMatrixParameterPanel) control;
 			Value = tb.Value;
 		}
 
 		public override void UpdateControlFromValue(){
-			PerseusLoadFileParameterPanel lfp = (PerseusLoadFileParameterPanel) control;
+			PerseusLoadMatrixParameterPanel lfp = (PerseusLoadMatrixParameterPanel) control;
 			lfp.Value = Value;
 		}
 
@@ -54,11 +59,19 @@ namespace PerseusPluginLib.Load{
 			}
 		}
 
+		private void UpdateFile(string filename){
+			if (control == null){
+				return;
+			}
+			PerseusLoadMatrixParameterPanel tb = (PerseusLoadMatrixParameterPanel) control;
+			tb.UpdateFile(filename);
+		}
+
 		public override float Height { get { return 770; } }
 		protected override Control Control{
 			get{
 				string[] items = Value[1].Length > 0 ? Value[1].Split(';') : new string[0];
-				return new PerseusLoadFileParameterPanel(items){Filter = Filter, Value = Value};
+				return new PerseusLoadMatrixParameterPanel(items){Filter = Filter, Value = Value};
 			}
 		}
 		public string Filename { get { return Value[0]; } }
@@ -81,7 +94,7 @@ namespace PerseusPluginLib.Load{
 		public int[] MultiNumericalColumnIndices { get { return GetIntValues(4); } }
 
 		public override object Clone(){
-			return new PerseusLoadFileParam(Name)
+			return new PerseusLoadMatrixParam(Name)
 			{Help = Help, Visible = Visible, Filter = Filter, Default = Default, Value = Value};
 		}
 	}

@@ -9,7 +9,7 @@ using PerseusApi;
 using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Load{
-	public class GenericDataUpload : IMatrixUpload{
+	public class GenericMatrixUpload : IMatrixUpload{
 		private static readonly HashSet<string> commentPrefix = new HashSet<string>(new[]{"#", "!"});
 		private static readonly HashSet<string> commentPrefixExceptions = new HashSet<string>(new[]{"#N/A", "#n/a"});
 		public bool HasButton { get { return true; } }
@@ -32,7 +32,7 @@ namespace PerseusPluginLib.Load{
 		}
 
 		public void LoadData(IMatrixData matrixData, Parameters parameters, ProcessInfo processInfo){
-			PerseusLoadFileParam par = (PerseusLoadFileParam) parameters.GetParam("File");
+			PerseusLoadMatrixParam par = (PerseusLoadMatrixParam) parameters.GetParam("File");
 			string filename = par.Filename;
 			if (string.IsNullOrEmpty(filename)){
 				processInfo.ErrString = "Please specify a filename";
@@ -290,7 +290,7 @@ namespace PerseusPluginLib.Load{
 		public Parameters GetParameters(ref string errorString){
 			return
 				new Parameters(new Parameter[]{
-					new PerseusLoadFileParam("File"){
+					new PerseusLoadMatrixParam("File"){
 						Filter = "Text (Tab delimited) (*.txt)|*.txt|CSV (Comma delimited) (*.csv)|*.csv",
 						Help = "Please specify here the name of the file to be uploaded including its full path."
 					}
