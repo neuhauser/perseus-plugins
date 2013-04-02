@@ -106,7 +106,8 @@ namespace PerseusPluginLib.Group{
 			SingleChoiceWithSubParams scwsp = new SingleChoiceWithSubParams("Action"){
 				Values = new[]{"Create", "Edit", "Rename", "Delete"},
 				SubParams =
-					new[]{GetCreateParameters(mdata), GetEditParameters(mdata), GetRenameParameters(mdata), GetDeleteParameters(mdata)}
+					new[]{GetCreateParameters(mdata), GetEditParameters(mdata), GetRenameParameters(mdata), GetDeleteParameters(mdata)},
+				ParamNameWidth = 136, TotalWidth = 731
 			};
 			return new Parameters(new Parameter[]{scwsp});
 		}

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using BasicLib.Param;
+using BasicLib.Parse;
 using BasicLib.Util;
 using PerseusApi;
 using PerseusPluginLib.Properties;
@@ -41,7 +43,71 @@ namespace PerseusPluginLib.Group{
 				case 3:
 					ProcessDataDelete(mdata, spar);
 					break;
+				case 4:
+					ProcessDataWriteTemplateFile(mdata, spar);
+					break;
+				case 5:
+					string err = ProcessDataReadFromFile(mdata, spar);
+					if (err != null){
+						processInfo.ErrString = err;
+					}
+					break;
 			}
+		}
+
+		private static string ProcessDataReadFromFile(IMatrixData mdata, Parameters param){
+			FileParam fp = param.GetFileParam("Input file");
+			string filename = fp.Value;
+			string[] colNames = TabSep.GetColumnNames(filename, '\t');
+			int nameIndex = GetNameIndex(colNames);
+			if (nameIndex < 0){
+				return "Error: the file has to contain a column called 'Name'.";
+			}
+			if (colNames.Length < 2){
+				return "Error: the file does not contain a grouping column.";
+			}
+			string[] nameCol = TabSep.GetColumn(colNames[nameIndex], filename, '\t');
+			Dictionary<string, int> map = ArrayUtils.GetIndexMap(nameCol);
+			for (int i = 0; i < colNames.Length; i++){
+				if (i == nameIndex){
+					continue;
+				}
+				string groupName = colNames[i];
+				string[] groupCol = TabSep.GetColumn(groupName, filename, '\t');
+				string[][] newCol = new string[mdata.ExpressionColumnCount][];
+				for (int j = 0; j < newCol.Length; j++){
+					string colName = mdata.ExpressionColumnNames[j];
+					if (!map.ContainsKey(colName)){
+						newCol[j] = new string[0];
+						continue;
+					}
+					int ind = map[colName];
+					string group = groupCol[ind];
+					newCol[j] = new[]{group};
+				}
+				mdata.AddCategoryRow(groupName, groupName, newCol);
+			}
+			return null;
+		}
+
+		private static int GetNameIndex(IList<string> colNames){
+			for (int i = 0; i < colNames.Count; i++){
+				if (colNames[i].ToLower().Equals("name")){
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		private static void ProcessDataWriteTemplateFile(IMatrixData mdata, Parameters param){
+			FileParam fp = param.GetFileParam("Output file");
+			StreamWriter writer = new StreamWriter(fp.Value);
+			writer.WriteLine("Name\tNew grouping");
+			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
+				string colName = mdata.ExpressionColumnNames[i];
+				writer.WriteLine(colName + "\t" + colName);
+			}
+			writer.Close();
 		}
 
 		private static void ProcessDataRename(IMatrixData mdata, Parameters param){
@@ -105,9 +171,13 @@ namespace PerseusPluginLib.Group{
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			SingleChoiceWithSubParams scwsp = new SingleChoiceWithSubParams("Action"){
-				Values = new[]{"Create", "Edit", "Rename", "Delete"},
+				Values = new[]{"Create", "Edit", "Rename", "Delete", "Write template file", "Read from file"},
 				SubParams =
-					new[]{GetCreateParameters(mdata), GetEditParameters(mdata), GetRenameParameters(mdata), GetDeleteParameters(mdata)}
+					new[]{
+						GetCreateParameters(mdata), GetEditParameters(mdata), GetRenameParameters(mdata), GetDeleteParameters(mdata),
+						GetWriteTemplateFileParameters(mdata), GetReadFromFileParameters(mdata)
+					},
+				ParamNameWidth = 136, TotalWidth = 731
 			};
 			return new Parameters(new Parameter[]{scwsp});
 		}
@@ -126,6 +196,18 @@ namespace PerseusPluginLib.Group{
 				{Values = mdata.CategoryRowNames, Help = "Select the category row that should be renamed."},
 				new StringParam("New name"), new StringParam("New description")
 			};
+			return new Parameters(par);
+		}
+
+		public Parameters GetReadFromFileParameters(IMatrixData mdata){
+			List<Parameter> par = new List<Parameter>
+			{new FileParam("Input file"){Filter = "Tab separated file (*.txt)|*.txt", Save = false}};
+			return new Parameters(par);
+		}
+
+		public Parameters GetWriteTemplateFileParameters(IMatrixData mdata){
+			List<Parameter> par = new List<Parameter>
+			{new FileParam("Output file", "Groups.txt"){Filter = "Tab separated file (*.txt)|*.txt", Save = true}};
 			return new Parameters(par);
 		}
 
