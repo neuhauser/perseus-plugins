@@ -9,17 +9,7 @@ using PerseusPluginLib.Properties;
 namespace PerseusPluginLib.Impute{
 	public class ReplaceMissingFromGaussian : IMatrixProcessing{
 		public bool HasButton { get { return true; } }
-		public Image ButtonImage { get { return Resources.impute; } }
-		public string HelpDescription{
-			get{
-				return
-					"Missing values will be replaced by random numbers that are drawn from a normal distribution. The parameters of this" +
-						" distribution can be optimized to simulate a typical abundance region that the missing values would have if they " +
-						"had been measured. In the absence of any a priori knowledge, the distribution of random numbers should be " +
-						"similar to the valid values. Often, missing values represent low abundance measurements. The default " +
-						"values are chosen to mimic this case.";
-			}
-		}
+		public Image ButtonImage { get { return Resources.histo; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public string HelpOutput { get { return ""; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
@@ -30,6 +20,16 @@ namespace PerseusPluginLib.Impute{
 		public string Heading { get { return "Imputation"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
+		public string HelpDescription{
+			get{
+				return
+					"Missing values will be replaced by random numbers that are drawn from a normal distribution. The parameters of this" +
+						" distribution can be optimized to simulate a typical abundance region that the missing values would have if they " +
+						"had been measured. In the absence of any a priori knowledge, the distribution of random numbers should be " +
+						"similar to the valid values. Often, missing values represent low abundance measurements. The default " +
+						"values are chosen to mimic this case.";
+			}
+		}
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
