@@ -30,9 +30,9 @@ namespace PerseusPluginLib.Norm{
 			SingleChoiceWithSubParams access = param.GetSingleChoiceWithSubParams("Matrix access");
 			bool rows = access.Value == 0;
 			int groupInd;
-			if (rows) {
+			if (rows){
 				groupInd = access.GetSubParameters().GetSingleChoiceParam("Grouping").Value - 1;
-			} else {
+			} else{
 				groupInd = -1;
 			}
 			int what = param.GetSingleChoiceParam("Subtract what").Value;
@@ -40,8 +40,8 @@ namespace PerseusPluginLib.Norm{
 				SubtractValues(rows, GetFunc(what), mdata);
 			} else{
 				string[][] catRow = mdata.CategoryRows[groupInd];
-				foreach (string[] t in catRow) {
-					if (t.Length > 1) {
+				foreach (string[] t in catRow){
+					if (t.Length > 1){
 						processInfo.ErrString = "The groups are overlapping.";
 						return;
 					}
@@ -52,39 +52,43 @@ namespace PerseusPluginLib.Norm{
 
 		private void SubtractGroups(IMatrixData mdata, IList<string[]> catRow, Func<double[], double> func){
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
-			foreach (int[] inds in groupVals.Select(groupVal => ZScore.GetIndices(catRow, groupVal))) {
+			foreach (int[] inds in groupVals.Select(groupVal => ZScore.GetIndices(catRow, groupVal))){
 				SubtractGroup(mdata, inds, func);
 			}
 		}
 
-		private static void SubtractGroup(IMatrixData data, IList<int> inds, Func<double[], double> func) {
-			for (int i = 0; i < data.RowCount; i++) {
+		private static void SubtractGroup(IMatrixData data, IList<int> inds, Func<double[], double> func){
+			for (int i = 0; i < data.RowCount; i++){
 				double[] vals = new double[inds.Count];
-				for (int j = 0; j < inds.Count; j++) {
+				for (int j = 0; j < inds.Count; j++){
 					double q = data[i, inds[j]];
 					vals[j] = q;
 				}
 				double mean = func(vals);
-				foreach (int t in inds) {
-					data[i, t] = (float)((data[i, t] - mean));
+				foreach (int t in inds){
+					data[i, t] = (float) ((data[i, t] - mean));
 				}
 			}
 		}
 
-		private static Func<double[], double> GetFunc(int what) {
-			switch (what) {
+		private static Func<double[], double> GetFunc(int what){
+			switch (what){
 				case 0:
 					return ArrayUtils.Mean;
 				case 1:
 					return ArrayUtils.Median;
 				case 2:
 					return ArrayUtils.MostFrequentValue;
+				case 3:
+					return ArrayUtils.TukeyBiweight;
+				case 4:
+					return ArrayUtils.TukeyBiweightSe;
 				default:
 					throw new Exception("Never get here.");
 			}
 		}
 
-		public Parameters GetParameters(IMatrixData mdata, ref string errorString) {
+		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceWithSubParams("Matrix access"){
@@ -97,7 +101,8 @@ namespace PerseusPluginLib.Norm{
 							},
 						Help = "Specifies if the subtraction is performed on the rows or the columns of the matrix."
 					},
-					new SingleChoiceParam("Subtract what"){Values = new[]{"Mean", "Median", "Most frequent value"}, Value = 1}
+					new SingleChoiceParam("Subtract what")
+					{Values = new[]{"Mean", "Median", "Most frequent value", "Tukey's biweight", "Tukey's biweight se"}, Value = 1}
 				});
 		}
 
