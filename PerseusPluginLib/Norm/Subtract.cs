@@ -50,7 +50,7 @@ namespace PerseusPluginLib.Norm{
 			}
 		}
 
-		private void SubtractGroups(IMatrixData mdata, IList<string[]> catRow, Func<double[], double> func){
+		private static void SubtractGroups(IMatrixData mdata, IList<string[]> catRow, Func<double[], double> func){
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
 			foreach (int[] inds in groupVals.Select(groupVal => ZScore.GetIndices(catRow, groupVal))){
 				SubtractGroup(mdata, inds, func);
