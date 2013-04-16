@@ -172,10 +172,10 @@ namespace PerseusPluginLib.Rearrange{
 					newEx[j][i] = (float) num[j][i];
 				}
 			}
-			float[,] newExp = new float[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
-			float[,] newQual = new float[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
-			bool[,] newIsImputed = new bool[mdata.RowCount, mdata.ExpressionColumnCount + num.Length];
-			for (int i = 0; i < mdata.RowCount; i++) {
+			float[,] newExp = new float[mdata.RowCount,mdata.ExpressionColumnCount + num.Length];
+			float[,] newQual = new float[mdata.RowCount,mdata.ExpressionColumnCount + num.Length];
+			bool[,] newIsImputed = new bool[mdata.RowCount,mdata.ExpressionColumnCount + num.Length];
+			for (int i = 0; i < mdata.RowCount; i++){
 				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
 					newExp[i, j] = mdata[i, j];
 					newQual[i, j] = mdata.QualityValues[i, j];
@@ -237,45 +237,39 @@ namespace PerseusPluginLib.Rearrange{
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			string[] choice = new[]{"Expression", "Numerical", "Categorical", "String"};
 			List<Parameters> subParams = new List<Parameters>{
-				GetExpressionSubParams(mdata), GetNumericSubParams(mdata), GetCategoricalSubParams(mdata), GetStringSubParams(mdata)
+				GetSubParams(mdata, GetExpressionSelection()), GetSubParams(mdata, GetNumericSelection()),
+				GetSubParams(mdata, GetCategoricalSelection()), GetSubParams(mdata, GetStringSelection())
 			};
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceWithSubParams("Source type")
-					{Values = choice, Help = "Select here the column whose type should be changed.", SubParams = subParams}
+					{Values = choice, Help = "Select here the column whose type should be changed.", SubParams = subParams,
+					ParamNameWidth = 136, TotalWidth = 731}
 				});
 		}
 
-		private static Parameters GetStringSubParams(IMatrixData mdata){
+		private static Parameters GetSubParams(IMatrixData mdata, IList<string> options){
 			return
 				new Parameters(new Parameter[]{
 					new MultiChoiceParam("Columns"){Values = mdata.StringColumnNames},
-					new SingleChoiceParam("Target type", 0){Values = new[]{"Categorical"}}
+					new SingleChoiceParam("Target type", 0){Values = options}
 				});
 		}
 
-		private static Parameters GetCategoricalSubParams(IMatrixData mdata){
-			return
-				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Columns"){Values = mdata.CategoryColumnNames},
-					new SingleChoiceParam("Target type", 0){Values = new[]{"Numerical", "String"}}
-				});
+		private static string[] GetStringSelection(){
+			return new[]{"Categorical"};
 		}
 
-		private static Parameters GetExpressionSubParams(IMatrixData mdata){
-			return
-				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Columns"){Values = mdata.ExpressionColumnNames},
-					new SingleChoiceParam("Target type", 0){Values = new[]{"Numerical"}}
-				});
+		private static string[] GetCategoricalSelection(){
+			return new[]{"Numerical", "String"};
 		}
 
-		private static Parameters GetNumericSubParams(IMatrixData mdata){
-			return
-				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Columns"){Values = mdata.NumericColumnNames},
-					new SingleChoiceParam("Target type", 0){Values = new[]{"Categorical", "Expression"}}
-				});
+		private static string[] GetExpressionSelection(){
+			return new[]{"Numerical"};
+		}
+
+		private static string[] GetNumericSelection(){
+			return new[]{"Categorical", "Expression"};
 		}
 	}
 }

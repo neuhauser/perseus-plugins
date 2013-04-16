@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using PerseusApi;
 
 namespace PerseusPluginLib.Manual{
+	[Serializable]
 	public class SelectRowsManuallyResult : IMatrixAnalysisResult{
 		private readonly IMatrixData mdata;
 

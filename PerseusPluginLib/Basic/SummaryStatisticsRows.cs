@@ -168,7 +168,9 @@ namespace PerseusPluginLib.Basic{
 								new Parameters(new MultiChoiceParam("Columns", ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount))
 								{Values = mdata.ExpressionColumnNames, Repeats = false}),
 								new Parameters(new SingleChoiceParam("Group"){Values = mdata.CategoryRowNames})
-							}
+							},
+						ParamNameWidth = 136,
+						TotalWidth = 731
 					},
 					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(procNames.Length)){Values = procNames}
 				});
