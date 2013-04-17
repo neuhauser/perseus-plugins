@@ -23,8 +23,8 @@ namespace PerseusPluginLib.Basic{
 		}
 		public string HelpOutput{
 			get{
-				return
-					"For each selected summary statistic, a new matrix is created containing the specific quantities for each selected column.";
+				return "A new matrix is created where each row corresponds to one of the selected summary statistic " +
+					"types. 'NaN' and 'Infinity' values are ignored for all calculations.";
 			}
 		}
 		public string[] HelpSupplTables { get { return new string[0]; } }
@@ -146,7 +146,7 @@ namespace PerseusPluginLib.Basic{
 						Help = "Specify here the columns for which the summary statistics quantities should be calculated."
 					},
 					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(SummaryStatisticsRows.procNames.Length))
-					{Values = SummaryStatisticsRows.procNames}
+					{Values = SummaryStatisticsRows.procNames, Help = "Select here which quantities should be calculated."}
 				});
 		}
 	}

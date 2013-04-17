@@ -9,8 +9,8 @@ namespace PerseusPluginLib.Basic{
 	public class CombineAnnotations : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public string HelpDescription { get { return ""; } }
-		public string HelpOutput { get { return ""; } }
+		public string HelpDescription { get { return "Search multiple categorical or string columns for the occurence of a set of terms."; } }
+		public string HelpOutput { get { return "A new categorical column is generated indicating the presence of any of these terms."; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public string Name { get { return "Combine annotations"; } }
@@ -95,8 +95,9 @@ namespace PerseusPluginLib.Basic{
 			int[] selection = new int[0];
 			return
 				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Categories"){Value = selection, Values = choice}, new MultiStringParam("Search terms"),
-					new StringParam("Name of new column"), new BoolParam("Inverse")
+					new MultiChoiceParam("Categories"){Value = selection, Values = choice, Help = "Search these columns for the search terms specified."}, 
+					new MultiStringParam("Search terms"){Help = "Look for these terms in the selected columns"},
+					new StringParam("Name of new column"), new BoolParam("Inverse"){Help = "If true, those rows are indicated which do not contain any of the search terms."}
 				});
 		}
 	}

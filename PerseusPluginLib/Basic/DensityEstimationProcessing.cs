@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Num;
 using BasicLib.Param;
@@ -156,17 +155,6 @@ namespace PerseusPluginLib.Basic{
 			return result;
 		}
 
-		private static float[,] InvertRows(float[,] vals){
-			float[,] result = new float[vals.GetLength(1),vals.GetLength(0)];
-			int n = vals.GetLength(1);
-			for (int i = 0; i < vals.GetLength(0); i++){
-				for (int j = 0; j < n; j++){
-					result[j, i] = vals[i, n - j - 1];
-				}
-			}
-			return result;
-		}
-
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			string[] vals = ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames);
 			int[] sel1 = vals.Length > 0 ? new[]{0} : new int[0];
@@ -181,7 +169,7 @@ namespace PerseusPluginLib.Basic{
 					,
 					new MultiChoiceParam("Column 2", sel2){
 						Values = vals, Repeats = true,
-						Help = "Colums for the second dimension. The number has to be the same as for the first column."
+						Help = "Colums for the second dimension. The number has to be the same as for the 'Column 1' parameter."
 					},
 					new IntParam("Number of points", 300){
 						Help =
