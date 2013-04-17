@@ -55,7 +55,15 @@
     <Compile Include="Basic\CombineByIdentifiersProcessing.cs" />
     <Compile Include="Basic\AddNoise.cs" />
     <Compile Include="Basic\DensityEstimationProcessing.cs" />
+    <Compile Include="Basic\PerformanceCurves.cs" />
     <Compile Include="Basic\Quantiles.cs" />
+    <Compile Include="Basic\PerformanceColumnType.cs" />
+    <Compile Include="Basic\PerformanceColumnTypeFpTp.cs" />
+    <Compile Include="Basic\PerformanceColumnTypePrecision.cs" />
+    <Compile Include="Basic\PerformanceColumnTypeRecall.cs" />
+    <Compile Include="Basic\PerformanceColumnTypeSensitivtiy.cs" />
+    <Compile Include="Basic\PerformanceColumnTypeSpecificity.cs" />
+    <Compile Include="Basic\PerformanceColumnTypeTpNp.cs" />
     <Compile Include="Basic\SummaryStatisticsColumns.cs" />
     <Compile Include="Basic\SummaryStatisticsRows.cs" />
     <Compile Include="Combine\MatchingColumnsByName.cs" />
