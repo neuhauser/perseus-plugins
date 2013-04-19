@@ -18,7 +18,7 @@ namespace PerseusPluginLib.Rearrange{
 		public string Name { get { return "Rename columns [reg. ex.]"; } }
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return 0; } }
+		public float DisplayOrder { get { return 1; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;

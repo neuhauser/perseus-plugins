@@ -242,17 +242,20 @@ namespace PerseusPluginLib.Rearrange{
 			};
 			return
 				new Parameters(new Parameter[]{
-					new SingleChoiceWithSubParams("Source type")
-					{Values = choice, Help = "Select here the column whose type should be changed.", SubParams = subParams,
-					ParamNameWidth = 136, TotalWidth = 731}
+					new SingleChoiceWithSubParams("Source type"){
+						Values = choice, Help = "What is the original type of the column(s) whose type should be changed?",
+						SubParams = subParams, ParamNameWidth = 136, TotalWidth = 731
+					}
 				});
 		}
 
 		private static Parameters GetSubParams(IMatrixData mdata, IList<string> options){
 			return
 				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Columns"){Values = mdata.StringColumnNames},
-					new SingleChoiceParam("Target type", 0){Values = options}
+					new MultiChoiceParam("Columns")
+					{Values = mdata.StringColumnNames, Help = "Select here the column whose type should be changed."},
+					new SingleChoiceParam("Target type", 0)
+					{Values = options, Help = "The type that these columns will have in the result table."}
 				});
 		}
 

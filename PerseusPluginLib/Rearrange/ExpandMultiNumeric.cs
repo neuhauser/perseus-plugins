@@ -9,14 +9,23 @@ namespace PerseusPluginLib.Rearrange{
 	public class ExpandMultiNumeric : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public string HelpDescription { get { return ""; } }
+		public string HelpDescription{
+			get{
+				return "Distribute multiple values per cell in a multi-numeric column over multiple rows. For each row in the" +
+					" original matrix there will be as many rows created as there are numbers in the cell of the multi-numeric " +
+					"column. If multiple multi-numeric columns are selected they have to have the same number of values in every " +
+					"row. Elements of string columns, if one is selected, are interpreted as semicolon-separated. They also have " +
+					"to have the same number of semicolon-separated elements as there are values in the cell(s) " +
+					"of the multi-numeric columns(s).";
+			}
+		}
 		public string Name { get { return "Expand multi-numeric and string columns"; } }
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 12; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
-		public string HelpOutput { get { return ""; } }
+		public string HelpOutput { get { return "Columns are the same. The number of rows increases due to the expansion."; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }

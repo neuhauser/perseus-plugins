@@ -55,7 +55,7 @@ namespace PerseusPluginLib.Norm{
 			}
 		}
 
-		private static void ZscoreGroups(IMatrixData data, IList<string[]> catRow) {
+		private static void ZscoreGroups(IMatrixData data, IList<string[]> catRow){
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
 			foreach (int[] inds in groupVals.Select(groupVal => GetIndices(catRow, groupVal))){
 				ZscoreGroup(data, inds);
@@ -63,16 +63,16 @@ namespace PerseusPluginLib.Norm{
 		}
 
 		private static void ZscoreGroup(IMatrixData data, IList<int> inds){
-			for (int i = 0; i < data.RowCount; i++) {
+			for (int i = 0; i < data.RowCount; i++){
 				double[] vals = new double[inds.Count];
-				for (int j = 0; j < inds.Count; j++) {
+				for (int j = 0; j < inds.Count; j++){
 					double q = data[i, inds[j]];
 					vals[j] = q;
 				}
 				double stddev;
 				double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
 				foreach (int t in inds){
-					data[i, t] = (float)((data[i, t] - mean) / stddev);
+					data[i, t] = (float) ((data[i, t] - mean)/stddev);
 				}
 			}
 		}
@@ -92,11 +92,13 @@ namespace PerseusPluginLib.Norm{
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceWithSubParams("Matrix access"){
-						Values = new[]{"Rows", "Columns"},
+						Values = new[]{"Rows", "Columns"}, ParamNameWidth = 136, TotalWidth = 731,
 						SubParams =
 							new[]{
-								new Parameters(new SingleChoiceParam("Grouping")
-								{Values = ArrayUtils.Concat(new[]{"<No grouping>"}, mdata.CategoryRowNames)}),
+								new Parameters(new SingleChoiceParam("Grouping"){
+									Values = ArrayUtils.Concat(new[]{"<No grouping>"}, mdata.CategoryRowNames),
+									Help = "The z-scoring will be done separately in groups if a grouping is specified here."
+								}),
 								new Parameters()
 							},
 						Help = "Specifies if the z-scoring is performed on the rows or the columns of the matrix."

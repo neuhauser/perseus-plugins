@@ -8,7 +8,7 @@ namespace PerseusPluginLib.Basic{
 	public class AddNoise : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public string HelpDescription { get { return "Modulate the data with some gaussian noise."; } }
+		public string HelpDescription { get { return "Modulate the data with gaussian noise."; } }
 		public string HelpOutput { get { return "Same as input matrix with random noise added to the expression columns."; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
@@ -36,7 +36,7 @@ namespace PerseusPluginLib.Basic{
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return new Parameters(new Parameter[]{
-				new DoubleParam("Standard deviation", 0.1) 
+				new DoubleParam("Standard deviation", 0.1){Help = "Standard deviation of the noise distribution."} 
 			});
 		}
 	}

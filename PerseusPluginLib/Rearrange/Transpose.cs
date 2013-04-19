@@ -37,7 +37,16 @@ namespace PerseusPluginLib.Rearrange{
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
 			int nameCol = param.GetSingleChoiceParam("New column names").Value;
 			float[,] x = ArrayUtils.Transpose(mdata.ExpressionValues);
-			List<string> colNames = new List<string>(mdata.StringColumns[nameCol]);
+			List<string> colNames;
+			if (nameCol >= 0){
+				colNames = new List<string>(mdata.StringColumns[nameCol]);
+			} else{
+				string[] s = new string[mdata.RowCount];
+				for (int i = 0; i < s.Length; i++){
+					s[i] = "Column" + (i + 1);
+				}
+				colNames = new List<string>(s);
+			}
 			List<string> rowNames = mdata.ExpressionColumnNames;
 			mdata.SetData(mdata.Name, colNames, x, new List<string>(new[]{"Name"}), new List<string[]>(new[]{rowNames.ToArray()}),
 				new List<string>(), new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(),

@@ -43,9 +43,9 @@ namespace PerseusPluginLib.Norm{
 				case 3:
 					DivideImpl(rows, ArrayUtils.TukeyBiweight, mdata);
 					break;
-				case 4:
-					DivideImpl(rows, ArrayUtils.TukeyBiweightSe, mdata);
-					break;
+				//case 4:
+				//	DivideImpl(rows, ArrayUtils.TukeyBiweightSe, mdata);
+				//	break;
 				default:
 					throw new Exception("Never get here.");
 			}
@@ -91,7 +91,8 @@ namespace PerseusPluginLib.Norm{
 						Help = "Specifies if the analysis is performed on the rows or the columns of the matrix."
 					},
 					new SingleChoiceParam("Divide by what")
-					{Values = new[]{"Mean", "Median", "Most frequent value", "Tukey's biweight", "Tukey's biweight se"}, Value = 1}
+					{Values = new[]{"Mean", "Median", "Most frequent value", "Tukey's biweight"//, "Tukey's biweight se"
+					}, Value = 1}
 				});
 		}
 	}

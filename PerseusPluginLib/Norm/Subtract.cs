@@ -81,8 +81,8 @@ namespace PerseusPluginLib.Norm{
 					return ArrayUtils.MostFrequentValue;
 				case 3:
 					return ArrayUtils.TukeyBiweight;
-				case 4:
-					return ArrayUtils.TukeyBiweightSe;
+					//case 4:
+					//	return ArrayUtils.TukeyBiweightSe;
 				default:
 					throw new Exception("Never get here.");
 			}
@@ -92,7 +92,7 @@ namespace PerseusPluginLib.Norm{
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceWithSubParams("Matrix access"){
-						Values = new[]{"Rows", "Columns"},
+						Values = new[]{"Rows", "Columns"}, ParamNameWidth = 136, TotalWidth = 731,
 						SubParams =
 							new[]{
 								new Parameters(new SingleChoiceParam("Grouping")
@@ -101,8 +101,12 @@ namespace PerseusPluginLib.Norm{
 							},
 						Help = "Specifies if the subtraction is performed on the rows or the columns of the matrix."
 					},
-					new SingleChoiceParam("Subtract what")
-					{Values = new[]{"Mean", "Median", "Most frequent value", "Tukey's biweight", "Tukey's biweight se"}, Value = 1}
+					new SingleChoiceParam("Subtract what"){
+						Values = new[]{
+							"Mean", "Median", "Most frequent value", "Tukey's biweight" //, "Tukey's biweight se"
+						},
+						Value = 1
+					}
 				});
 		}
 

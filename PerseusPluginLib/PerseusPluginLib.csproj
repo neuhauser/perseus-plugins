@@ -49,7 +49,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbsQuant\CopyNumbers.cs" />
     <Compile Include="Basic\CloneProcessing.cs" />
     <Compile Include="Basic\CombineAnnotations.cs" />
     <Compile Include="Basic\CombineByIdentifiersProcessing.cs" />

@@ -59,7 +59,10 @@ namespace PerseusPluginLib.Rearrange{
 			int[] sel = ArrayUtils.ConsecutiveInts(values.Count);
 			return
 				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Operation"){Values = names},
+					new MultiChoiceParam("Operation"){
+						Values = names,
+						Help = "How should the numbers in a cell of the multi-numeric columns be transformed to a single number?"
+					},
 					new MultiChoiceParam("Columns"){
 						Values = values, Value = sel,
 						Help = "Select here the multi-numeric colums that should be converted to numeric columns."

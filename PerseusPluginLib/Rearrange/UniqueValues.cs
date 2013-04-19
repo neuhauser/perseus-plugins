@@ -8,7 +8,12 @@ namespace PerseusPluginLib.Rearrange{
 	public class UniqueValues : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public string HelpDescription { get { return ""; } }
+		public string HelpDescription{
+			get{
+				return "Values in the selected string columns are made unique. The strings are " +
+					"interpreted as separated by semicolons. These semicolon-separated values are made unique.";
+			}
+		}
 		public string Name { get { return "Unique values"; } }
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
@@ -26,15 +31,9 @@ namespace PerseusPluginLib.Rearrange{
 
 		public void ProcessData(IMatrixData mdata, Parameters param1, ref IMatrixData[] supplTables, ProcessInfo processInfo){
 			int[] stringCols = param1.GetMultiChoiceParam("String columns").Value;
-			int[] catCols = param1.GetMultiChoiceParam("Categorical columns").Value;
-			if (catCols.Length + stringCols.Length == 0){
+			if (stringCols.Length == 0){
 				processInfo.ErrString = "Please select some columns.";
 				return;
-			}
-			foreach (string[][] col in catCols.Select(catCol => mdata.CategoryColumns[catCol])){
-				for (int i = 0; i < col.Length; i++){
-					col[i] = ArrayUtils.UniqueValues(col[i]);
-				}
 			}
 			foreach (string[] col in stringCols.Select(stringCol => mdata.StringColumns[stringCol])){
 				for (int i = 0; i < col.Length; i++){
@@ -55,10 +54,6 @@ namespace PerseusPluginLib.Rearrange{
 					new MultiChoiceParam("String columns"){
 						Values = mdata.StringColumnNames, Value = new int[0],
 						Help = "Select here the string colums that should be expanded."
-					},
-					new MultiChoiceParam("Categorical columns"){
-						Values = mdata.CategoryColumnNames, Value = new int[0],
-						Help = "Select here the categorical colums that should be expanded."
 					}
 				});
 		}

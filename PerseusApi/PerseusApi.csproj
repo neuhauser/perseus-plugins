@@ -53,6 +53,7 @@
     <Compile Include="IAnalysis.cs" />
     <Compile Include="IAnalysisResult.cs" />
     <Compile Include="IData.cs" />
+    <Compile Include="IDocumentData.cs" />
     <Compile Include="IMatrixActivity.cs" />
     <Compile Include="IMatrixAnalysis.cs" />
     <Compile Include="IMatrixAnalysisResult.cs" />
