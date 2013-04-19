@@ -5,6 +5,7 @@ using BasicLib.Num;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Basic{
 	public class PerformanceCurves : IMatrixProcessing{
@@ -20,12 +21,15 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			bool falseAreIndicated = param.GetSingleChoiceParam("Indicated are").Value == 0;
 			int catCol = param.GetSingleChoiceParam("In column").Value;
 			string word = param.GetStringParam("Indicator").Value;

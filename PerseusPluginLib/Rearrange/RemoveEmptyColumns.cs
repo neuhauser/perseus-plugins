@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Rearrange{
 	public class RemoveEmptyColumns : IMatrixProcessing{
@@ -19,12 +20,15 @@ namespace PerseusPluginLib.Rearrange{
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
 		public string HelpDescription { get { return "Columns containing no values or only invalid values will be removed."; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int[] exColInds = GetValidExCols(data);
 			int[] numColInds = GetValidNumCols(data);
 			int[] multiNumColInds = GetValidMultiNumCols(data);

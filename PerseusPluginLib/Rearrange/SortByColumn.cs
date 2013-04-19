@@ -2,6 +2,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Rearrange{
 	public class SortByColumn : IMatrixProcessing{
@@ -18,12 +19,15 @@ namespace PerseusPluginLib.Rearrange{
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 6; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int ind = param.GetSingleChoiceParam("Column").Value;
 			bool descending = param.GetBoolParam("Descending").Value;
 			if (ind < mdata.ExpressionColumnCount){

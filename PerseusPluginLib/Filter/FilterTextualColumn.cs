@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Filter{
@@ -20,12 +21,15 @@ namespace PerseusPluginLib.Filter{
 		public string Heading { get { return "Filter"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 7; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int colInd = param.GetSingleChoiceParam("Column").Value;
 			string searchString = param.GetStringParam("Search string").Value;
 			if (string.IsNullOrEmpty(searchString)){

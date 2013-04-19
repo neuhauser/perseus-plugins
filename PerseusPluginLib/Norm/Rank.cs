@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Norm{
 	internal class Rank : IMatrixProcessing{
@@ -19,12 +20,15 @@ namespace PerseusPluginLib.Norm{
 		public string Heading { get { return "Normalization"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return -9; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			SingleChoiceParam access = param.GetSingleChoiceParam("Matrix access");
 			bool rows = access.Value == 0;
 			Rank1(rows, mdata);

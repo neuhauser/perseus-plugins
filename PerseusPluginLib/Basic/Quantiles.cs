@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Basic{
@@ -19,6 +20,9 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 		public string HelpDescription {
 			get{
 				return
@@ -30,7 +34,7 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int numQuantiles = param.GetIntParam("Number of quantiles").Value;
 			int[] colInds = param.GetMultiChoiceParam("Columns").Value;
 			foreach (int colInd in colInds){

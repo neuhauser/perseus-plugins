@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Rearrange{
 	public class RenameColumnsRegexp : IMatrixProcessing{
@@ -19,12 +20,15 @@ namespace PerseusPluginLib.Rearrange{
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 1; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			string regexStr = param.GetStringParam("Regular expression").Value;
 			Regex regex = new Regex(regexStr);
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){

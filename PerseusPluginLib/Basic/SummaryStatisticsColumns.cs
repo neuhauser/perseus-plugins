@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Basic{
 	public class SummaryStatisticsColumns : IMatrixProcessing{
@@ -15,7 +16,10 @@ namespace PerseusPluginLib.Basic{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
-		public string HelpDescription{
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
+		public string HelpDescription {
 			get{
 				return
 					"A set of simple descriptive quantities are calculated that help summarizing the data in the selected expression or numerical columns.";
@@ -34,7 +38,7 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int[] cols = param.GetMultiChoiceParam("Columns").Value;
 			HashSet<int> w = ArrayUtils.ToHashSet(param.GetMultiChoiceParam("Calculate").Value);
 			bool[] include = new bool[SummaryStatisticsRows.procs.Length];

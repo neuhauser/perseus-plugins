@@ -1,7 +1,7 @@
 using System;
 using BasicLib.Param;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixAnalysis : IMatrixActivity, IAnalysis{
 		string Heading { get; }
 		Tuple<IMatrixProcessing, Func<Parameters, IMatrixData, Parameters, string>>[] Replacements { get; }

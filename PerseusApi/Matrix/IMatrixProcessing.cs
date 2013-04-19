@@ -1,7 +1,7 @@
 using BasicLib.Param;
 using BasicLib.Util;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixProcessing : IMatrixActivity{
 		string Heading { get; }
 		string HelpOutput { get; }
@@ -9,7 +9,12 @@ namespace PerseusApi{
 		string[] HelpSupplTables { get; }
 		HelpType[] HelpSupplTablesType { get; }
 		int NumSupplTables { get; }
-		void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo);
+		string[] HelpDocuments { get; }
+		HelpType[] HelpDocumentTypes { get; }
+		int NumDocuments { get; }
+
+		void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents,
+			ProcessInfo processInfo);
 
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the processing.

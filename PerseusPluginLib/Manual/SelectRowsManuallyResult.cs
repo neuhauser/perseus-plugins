@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{
 	[Serializable]
@@ -11,7 +12,7 @@ namespace PerseusPluginLib.Manual{
 			this.mdata = mdata;
 		}
 
-		public Control GetControl(Action<string> updateStatusLabel, Action<IMatrixData> newMatrix){
+		public Control GetControl(Action<string> updateStatusLabel, Action<IMatrixData> newMatrix, Action<IDocumentData> newDocument) {
 			return new SelectRowsManuallyControl(mdata, newMatrix);
 		}
 

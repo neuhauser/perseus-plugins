@@ -1,6 +1,6 @@
 using BasicLib.Param;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixExport : IMatrixActivity{
 		void Export(Parameters parameters, IMatrixData data, ProcessInfo processInfo);
 

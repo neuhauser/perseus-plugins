@@ -4,6 +4,7 @@ using BasicLib.Num;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Impute{
@@ -20,7 +21,10 @@ namespace PerseusPluginLib.Impute{
 		public string Heading { get { return "Imputation"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
-		public string HelpDescription{
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
+		public string HelpDescription {
 			get{
 				return
 					"Missing values will be replaced by random numbers that are drawn from a normal distribution. The parameters of this" +
@@ -35,7 +39,7 @@ namespace PerseusPluginLib.Impute{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			double width = param.GetDoubleParam("Width").Value;
 			double shift = param.GetDoubleParam("Down shift").Value;
 			bool separateColumns = param.GetSingleChoiceParam("Mode").Value == 0;

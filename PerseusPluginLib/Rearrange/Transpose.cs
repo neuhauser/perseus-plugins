@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Rearrange{
 	public class Transpose : IMatrixProcessing{
@@ -29,12 +30,15 @@ namespace PerseusPluginLib.Rearrange{
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 5; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int nameCol = param.GetSingleChoiceParam("New column names").Value;
 			float[,] x = ArrayUtils.Transpose(mdata.ExpressionValues);
 			List<string> colNames;

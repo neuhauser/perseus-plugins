@@ -1,7 +1,7 @@
 using BasicLib.Param;
 using BasicLib.Util;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixCombination : IMatrixActivity{
 		string HelpOutput { get; }
 		HelpType HelpOutputType { get; }

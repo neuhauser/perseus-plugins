@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{
 	public partial class SelectRowsManuallyControl : UserControl{

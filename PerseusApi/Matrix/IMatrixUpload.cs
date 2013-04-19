@@ -1,6 +1,6 @@
 using BasicLib.Param;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixUpload : IMatrixActivity{
 		void LoadData(IMatrixData matrixData, Parameters parameters, ProcessInfo processInfo);
 

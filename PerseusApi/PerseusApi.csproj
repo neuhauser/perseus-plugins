@@ -49,19 +49,20 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentType.cs" />
     <Compile Include="IActivity.cs" />
     <Compile Include="IAnalysis.cs" />
     <Compile Include="IAnalysisResult.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="IDocumentData.cs" />
-    <Compile Include="IMatrixActivity.cs" />
-    <Compile Include="IMatrixAnalysis.cs" />
-    <Compile Include="IMatrixAnalysisResult.cs" />
-    <Compile Include="IMatrixCombination.cs" />
-    <Compile Include="IMatrixData.cs" />
-    <Compile Include="IMatrixExport.cs" />
-    <Compile Include="IMatrixProcessing.cs" />
-    <Compile Include="IMatrixUpload.cs" />
+    <Compile Include="Matrix\IMatrixActivity.cs" />
+    <Compile Include="Matrix\IMatrixAnalysis.cs" />
+    <Compile Include="Matrix\IMatrixAnalysisResult.cs" />
+    <Compile Include="Matrix\IMatrixCombination.cs" />
+    <Compile Include="Matrix\IMatrixData.cs" />
+    <Compile Include="Matrix\IMatrixExport.cs" />
+    <Compile Include="Matrix\IMatrixProcessing.cs" />
+    <Compile Include="Matrix\IMatrixUpload.cs" />
     <Compile Include="IVisualization.cs" />
     <Compile Include="IVisualizationResult.cs" />
     <Compile Include="ProcessInfo.cs" />

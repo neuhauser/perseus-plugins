@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Rearrange{
 	public delegate double Conversion(double[] x);
@@ -31,12 +32,15 @@ namespace PerseusPluginLib.Rearrange{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param1, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param1, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int[] cols = param1.GetMultiChoiceParam("Columns").Value;
 			int[] ops = param1.GetMultiChoiceParam("Operation").Value;
 			foreach (int t in ops){

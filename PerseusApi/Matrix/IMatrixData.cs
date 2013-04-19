@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace PerseusApi{
+namespace PerseusApi.Matrix{
 	public interface IMatrixData : IData{
 		int RowCount { get; }
 		float[,] ExpressionValues { get; set; }

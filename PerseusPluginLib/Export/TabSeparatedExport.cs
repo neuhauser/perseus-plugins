@@ -5,6 +5,7 @@ using System.IO;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 
 namespace PerseusPluginLib.Export{

@@ -5,6 +5,7 @@ using System.Linq;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Norm{
 	public class Subtract : IMatrixProcessing{
@@ -21,12 +22,15 @@ namespace PerseusPluginLib.Norm{
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			SingleChoiceWithSubParams access = param.GetSingleChoiceWithSubParams("Matrix access");
 			bool rows = access.Value == 0;
 			int groupInd;

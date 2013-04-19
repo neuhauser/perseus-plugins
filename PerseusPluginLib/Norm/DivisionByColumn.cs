@@ -2,6 +2,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Norm{
 	public class DivisionByColumn : IMatrixProcessing{
@@ -18,12 +19,15 @@ namespace PerseusPluginLib.Norm{
 		public string Heading { get { return "Normalization"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ProcessInfo processInfo){
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int colIndex = param.GetSingleChoiceParam("Control column").Value;
 			if (colIndex < mdata.ExpressionColumnCount){
 				DivideByColumn(mdata, colIndex);

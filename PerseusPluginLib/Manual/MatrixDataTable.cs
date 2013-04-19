@@ -3,6 +3,7 @@ using BasicLib.Forms.Table;
 using BasicLib.Num;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{
 	public class MatrixDataTable : VirtualDataTable{
