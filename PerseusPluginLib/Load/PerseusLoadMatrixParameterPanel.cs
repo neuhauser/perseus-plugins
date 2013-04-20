@@ -14,7 +14,8 @@ namespace PerseusPluginLib.Load{
 				"pfam names", "gocc names", "gomf names", "gobp names", "kegg pathway names", "chromosome", "strand",
 				"interpro name", "prints name", "prosite name", "smart name", "sequence motifs", "reactome", "transcription factors"
 				, "microrna", "scop class", "scop fold", "scop superfamily", "scop family", "phospho motifs", "mim", "pdb", "intact"
-				, "corum", "motifs", "best motif", "reverse", "contaminant", "only identified by site", "type", "amino acid"
+				, "corum", "motifs", "best motif", "reverse", "contaminant", "only identified by site", "type", "amino acid",
+				"raw file", "experiment", "charge","modifications"
 			});
 		private static readonly HashSet<string> textualCols =
 			new HashSet<string>(new[]{
@@ -25,7 +26,13 @@ namespace PerseusPluginLib.Load{
 		private static readonly HashSet<string> numericCols =
 			new HashSet<string>(new[]{
 				"position", "total position", "peptides (seq)", "razor peptides (seq)", "unique peptides (seq)", "localization prob"
-				, "size", "p value", "benj. hoch. fdr", "score", "score for localization", "pep"
+				, "size", "p value", "benj. hoch. fdr", "score", "delta score", "combinatorics", "intensity",
+				"score for localization", "pep", "m/z", "mass", "resolution", "uncalibrated - calibrated m/z [ppm]",
+				"mass error [ppm]", "uncalibrated mass error [ppm]", "max intensity m/z 0", "retention length", "retention time",
+				"calibrated retention time", "calibrated retention time start", "calibrated retention time finish",
+				"retention time calibration", "match time difference", "match q-value", "match score", "number of data points",
+				"number of scans", "number of isotopic peaks", "pif", "fraction of total spectrum", "base peak fraction",
+				"ms/ms count", "ms/ms m/z"
 			});
 		public string Filter { get; set; }
 		public PerseusLoadMatrixParameterPanel() : this(new string[0]) {}
