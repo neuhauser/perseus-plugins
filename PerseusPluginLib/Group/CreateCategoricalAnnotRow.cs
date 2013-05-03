@@ -71,7 +71,7 @@ namespace PerseusPluginLib.Group{
 				return "Error: the file does not contain a grouping column.";
 			}
 			string[] nameCol = TabSep.GetColumn(colNames[nameIndex], filename, '\t');
-			Dictionary<string, int> map = ArrayUtils.GetIndexMap(nameCol);
+			Dictionary<string, int> map = ArrayUtils.InverseMap(nameCol);
 			for (int i = 0; i < colNames.Length; i++){
 				if (i == nameIndex){
 					continue;
