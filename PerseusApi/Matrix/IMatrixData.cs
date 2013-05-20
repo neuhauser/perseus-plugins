@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PerseusApi.Document;
 
 namespace PerseusApi.Matrix{
 	public interface IMatrixData : IData{
@@ -51,6 +52,7 @@ namespace PerseusApi.Matrix{
 		void ExtractExpressionColumns(int[] order);
 		IMatrixData Copy();
 		IMatrixData CreateNewInstance();
+		IDocumentData CreateNewDocument();
 		void Clear();
 
 		void SetData(string name, List<string> expressionColumnNames, float[,] expressionValues,
