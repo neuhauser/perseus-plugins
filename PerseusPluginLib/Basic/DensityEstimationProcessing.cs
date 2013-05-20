@@ -3,6 +3,7 @@ using BasicLib.Num;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Document;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using PerseusApi.Document;
 
 namespace PerseusApi.Matrix{
 	/// <summary>

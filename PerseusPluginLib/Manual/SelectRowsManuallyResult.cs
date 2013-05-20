@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using PerseusApi;
+using PerseusApi.Document;
 using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{

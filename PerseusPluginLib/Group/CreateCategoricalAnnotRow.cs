@@ -5,6 +5,7 @@ using BasicLib.Param;
 using BasicLib.Parse;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Document;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 

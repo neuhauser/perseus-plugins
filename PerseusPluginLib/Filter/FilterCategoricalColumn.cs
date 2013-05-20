@@ -3,6 +3,7 @@ using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
+using PerseusApi.Document;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
 
@@ -31,6 +32,10 @@ namespace PerseusPluginLib.Filter{
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
 			int colInd = param.GetSingleChoiceParam("Column").Value;
+			if (colInd < 0){
+				processInfo.ErrString = "No categorical columns available.";
+				return;
+			}
 			string value = param.GetStringParam("Find").Value;
 			bool remove = param.GetSingleChoiceParam("Mode").Value == 0;
 			string[][] cats = mdata.CategoryColumns[colInd];
