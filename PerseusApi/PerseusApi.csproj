@@ -49,6 +49,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataType.cs" />
     <Compile Include="DocumentType.cs" />
     <Compile Include="IActivity.cs" />
     <Compile Include="IAnalysis.cs" />
