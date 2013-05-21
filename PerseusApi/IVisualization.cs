@@ -3,6 +3,7 @@
 namespace PerseusApi{
 	public interface IVisualization : IActivity{
 		string[] InputNames { get; }
+		DataType[] InputDataTypes { get; }
 		IVisualizationResult VisualizeData(IData[] data, Parameters param, ProcessInfo processInfo);
 
 		/// <summary>
