@@ -15,6 +15,10 @@ namespace PerseusApi.Matrix{
 		List<string> ExpressionColumnDescriptions { get; set; }
 		float[] GetExpressionRow(int row);
 		float[] GetExpressionColumn(int col);
+		float[] GetQualityRow(int row);
+		float[] GetQualityColumn(int col);
+		bool[] GetIsImputednRow(int row);
+		bool[] GetIsImputedColumn(int col);
 		float this[int i, int j] { get; set; }
 		int CategoryColumnCount { get; }
 		List<string> CategoryColumnNames { get; set; }

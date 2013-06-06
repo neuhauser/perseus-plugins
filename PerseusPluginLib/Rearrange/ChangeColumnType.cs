@@ -30,7 +30,8 @@ namespace PerseusPluginLib.Rearrange{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			SingleChoiceWithSubParams sp = param.GetSingleChoiceWithSubParams("Source type");
 			Parameters subParams = sp.GetSubParameters();
 			int[] colInds = subParams.GetMultiChoiceParam("Columns").Value;
@@ -242,8 +243,10 @@ namespace PerseusPluginLib.Rearrange{
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			string[] choice = new[]{"Expression", "Numerical", "Categorical", "String"};
 			List<Parameters> subParams = new List<Parameters>{
-				GetSubParams(mdata, GetExpressionSelection()), GetSubParams(mdata, GetNumericSelection()),
-				GetSubParams(mdata, GetCategoricalSelection()), GetSubParams(mdata, GetStringSelection())
+				GetSubParams(mdata.ExpressionColumnNames, GetExpressionSelection()),
+				GetSubParams(mdata.NumericColumnNames, GetNumericSelection()),
+				GetSubParams(mdata.CategoryColumnNames, GetCategoricalSelection()),
+				GetSubParams(mdata.StringColumnNames, GetStringSelection())
 			};
 			return
 				new Parameters(new Parameter[]{
@@ -254,11 +257,10 @@ namespace PerseusPluginLib.Rearrange{
 				});
 		}
 
-		private static Parameters GetSubParams(IMatrixData mdata, IList<string> options){
+		private static Parameters GetSubParams(IList<string> values, IList<string> options){
 			return
 				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Columns")
-					{Values = mdata.StringColumnNames, Help = "Select here the column whose type should be changed."},
+					new MultiChoiceParam("Columns"){Values = values, Help = "Select here the column whose type should be changed."},
 					new SingleChoiceParam("Target type", 0)
 					{Values = options, Help = "The type that these columns will have in the result table."}
 				});

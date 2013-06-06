@@ -15,13 +15,14 @@ namespace PerseusPluginLib.Load{
 				"interpro name", "prints name", "prosite name", "smart name", "sequence motifs", "reactome", "transcription factors"
 				, "microrna", "scop class", "scop fold", "scop superfamily", "scop family", "phospho motifs", "mim", "pdb", "intact"
 				, "corum", "motifs", "best motif", "reverse", "contaminant", "only identified by site", "type", "amino acid",
-				"raw file", "experiment", "charge", "modifications", "md modification"
+				"raw file", "experiment", "charge", "modifications", "md modification", "dp aa", "dp decoy", "dp modification"
 			});
 		private static readonly HashSet<string> textualCols =
 			new HashSet<string>(new[]{
 				"protein ids", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl", "ensg", "ensp", "enst",
 				"mgi", "kegg ortholog", "dip", "hprd interactors", "sequence window", "sequence", "orf name", "names", "proteins",
-				"positions within proteins", "leading proteins", "md sequence", "md proteins", "md gene names", "md protein names"
+				"positions within proteins", "leading proteins", "md sequence", "md proteins", "md gene names", "md protein names",
+				"dp base sequence", "dp probabilities", "dp proteins", "dp gene names", "dp protein names"
 			});
 		private static readonly HashSet<string> numericCols =
 			new HashSet<string>(new[]{
@@ -32,7 +33,10 @@ namespace PerseusPluginLib.Load{
 				"calibrated retention time", "calibrated retention time start", "calibrated retention time finish",
 				"retention time calibration", "match time difference", "match q-value", "match score", "number of data points",
 				"number of scans", "number of isotopic peaks", "pif", "fraction of total spectrum", "base peak fraction",
-				"ms/ms count", "ms/ms m/z", "md base scan number", "md mass error", "md time difference"
+				"ms/ms count", "ms/ms m/z", "md base scan number", "md mass error", "md time difference", "dp mass difference",
+				"dp time difference", "dp score", "dp pep", "dp positional probability", "dp base scan number", "dp mod scan number"
+				, "dp cluster index", "dp cluster mass", "dp cluster mass sd", "dp cluster size total", "dp cluster size forward",
+				"dp cluster size reverse", "dp peptide length difference"
 			});
 		public string Filter { get; set; }
 		public PerseusLoadMatrixParameterPanel() : this(new string[0]) {}

@@ -16,7 +16,7 @@ namespace PerseusPluginLib.Rearrange{
 		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
-		public int NumSupplTables { get { return 2; } }
+		public int NumSupplTables { get { return 0; } }
 		public string Name { get { return "Rename columns [reg. ex.]"; } }
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
@@ -29,7 +29,8 @@ namespace PerseusPluginLib.Rearrange{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			string regexStr = param.GetStringParam("Regular expression").Value;
 			Regex regex = new Regex(regexStr);
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
