@@ -44,18 +44,57 @@ namespace PerseusPluginLib.Rearrange{
 			float[,] x = ArrayUtils.Transpose(mdata.ExpressionValues);
 			List<string> colNames;
 			if (nameCol >= 0){
-				colNames = new List<string>(mdata.StringColumns[nameCol]);
-			} else{
-				string[] s = new string[mdata.RowCount];
-				for (int i = 0; i < s.Length; i++){
-					s[i] = "Column" + (i + 1);
+				HashSet<string> taken = new HashSet<string>();
+				colNames = new List<string>();
+				foreach (string n in mdata.StringColumns[nameCol]) {
+					string n1 = GetNextAvailableName(n, taken);
+					taken.Add(n1);
+					colNames.Add(n1);
 				}
-				colNames = new List<string>(s);
+
+			} else{
+				colNames = new List<string>();
+				for (int i = 0; i < mdata.RowCount; i++) {
+					colNames.Add("Column" + (i + 1));
+				}
 			}
 			List<string> rowNames = mdata.ExpressionColumnNames;
 			mdata.SetData(mdata.Name, colNames, x, new List<string>(new[]{"Name"}), new List<string[]>(new[]{rowNames.ToArray()}),
 				new List<string>(), new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(),
 				new List<double[][]>());
+		}
+
+		private static string GetNextAvailableName(string s, ICollection<string> taken){
+			if (!taken.Contains(s)){
+				return s;
+			}
+			while (true){
+				s = GetNext(s);
+				if (!taken.Contains(s)){
+					return s;
+				}
+			}
+		}
+
+		private static string GetNext(string s){
+			if (!HasNumberExtension(s)){
+				return s + "_1";
+			}
+			int x = s.LastIndexOf('_');
+			string s1 = s.Substring(x + 1);
+			int num =int.Parse(s1);
+			return s.Substring(0, x) + (num + 1);
+		}
+
+		private static bool HasNumberExtension(string s){
+			int x = s.LastIndexOf('_');
+			if (x < 0){
+				return false;
+			}
+			string s1 = s.Substring(x + 1);
+			int num;
+			bool succ = int.TryParse(s1, out num);
+			return succ;
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){

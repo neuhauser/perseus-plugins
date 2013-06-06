@@ -89,7 +89,9 @@ namespace PerseusPluginLib.Rearrange{
 			}
 			List<string> newExpNames = new List<string>();
 			newExpNames.AddRange(allNewCols);
-			mdata.SetData(mdata.Name, mdata.Description, newExpNames, newExpNames, newExpVals, newIsImputed, newQuality,
+			List<string> newExpDesc = new List<string>();
+			newExpDesc.AddRange(allNewCols);
+			mdata.SetData(mdata.Name, mdata.Description, newExpNames, newExpDesc, newExpVals, newIsImputed, newQuality,
 				mdata.QualityName, mdata.QualityBiggerIsBetter, mdata.StringColumnNames, mdata.StringColumnDescriptions,
 				Expand(mdata.StringColumns, nseries), mdata.CategoryColumnNames, mdata.CategoryColumnDescriptions,
 				Expand(mdata.CategoryColumns, nseries), mdata.NumericColumnNames, mdata.NumericColumnDescriptions,
