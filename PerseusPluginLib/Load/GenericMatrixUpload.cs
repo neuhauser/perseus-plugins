@@ -94,13 +94,13 @@ namespace PerseusPluginLib.Load{
 				}
 			}
 			LoadData(colNames, colDescriptions, eInds, cInds, nInds, tInds, mInds, filename, matrixData, annotationRows,
-				processInfo.Progress, processInfo.Status);
+				processInfo.Progress, processInfo.Status, separator);
 		}
 
 		private static void LoadData(IList<string> colNames, IList<string> colDescriptions, IList<int> expressionColIndices,
 			IList<int> catColIndices, IList<int> numColIndices, IList<int> textColIndices, IList<int> multiNumColIndices,
 			string filename, IMatrixData matrixData, IDictionary<string, string[]> annotationRows, Action<int> progress,
-			Action<string> status){
+			Action<string> status, char separator) {
 			Dictionary<string, string[]> catAnnotatRows;
 			Dictionary<string, string[]> numAnnotatRows;
 			status("Reading data");
@@ -132,7 +132,7 @@ namespace PerseusPluginLib.Load{
 				if (TabSep.IsCommentLine(line, commentPrefix, commentPrefixExceptions)){
 					continue;
 				}
-				string[] w = line.Split('\t');
+				string[] w = line.Split(separator);
 				for (int i = 0; i < expressionColIndices.Count; i++){
 					if (expressionColIndices[i] >= w.Length){
 						expressionValues[count, i] = float.NaN;

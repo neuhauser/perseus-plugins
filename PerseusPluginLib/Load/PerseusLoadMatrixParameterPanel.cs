@@ -22,7 +22,7 @@ namespace PerseusPluginLib.Load{
 				"protein ids", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl", "ensg", "ensp", "enst",
 				"mgi", "kegg ortholog", "dip", "hprd interactors", "sequence window", "sequence", "orf name", "names", "proteins",
 				"positions within proteins", "leading proteins", "md sequence", "md proteins", "md gene names", "md protein names",
-				"dp base sequence", "dp probabilities", "dp proteins", "dp gene names", "dp protein names"
+				"dp base sequence", "dp probabilities", "dp proteins", "dp gene names", "dp protein names", "name"
 			});
 		private static readonly HashSet<string> numericCols =
 			new HashSet<string>(new[]{
