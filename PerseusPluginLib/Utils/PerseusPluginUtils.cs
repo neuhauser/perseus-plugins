@@ -23,7 +23,7 @@ namespace PerseusPluginLib.Utils{
 			return new SingleChoiceParam("Mode"){
 				Values = new[]{"Mark matching rows", "Mark non-matching rows"},
 				Help =
-					"If 'Mark matching rows' is selected, rows having the value specified above will be indicated with a '+* in the output column. " +
+					"If 'Mark matching rows' is selected, rows having the value specified above will be indicated with a '+' in the output column. " +
 						"If 'Keep matching rows' is selected, the opposite will happen."
 			};
 		}

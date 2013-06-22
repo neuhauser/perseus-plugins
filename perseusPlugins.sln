@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerseusApi", "PerseusApi\Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerseusPluginLib", "PerseusPluginLib\PerseusPluginLib.csproj", "{5F1C1ABC-403D-4F96-A37D-B6CE1B791544}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyPlugins", "MyPlugins\MyPlugins.csproj", "{79439ECA-807F-439A-8B9B-B0A8532BC02F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginMy", "PluginMy\PluginMy.csproj", "{AF3A6168-3FF3-4A68-B212-BAAC932FAB61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,10 @@ Global
 		{5F1C1ABC-403D-4F96-A37D-B6CE1B791544}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F1C1ABC-403D-4F96-A37D-B6CE1B791544}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F1C1ABC-403D-4F96-A37D-B6CE1B791544}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79439ECA-807F-439A-8B9B-B0A8532BC02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79439ECA-807F-439A-8B9B-B0A8532BC02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79439ECA-807F-439A-8B9B-B0A8532BC02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79439ECA-807F-439A-8B9B-B0A8532BC02F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF3A6168-3FF3-4A68-B212-BAAC932FAB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF3A6168-3FF3-4A68-B212-BAAC932FAB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF3A6168-3FF3-4A68-B212-BAAC932FAB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF3A6168-3FF3-4A68-B212-BAAC932FAB61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
