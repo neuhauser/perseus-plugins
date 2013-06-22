@@ -30,7 +30,8 @@ namespace PerseusPluginLib.Filter{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int colInd = param.GetSingleChoiceParam("Column").Value;
 			string searchString = param.GetStringParam("Search string").Value;
 			if (string.IsNullOrEmpty(searchString)){

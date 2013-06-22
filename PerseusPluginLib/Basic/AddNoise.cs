@@ -29,20 +29,21 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			Random2 rand = new Random2();
 			double std = param.GetDoubleParam("Standard deviation").Value;
 			for (int i = 0; i < mdata.RowCount; i++){
 				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
-					mdata[i, j] += (float)rand.NextGaussian(0, std);
+					mdata[i, j] += (float) rand.NextGaussian(0, std);
 				}
 			}
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			return new Parameters(new Parameter[]{
-				new DoubleParam("Standard deviation", 0.1){Help = "Standard deviation of the noise distribution."} 
-			});
+			return
+				new Parameters(new Parameter[]
+				{new DoubleParam("Standard deviation", 0.1){Help = "Standard deviation of the noise distribution."}});
 		}
 	}
 }

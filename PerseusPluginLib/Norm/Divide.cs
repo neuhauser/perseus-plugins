@@ -30,7 +30,8 @@ namespace PerseusPluginLib.Norm{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			SingleChoiceParam access = param.GetSingleChoiceParam("Matrix access");
 			bool rows = access.Value == 0;
 			int what = param.GetSingleChoiceParam("Divide by what").Value;
@@ -48,9 +49,9 @@ namespace PerseusPluginLib.Norm{
 				case 3:
 					DivideImpl(rows, ArrayUtils.TukeyBiweight, mdata);
 					break;
-				//case 4:
-				//	DivideImpl(rows, ArrayUtils.TukeyBiweightSe, mdata);
-				//	break;
+					//case 4:
+					//	DivideImpl(rows, ArrayUtils.TukeyBiweightSe, mdata);
+					//	break;
 				default:
 					throw new Exception("Never get here.");
 			}
@@ -95,9 +96,12 @@ namespace PerseusPluginLib.Norm{
 						Values = new[]{"Rows", "Columns"},
 						Help = "Specifies if the analysis is performed on the rows or the columns of the matrix."
 					},
-					new SingleChoiceParam("Divide by what")
-					{Values = new[]{"Mean", "Median", "Most frequent value", "Tukey's biweight"//, "Tukey's biweight se"
-					}, Value = 1}
+					new SingleChoiceParam("Divide by what"){
+						Values = new[]{
+							"Mean", "Median", "Most frequent value", "Tukey's biweight" //, "Tukey's biweight se"
+						},
+						Value = 1
+					}
 				});
 		}
 	}

@@ -30,7 +30,8 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			string colName = param.GetStringParam("Name of new column").Value;
 			int[] columns = param.GetMultiChoiceParam("Categories").Value;
 			bool inverse = param.GetBoolParam("Inverse").Value;
@@ -100,9 +101,11 @@ namespace PerseusPluginLib.Basic{
 			int[] selection = new int[0];
 			return
 				new Parameters(new Parameter[]{
-					new MultiChoiceParam("Categories"){Value = selection, Values = choice, Help = "Search these columns for the search terms specified."}, 
+					new MultiChoiceParam("Categories")
+					{Value = selection, Values = choice, Help = "Search these columns for the search terms specified."},
 					new MultiStringParam("Search terms"){Help = "Look for these terms in the selected columns"},
-					new StringParam("Name of new column"), new BoolParam("Inverse"){Help = "If true, those rows are indicated which do not contain any of the search terms."}
+					new StringParam("Name of new column"),
+					new BoolParam("Inverse"){Help = "If true, those rows are indicated which do not contain any of the search terms."}
 				});
 		}
 	}

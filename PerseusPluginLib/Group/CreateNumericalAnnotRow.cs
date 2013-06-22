@@ -29,7 +29,8 @@ namespace PerseusPluginLib.Group{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			SingleChoiceWithSubParams scwsp = param.GetSingleChoiceWithSubParams("Action");
 			Parameters spar = scwsp.GetSubParameters();
 			switch (scwsp.Value){

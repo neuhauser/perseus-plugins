@@ -29,7 +29,8 @@ namespace PerseusPluginLib.Rearrange{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			List<string> expressionColumnNames = new List<string>();
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
 				expressionColumnNames.Add(param.GetStringParam(mdata.ExpressionColumnNames[i]).Value);

@@ -41,7 +41,8 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int[] colIndx = param.GetMultiChoiceParam("Column 1").Value;
 			int[] colIndy = param.GetMultiChoiceParam("Column 2").Value;
 			if (colIndx.Length == 0){
@@ -64,7 +65,7 @@ namespace PerseusPluginLib.Basic{
 				double ymin;
 				double ymax;
 				DensityEstimation.CalcRanges(xvals1, yvals1, out xmin, out xmax, out ymin, out ymax);
-				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin) / points, points, yvals1, ymin,
+				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin)/points, points, yvals1, ymin,
 					(ymax - ymin)/points, points);
 				DensityEstimation.DivideByMaximum(values);
 				//if (modeInd == 1){

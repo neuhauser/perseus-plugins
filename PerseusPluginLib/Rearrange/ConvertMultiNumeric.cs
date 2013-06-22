@@ -41,7 +41,8 @@ namespace PerseusPluginLib.Rearrange{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param1, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param1, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int[] cols = param1.GetMultiChoiceParam("Columns").Value;
 			int[] ops = param1.GetMultiChoiceParam("Operation").Value;
 			foreach (int t in ops){

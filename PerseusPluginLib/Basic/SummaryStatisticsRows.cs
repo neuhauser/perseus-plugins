@@ -64,8 +64,7 @@ namespace PerseusPluginLib.Basic{
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
 		public int NumDocuments { get { return 0; } }
-		public string HelpDescription {
-			get {
+		public string HelpDescription { get{
 			return
 				"A set of simple descriptive quantities are calculated that help summarizing the expression data in each row.";
 		} }
@@ -83,7 +82,8 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			SingleChoiceWithSubParams xp = param.GetSingleChoiceWithSubParams("Expression column selection");
 			bool groups = xp.Value == 2;
 			string[] groupNames = null;

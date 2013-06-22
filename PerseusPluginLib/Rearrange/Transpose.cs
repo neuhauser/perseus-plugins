@@ -39,22 +39,22 @@ namespace PerseusPluginLib.Rearrange{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int nameCol = param.GetSingleChoiceParam("New column names").Value;
 			float[,] x = ArrayUtils.Transpose(mdata.ExpressionValues);
 			List<string> colNames;
 			if (nameCol >= 0){
 				HashSet<string> taken = new HashSet<string>();
 				colNames = new List<string>();
-				foreach (string n in mdata.StringColumns[nameCol]) {
+				foreach (string n in mdata.StringColumns[nameCol]){
 					string n1 = GetNextAvailableName(n, taken);
 					taken.Add(n1);
 					colNames.Add(n1);
 				}
-
 			} else{
 				colNames = new List<string>();
-				for (int i = 0; i < mdata.RowCount; i++) {
+				for (int i = 0; i < mdata.RowCount; i++){
 					colNames.Add("Column" + (i + 1));
 				}
 			}
@@ -82,7 +82,7 @@ namespace PerseusPluginLib.Rearrange{
 			}
 			int x = s.LastIndexOf('_');
 			string s1 = s.Substring(x + 1);
-			int num =int.Parse(s1);
+			int num = int.Parse(s1);
 			return s.Substring(0, x) + (num + 1);
 		}
 

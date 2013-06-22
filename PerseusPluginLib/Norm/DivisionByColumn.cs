@@ -28,7 +28,8 @@ namespace PerseusPluginLib.Norm{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int colIndex = param.GetSingleChoiceParam("Control column").Value;
 			if (colIndex < mdata.ExpressionColumnCount){
 				DivideByColumn(mdata, colIndex);

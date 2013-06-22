@@ -30,7 +30,8 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData data, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			bool falseAreIndicated = param.GetSingleChoiceParam("Indicated are").Value == 0;
 			int catCol = param.GetSingleChoiceParam("In column").Value;
 			string word = param.GetStringParam("Indicator").Value;

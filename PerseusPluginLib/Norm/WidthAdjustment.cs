@@ -36,7 +36,8 @@ namespace PerseusPluginLib.Norm{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			float[,] vals = mdata.ExpressionValues;
 			double[] dm = new double[mdata.ExpressionColumnCount];
 			double[] dp = new double[mdata.ExpressionColumnCount];

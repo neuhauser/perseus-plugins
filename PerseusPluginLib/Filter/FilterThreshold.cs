@@ -31,7 +31,7 @@ namespace PerseusPluginLib.Filter{
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
 		public int NumDocuments { get { return 0; } }
-		public string HelpDescription {
+		public string HelpDescription{
 			get{
 				return
 					"Rows/columns of the expression matrix are filtered to contain at least the specified numbers of entries that are " +
@@ -47,7 +47,8 @@ namespace PerseusPluginLib.Filter{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			bool rows = param.GetSingleChoiceParam("Matrix access").Value == 0;
 			int minValids = param.GetIntParam("Min. number of values").Value;
 			SingleChoiceWithSubParams modeParam = param.GetSingleChoiceWithSubParams("Mode");

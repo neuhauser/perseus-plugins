@@ -39,7 +39,8 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			bool keepEmpty = param.GetBoolParam("Keep rows without ID").Value;
 			AverageType atype = GetAverageType(param.GetSingleChoiceParam("Average type for expression columns").Value);
 			string[] ids2 = mdata.StringColumns[param.GetSingleChoiceParam("ID column").Value];

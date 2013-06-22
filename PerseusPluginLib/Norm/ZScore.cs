@@ -23,7 +23,7 @@ namespace PerseusPluginLib.Norm{
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
 		public int NumDocuments { get { return 0; } }
-		public string HelpDescription {
+		public string HelpDescription{
 			get{
 				return
 					"The mean of each row/column is subtracted from each value. The result is then divided by the standard deviation of the row/column.";
@@ -37,7 +37,8 @@ namespace PerseusPluginLib.Norm{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables, ref IDocumentData[] documents, ProcessInfo processInfo) {
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
 			SingleChoiceWithSubParams access = param.GetSingleChoiceWithSubParams("Matrix access");
 			bool rows = access.Value == 0;
 			int groupInd;
