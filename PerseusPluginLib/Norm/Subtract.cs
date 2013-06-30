@@ -7,6 +7,7 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using Utils.Util;
 
 namespace PerseusPluginLib.Norm{
 	public class Subtract : IMatrixProcessing{
@@ -28,7 +29,7 @@ namespace PerseusPluginLib.Norm{
 		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
-			return 1;
+			return int.MaxValue;
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
@@ -43,7 +44,7 @@ namespace PerseusPluginLib.Norm{
 			}
 			int what = param.GetSingleChoiceParam("Subtract what").Value;
 			if (groupInd < 0){
-				SubtractValues(rows, GetFunc(what), mdata);
+				SubtractValues(rows, GetFunc(what), mdata, processInfo.NumThreads);
 			} else{
 				string[][] catRow = mdata.CategoryRows[groupInd];
 				foreach (string[] t in catRow){
@@ -87,8 +88,6 @@ namespace PerseusPluginLib.Norm{
 					return ArrayUtils.MostFrequentValue;
 				case 3:
 					return ArrayUtils.TukeyBiweight;
-					//case 4:
-					//	return ArrayUtils.TukeyBiweightSe;
 				default:
 					throw new Exception("Never get here.");
 			}
@@ -109,42 +108,46 @@ namespace PerseusPluginLib.Norm{
 					},
 					new SingleChoiceParam("Subtract what"){
 						Values = new[]{
-							"Mean", "Median", "Most frequent value", "Tukey's biweight" //, "Tukey's biweight se"
+							"Mean", "Median", "Most frequent value", "Tukey's biweight"
 						},
 						Value = 1
 					}
 				});
 		}
 
-		public static void SubtractValues(bool rows, Func<double[], double> summarize, IMatrixData data){
+		public static void SubtractValues(bool rows, Func<double[], double> summarize, IMatrixData data, int nthreads){
 			if (rows){
-				for (int i = 0; i < data.RowCount; i++){
-					List<double> vals = new List<double>();
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						double q = data[i, j];
-						if (!double.IsNaN(q) && !double.IsInfinity(q)){
-							vals.Add(q);
-						}
-					}
-					double med = summarize(vals.ToArray());
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						data[i, j] -= (float) med;
-					}
-				}
+				new ThreadDistributor(nthreads, data.RowCount, i => Calc1(i, summarize, data)).Start();
 			} else{
-				for (int j = 0; j < data.ExpressionColumnCount; j++){
-					List<double> vals = new List<double>();
-					for (int i = 0; i < data.RowCount; i++){
-						double q = data[i, j];
-						if (!double.IsNaN(q) && !double.IsInfinity(q)){
-							vals.Add(q);
-						}
-					}
-					double med = summarize(vals.ToArray());
-					for (int i = 0; i < data.RowCount; i++){
-						data[i, j] -= (float) med;
-					}
+				new ThreadDistributor(nthreads, data.ExpressionColumnCount, j => Calc2(j, summarize, data)).Start();
+			}
+		}
+
+		private static void Calc1(int i, Func<double[], double> summarize, IMatrixData data){
+			List<double> vals = new List<double>();
+			for (int j = 0; j < data.ExpressionColumnCount; j++){
+				double q = data[i, j];
+				if (!double.IsNaN(q) && !double.IsInfinity(q)){
+					vals.Add(q);
 				}
+			}
+			double med = summarize(vals.ToArray());
+			for (int j = 0; j < data.ExpressionColumnCount; j++){
+				data[i, j] -= (float) med;
+			}
+		}
+
+		private static void Calc2(int j, Func<double[], double> summarize, IMatrixData data){
+			List<double> vals = new List<double>();
+			for (int i = 0; i < data.RowCount; i++){
+				double q = data[i, j];
+				if (!double.IsNaN(q) && !double.IsInfinity(q)){
+					vals.Add(q);
+				}
+			}
+			double med = summarize(vals.ToArray());
+			for (int i = 0; i < data.RowCount; i++){
+				data[i, j] -= (float) med;
 			}
 		}
 	}

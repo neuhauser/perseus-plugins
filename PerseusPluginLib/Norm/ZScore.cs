@@ -8,6 +8,7 @@ using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
+using Utils.Util;
 
 namespace PerseusPluginLib.Norm{
 	public class ZScore : IMatrixProcessing{
@@ -34,7 +35,7 @@ namespace PerseusPluginLib.Norm{
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
 
 		public int GetMaxThreads(Parameters parameters){
-			return 1;
+			return int.MaxValue;
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
@@ -48,7 +49,7 @@ namespace PerseusPluginLib.Norm{
 				groupInd = -1;
 			}
 			if (groupInd < 0){
-				Zscore(rows, mdata);
+				Zscore(rows, mdata, processInfo.NumThreads);
 			} else{
 				string[][] catRow = mdata.CategoryRows[groupInd];
 				foreach (string[] t in catRow){
@@ -57,29 +58,31 @@ namespace PerseusPluginLib.Norm{
 						return;
 					}
 				}
-				ZscoreGroups(mdata, catRow);
+				ZscoreGroups(mdata, catRow, processInfo.NumThreads);
 			}
 		}
 
-		private static void ZscoreGroups(IMatrixData data, IList<string[]> catRow){
+		private static void ZscoreGroups(IMatrixData data, IList<string[]> catRow, int nthreads){
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(catRow);
 			foreach (int[] inds in groupVals.Select(groupVal => GetIndices(catRow, groupVal))){
-				ZscoreGroup(data, inds);
+				ZscoreGroup(data, inds, nthreads);
 			}
 		}
 
-		private static void ZscoreGroup(IMatrixData data, IList<int> inds){
-			for (int i = 0; i < data.RowCount; i++){
-				double[] vals = new double[inds.Count];
-				for (int j = 0; j < inds.Count; j++){
-					double q = data[i, inds[j]];
-					vals[j] = q;
-				}
-				double stddev;
-				double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
-				foreach (int t in inds){
-					data[i, t] = (float) ((data[i, t] - mean)/stddev);
-				}
+		private static void ZscoreGroup(IMatrixData data, IList<int> inds, int nthreads){
+			new ThreadDistributor(nthreads, data.RowCount, i => Calc3(i, data, inds)).Start();
+		}
+
+		private static void Calc3(int i, IMatrixData data, IList<int> inds){
+			double[] vals = new double[inds.Count];
+			for (int j = 0; j < inds.Count; j++){
+				double q = data[i, inds[j]];
+				vals[j] = q;
+			}
+			double stddev;
+			double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
+			foreach (int t in inds){
+				data[i, t] = (float) ((data[i, t] - mean)/stddev);
 			}
 		}
 
@@ -112,33 +115,37 @@ namespace PerseusPluginLib.Norm{
 				});
 		}
 
-		public static void Zscore(bool rows, IMatrixData data){
+		public static void Zscore(bool rows, IMatrixData data, int nthreads){
 			if (rows){
-				for (int i = 0; i < data.RowCount; i++){
-					double[] vals = new double[data.ExpressionColumnCount];
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						double q = data[i, j];
-						vals[j] = q;
-					}
-					double stddev;
-					double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						data[i, j] = (float) ((data[i, j] - mean)/stddev);
-					}
-				}
+				new ThreadDistributor(nthreads, data.RowCount, i => Calc1(i, data)).Start();
 			} else{
-				for (int j = 0; j < data.ExpressionColumnCount; j++){
-					double[] vals = new double[data.RowCount];
-					for (int i = 0; i < data.RowCount; i++){
-						double q = data[i, j];
-						vals[i] = q;
-					}
-					double stddev;
-					double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
-					for (int i = 0; i < data.RowCount; i++){
-						data[i, j] = (float) ((data[i, j] - mean)/stddev);
-					}
-				}
+				new ThreadDistributor(nthreads, data.ExpressionColumnCount, j => Calc2(j, data)).Start();
+			}
+		}
+
+		private static void Calc1(int i, IMatrixData data){
+			double[] vals = new double[data.ExpressionColumnCount];
+			for (int j = 0; j < data.ExpressionColumnCount; j++){
+				double q = data[i, j];
+				vals[j] = q;
+			}
+			double stddev;
+			double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
+			for (int j = 0; j < data.ExpressionColumnCount; j++){
+				data[i, j] = (float) ((data[i, j] - mean)/stddev);
+			}
+		}
+
+		private static void Calc2(int j, IMatrixData data){
+			double[] vals = new double[data.RowCount];
+			for (int i = 0; i < data.RowCount; i++){
+				double q = data[i, j];
+				vals[i] = q;
+			}
+			double stddev;
+			double mean = ArrayUtils.MeanAndStddev(vals, out stddev);
+			for (int i = 0; i < data.RowCount; i++){
+				data[i, j] = (float) ((data[i, j] - mean)/stddev);
 			}
 		}
 	}
