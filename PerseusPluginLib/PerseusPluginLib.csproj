@@ -95,7 +95,6 @@
     <Compile Include="Rearrange\RenameColumnsRegexp.cs" />
     <Compile Include="Rearrange\ReorderColumns.cs" />
     <Compile Include="Filter\FilterCategoricalColumn.cs" />
-    <Compile Include="Filter\FilterNumericalColumn.cs" />
     <Compile Include="Filter\FilterTextualColumn.cs" />
     <Compile Include="Filter\FilterThreshold.cs" />
     <Compile Include="Utils\ColumnNameInfo.cs" />

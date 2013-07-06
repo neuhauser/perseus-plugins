@@ -190,8 +190,8 @@ namespace PerseusPluginLib.Basic{
 
 		private static float[,] GetExVals(IList<double[]> rows){
 			float[,] result = new float[rows[0].Length,rows.Count];
-			for (int i = 0; i < result.GetLength(0); i++){
-				for (int j = 0; j < result.GetLength(1); j++){
+			for (int i = 0; i < result.GetLength(1); i++){
+				for (int j = 0; j < result.GetLength(0); j++){
 					result[j, i] = (float) rows[i][j];
 				}
 			}
