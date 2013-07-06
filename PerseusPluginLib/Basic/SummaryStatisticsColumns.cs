@@ -23,7 +23,8 @@ namespace PerseusPluginLib.Basic{
 		public string HelpDescription{
 			get{
 				return
-					"A set of simple descriptive quantities are calculated that help summarizing the data in the selected expression or numerical columns.";
+					"A set of simple descriptive quantities are calculated that help summarizing the data in the selected expression " +
+						"or numerical columns.";
 			}
 		}
 		public string HelpOutput{
@@ -37,6 +38,21 @@ namespace PerseusPluginLib.Basic{
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
+		}
+
+		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
+			return
+				new Parameters(new List<Parameter>{
+					new MultiChoiceParam("Columns"){
+						Value = ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount),
+						Values =
+							ArrayUtils.Concat(ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames),
+								mdata.MultiNumericColumnNames),
+						Help = "Specify here the columns for which the summary statistics quantities should be calculated."
+					},
+					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(SummaryStatisticsRows.procNames.Length))
+					{Values = SummaryStatisticsRows.procNames, Help = "Select here which quantities should be calculated."}
+				});
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
@@ -68,13 +84,54 @@ namespace PerseusPluginLib.Basic{
 				}
 			}
 			float[,] exVals = GetExVals(ex);
-			IEnumerable<string> colNames = GetColNames(mdata, cols);
-			mdata.SetData("Summary", new List<string>(colNames), exVals, new List<string>(new[]{"Type"}),
-				new List<string[]>(new[]{names.ToArray()}), new List<string>(), new List<string[][]>(), new List<string>(),
-				new List<double[]>(), new List<string>(), new List<double[][]>());
+			string[] colNames = GetColNames(mdata, cols);
+			mdata.SetData("Summary", new List<string>(names.ToArray()), exVals, new List<string>(new[]{"Columns"}),
+				new List<string[]>(new[]{colNames}), mdata.CategoryRowNames,
+				TransformCategories(mdata.CategoryRows, cols, mdata.ExpressionColumnCount), mdata.NumericRowNames,
+				TransformNumeric(mdata.NumericRows, cols, mdata.ExpressionColumnCount), new List<string>(), new List<double[][]>());
 		}
 
-		private static IEnumerable<string> GetColNames(IMatrixData mdata, IEnumerable<int> cols){
+		private static List<double[]> TransformNumeric(IEnumerable<double[]> numericRows, IList<int> cols, int n){
+			List<double[]> result = new List<double[]>();
+			foreach (double[] numericRow in numericRows){
+				result.Add(TransformNumeric(numericRow, cols, n));
+			}
+			return result;
+		}
+
+		private static double[] TransformNumeric(IList<double> numericRows, IList<int> cols, int n){
+			double[] result = new double[cols.Count];
+			for (int i = 0; i < cols.Count; i++){
+				if (cols[i] < n){
+					result[i] = numericRows[cols[i]];
+				} else{
+					result[i] = double.NaN;
+				}
+			}
+			return result;
+		}
+
+		private static List<string[][]> TransformCategories(IEnumerable<string[][]> categoryRows, IList<int> cols, int n){
+			List<string[][]> result = new List<string[][]>();
+			foreach (string[][] categoryRow in categoryRows){
+				result.Add(TransformCategories(categoryRow, cols, n));
+			}
+			return result;
+		}
+
+		private static string[][] TransformCategories(IList<string[]> categoryRow, IList<int> cols, int n){
+			string[][] result = new string[cols.Count][];
+			for (int i = 0; i < cols.Count; i++){
+				if (cols[i] < n){
+					result[i] = categoryRow[cols[i]];
+				} else{
+					result[i] = new string[0];
+				}
+			}
+			return result;
+		}
+
+		private static string[] GetColNames(IMatrixData mdata, IEnumerable<int> cols){
 			List<string> result = new List<string>();
 			foreach (int col in cols){
 				result.Add(GetColName(mdata, col));
@@ -132,28 +189,13 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		private static float[,] GetExVals(IList<double[]> rows){
-			float[,] result = new float[rows.Count,rows[0].Length];
+			float[,] result = new float[rows[0].Length,rows.Count];
 			for (int i = 0; i < result.GetLength(0); i++){
 				for (int j = 0; j < result.GetLength(1); j++){
-					result[i, j] = (float) rows[i][j];
+					result[j, i] = (float) rows[i][j];
 				}
 			}
 			return result;
-		}
-
-		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			return
-				new Parameters(new List<Parameter>{
-					new MultiChoiceParam("Columns"){
-						Value = ArrayUtils.ConsecutiveInts(mdata.ExpressionColumnCount),
-						Values =
-							ArrayUtils.Concat(ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames),
-								mdata.MultiNumericColumnNames),
-						Help = "Specify here the columns for which the summary statistics quantities should be calculated."
-					},
-					new MultiChoiceParam("Calculate", ArrayUtils.ConsecutiveInts(SummaryStatisticsRows.procNames.Length))
-					{Values = SummaryStatisticsRows.procNames, Help = "Select here which quantities should be calculated."}
-				});
 		}
 	}
 }
