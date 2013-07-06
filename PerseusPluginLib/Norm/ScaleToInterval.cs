@@ -5,6 +5,7 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using Utils.Util;
 
 namespace PerseusPluginLib.Norm{
 	public class ScaleToInterval : IMatrixProcessing{
@@ -31,7 +32,7 @@ namespace PerseusPluginLib.Norm{
 		}
 
 		public int GetMaxThreads(Parameters parameters){
-			return 1;
+			return int.MaxValue;
 		}
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
@@ -39,7 +40,7 @@ namespace PerseusPluginLib.Norm{
 			bool rows = param.GetSingleChoiceParam("Matrix access").Value == 0;
 			double min = param.GetDoubleParam("Minimum").Value;
 			double max = param.GetDoubleParam("Maximum").Value;
-			MapToInterval1(rows, mdata, min, max);
+			MapToInterval1(rows, mdata, min, max, processInfo.NumThreads);
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
@@ -53,39 +54,43 @@ namespace PerseusPluginLib.Norm{
 				});
 		}
 
-		public static void MapToInterval1(bool rows, IMatrixData data, double min, double max){
+		public static void MapToInterval1(bool rows, IMatrixData data, double min, double max, int nthreads){
 			if (rows){
-				for (int i = 0; i < data.RowCount; i++){
-					List<double> vals = new List<double>();
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						double q = data[i, j];
-						if (!double.IsNaN(q) && !double.IsInfinity(q)){
-							vals.Add(q);
-						}
-					}
-					double mind;
-					double maxd;
-					ArrayUtils.MinMax(vals, out mind, out maxd);
-					for (int j = 0; j < data.ExpressionColumnCount; j++){
-						data[i, j] = (float) (min + (max - min)/(maxd - mind)*(data[i, j] - mind));
-					}
-				}
+				new ThreadDistributor(nthreads, data.RowCount, i => Calc1(i, data, min, max)).Start();
 			} else{
-				for (int j = 0; j < data.ExpressionColumnCount; j++){
-					List<double> vals = new List<double>();
-					for (int i = 0; i < data.RowCount; i++){
-						double q = data[i, j];
-						if (!double.IsNaN(q) && !double.IsInfinity(q)){
-							vals.Add(q);
-						}
-					}
-					double mind;
-					double maxd;
-					ArrayUtils.MinMax(vals, out mind, out maxd);
-					for (int i = 0; i < data.RowCount; i++){
-						data[i, j] = (float) (min + (max - min)/(maxd - mind)*(data[i, j] - mind));
-					}
+				new ThreadDistributor(nthreads, data.ExpressionColumnCount, j => Calc2(j, data, min, max)).Start();
+			}
+		}
+
+		private static void Calc1(int i, IMatrixData data, double min, double max) {
+			List<double> vals = new List<double>();
+			for (int j = 0; j < data.ExpressionColumnCount; j++) {
+				double q = data[i, j];
+				if (!double.IsNaN(q) && !double.IsInfinity(q)) {
+					vals.Add(q);
 				}
+			}
+			double mind;
+			double maxd;
+			ArrayUtils.MinMax(vals, out mind, out maxd);
+			for (int j = 0; j < data.ExpressionColumnCount; j++) {
+				data[i, j] = (float)(min + (max - min) / (maxd - mind) * (data[i, j] - mind));
+			}
+		}
+
+		private static void Calc2(int j, IMatrixData data, double min, double max) {
+			List<double> vals = new List<double>();
+			for (int i = 0; i < data.RowCount; i++) {
+				double q = data[i, j];
+				if (!double.IsNaN(q) && !double.IsInfinity(q)) {
+					vals.Add(q);
+				}
+			}
+			double mind;
+			double maxd;
+			ArrayUtils.MinMax(vals, out mind, out maxd);
+			for (int i = 0; i < data.RowCount; i++) {
+				data[i, j] = (float)(min + (max - min) / (maxd - mind) * (data[i, j] - mind));
 			}
 		}
 	}

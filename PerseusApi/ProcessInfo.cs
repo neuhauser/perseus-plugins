@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Utils.Util;
 
 namespace PerseusApi{
 	public class ProcessInfo{
@@ -8,6 +11,7 @@ namespace PerseusApi{
 		public Action<int> Progress { get; private set; }
 		public Action<int> ReduceThreads { get; private set; }
 		public string ErrString { get; set; }
+		public List<ThreadDistributor> threadDistributors = new List<ThreadDistributor>();
 
 		public ProcessInfo(Settings settings, Action<string> status, Action<int> progress, int numThreads,
 			Action<int> reduceThreads){
@@ -19,5 +23,12 @@ namespace PerseusApi{
 		}
 
 		public int NumThreads { get { return Math.Min(numThreads, Settings.Nthreads); } }
+
+		public void Abort(){
+			foreach (
+				ThreadDistributor threadDistributor in threadDistributors.Where(threadDistributor => threadDistributor != null)){
+				threadDistributor.Abort();
+			}
+		}
 	}
 }
