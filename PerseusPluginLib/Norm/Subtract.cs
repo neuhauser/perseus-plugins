@@ -7,7 +7,6 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
-using Utils.Util;
 
 namespace PerseusPluginLib.Norm{
 	public class Subtract : IMatrixProcessing{

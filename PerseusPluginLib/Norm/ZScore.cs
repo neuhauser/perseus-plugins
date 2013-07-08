@@ -8,7 +8,6 @@ using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
-using Utils.Util;
 
 namespace PerseusPluginLib.Norm{
 	public class ZScore : IMatrixProcessing{
