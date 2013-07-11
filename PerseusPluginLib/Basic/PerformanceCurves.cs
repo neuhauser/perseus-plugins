@@ -167,7 +167,7 @@ namespace PerseusPluginLib.Basic{
 		}
 
 		public static bool[] GetIndicatorColumn(bool falseAreIndicated, int catColInd, string word, IMatrixData data){
-			string[][] catCol = data.CategoryColumns[catColInd];
+			string[][] catCol = data.GetCategoryColumnAt(catColInd);
 			bool[] result = new bool[data.RowCount];
 			for (int i = 0; i < result.Length; i++){
 				string[] cats = catCol[i];

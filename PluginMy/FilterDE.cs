@@ -33,7 +33,7 @@ namespace PluginMy{
 			ref IDocumentData[] documents, ProcessInfo processInfo){
 			int colIndex = param.GetSingleChoiceParam("Column with second last AA").Value;
 			string aas = param.GetStringParam("Amino acids").Value;
-			string[][] col = mdata.CategoryColumns[colIndex];
+			string[][] col = mdata.GetCategoryColumnAt(colIndex);
 			List<int> validRows = new List<int>();
 			for (int i = 0; i < mdata.RowCount; i++){
 				string[] x = col[i];

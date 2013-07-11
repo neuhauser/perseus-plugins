@@ -108,13 +108,13 @@ namespace PerseusPluginLib.Combine{
 				if (dic1.ContainsKey(catColNames[i])){
 					int ind = dic1[stringColNames[i]];
 					for (int j = 0; j < nrows1; j++){
-						catCols[i][j] = mdata1.CategoryColumns[ind][j];
+						catCols[i][j] = mdata1.GetCategoryColumnAt(ind)[j];
 					}
 				}
 				if (dic2.ContainsKey(catColNames[i])){
 					int ind = dic2[catColNames[i]];
 					for (int j = 0; j < nrows2; j++){
-						catCols[i][nrows1 + j] = mdata2.CategoryColumns[ind][j];
+						catCols[i][nrows1 + j] = mdata2.GetCategoryColumnAt(ind)[j];
 					}
 				}
 			}

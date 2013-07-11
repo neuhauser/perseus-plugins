@@ -91,7 +91,7 @@ namespace PerseusPluginLib.Filter{
 			}
 			if (modeInd != 0){
 				int gind = modeParam.GetSubParameters().GetSingleChoiceParam("Grouping").Value;
-				string[][] groupCol = mdata.CategoryRows[gind];
+				string[][] groupCol = mdata.GetCategoryRowAt(gind);
 				NonzeroFilterGroup(minValids, mdata, param, modeInd == 2, threshold, threshold2, filterMode, groupCol);
 			} else{
 				NonzeroFilter1(rows, minValids, mdata, param, threshold, threshold2, filterMode);

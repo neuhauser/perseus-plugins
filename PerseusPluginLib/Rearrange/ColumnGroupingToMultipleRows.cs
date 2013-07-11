@@ -6,6 +6,7 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Rearrange{
 	public class ColumnGroupingToMultipleRows : IMatrixProcessing{
@@ -43,11 +44,11 @@ namespace PerseusPluginLib.Rearrange{
 				return;
 			}
 			int[] remainingCatRows = ArrayUtils.Complement(new[]{newColGroupInd, seriesInd}, mdata.CategoryRowCount);
-			string[][] newColGroup = mdata.CategoryRows[newColGroupInd];
+			string[][] newColGroup = mdata.GetCategoryRowAt(newColGroupInd);
 			int ncols = newColGroup.Length;
 			string[] allNewCols = ArrayUtils.UniqueValues(ArrayUtils.Concat(newColGroup));
 			int nNewCols = allNewCols.Length;
-			string[][] series = mdata.CategoryRows[seriesInd];
+			string[][] series = mdata.GetCategoryRowAt(seriesInd);
 			string[] allSeries = ArrayUtils.UniqueValues(ArrayUtils.Concat(series));
 			int nseries = allSeries.Length;
 			List<int>[,] colIndices = new List<int>[nseries,nNewCols];
@@ -94,12 +95,21 @@ namespace PerseusPluginLib.Rearrange{
 			mdata.SetData(mdata.Name, mdata.Description, newExpNames, newExpDesc, newExpVals, newIsImputed, newQuality,
 				mdata.QualityName, mdata.QualityBiggerIsBetter, mdata.StringColumnNames, mdata.StringColumnDescriptions,
 				Expand(mdata.StringColumns, nseries), mdata.CategoryColumnNames, mdata.CategoryColumnDescriptions,
-				Expand(mdata.CategoryColumns, nseries), mdata.NumericColumnNames, mdata.NumericColumnDescriptions,
+				ExpandCat(mdata, nseries), mdata.NumericColumnNames, mdata.NumericColumnDescriptions,
 				Expand(mdata.NumericColumns, nseries), mdata.MultiNumericColumnNames, mdata.MultiNumericColumnDescriptions,
 				Expand(mdata.MultiNumericColumns, nseries), ArrayUtils.SubList(mdata.CategoryRowNames, remainingCatRows),
 				ArrayUtils.SubList(mdata.CategoryRowDescriptions, remainingCatRows),
-				TransformCatCols(ArrayUtils.SubList(mdata.CategoryRows, remainingCatRows), colIndices2), mdata.NumericRowNames,
+				TransformCatCols(PerseusPluginUtils.GetCategoryRows(mdata, remainingCatRows), colIndices2), mdata.NumericRowNames,
 				mdata.NumericRowDescriptions, TransformNumCols(mdata.NumericRows, colIndices2));
+		}
+
+		private static List<string[][]> ExpandCat(IMatrixData mdata, int nseries){
+			List<string[][]> result = new List<string[][]>();
+			for (int index = 0; index < mdata.CategoryColumnCount; index++){
+				string[][] column = mdata.GetCategoryColumnAt(index);
+				result.Add(Expand(column, nseries));
+			}
+			return result;
 		}
 
 		private static List<double[]> TransformNumCols(IEnumerable<double[]> numericRows, IList<List<int>> colIndices2){

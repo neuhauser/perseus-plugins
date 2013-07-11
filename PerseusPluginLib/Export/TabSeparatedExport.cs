@@ -106,7 +106,7 @@ namespace PerseusPluginLib.Export{
 			for (int i = 0; i < data.CategoryRowCount; i++){
 				words = new List<string>();
 				for (int j = 0; j < data.ExpressionColumnCount; j++){
-					string[] s = data.CategoryRows[i][j];
+					string[] s = data.GetCategoryRowAt(i)[j];
 					words.Add(s.Length == 0 ? "" : StringUtils.Concat(";", s));
 				}
 				for (int j = 0; j < data.CategoryColumnCount; j++){
@@ -129,7 +129,7 @@ namespace PerseusPluginLib.Export{
 					words.Add(Trunc("" + data[j, i]));
 				}
 				for (int i = 0; i < data.CategoryColumnCount; i++){
-					string[] q = data.CategoryColumns[i][j] ?? new string[0];
+					string[] q = data.GetCategoryColumnAt(i)[j] ?? new string[0];
 					words.Add(Trunc((q.Length > 0 ? StringUtils.Concat(";", q) : "")));
 				}
 				for (int i = 0; i < data.NumericColumnCount; i++){

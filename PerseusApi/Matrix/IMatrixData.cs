@@ -20,11 +20,20 @@ namespace PerseusApi.Matrix{
 		bool[] GetIsImputednRow(int row);
 		bool[] GetIsImputedColumn(int col);
 		float this[int i, int j] { get; set; }
+
+
 		int CategoryColumnCount { get; }
 		List<string> CategoryColumnNames { get; set; }
 		List<string> CategoryColumnDescriptions { get; set; }
-		List<string[][]> CategoryColumns { get; set; }
+		List<string[][]> CategoryColumns { set; }
+		string[][] GetCategoryColumnAt(int index);
+		void SetCategoryColumnAt(string[][] vals, int index);
+		void RemoveCategoryColumnAt(int index);
 		void AddCategoryColumn(string name, string description, string[][] vals);
+		void AddCategoryColumns(IList<string> names, IList<string> descriptions, IList<string[][]> vals);
+		void ClearCategoryColumns();
+
+	
 		int NumericColumnCount { get; }
 		List<string> NumericColumnNames { get; set; }
 		List<string> NumericColumnDescriptions { get; set; }
@@ -40,12 +49,20 @@ namespace PerseusApi.Matrix{
 		List<string> MultiNumericColumnDescriptions { get; set; }
 		List<double[][]> MultiNumericColumns { get; set; }
 		void AddMultiNumericColumn(string name, string description, double[][] vals);
+
+	
 		int CategoryRowCount { get; }
 		List<string> CategoryRowNames { get; set; }
 		List<string> CategoryRowDescriptions { get; set; }
-		List<string[][]> CategoryRows { get; set; }
+		List<string[][]> CategoryRows { set; }
+		string[][] GetCategoryRowAt(int index);
+		void SetCategoryRowAt(string[][] vals, int index);
+		void RemoveCategoryRowAt(int index);
 		void AddCategoryRow(string name, string description, string[][] vals);
+		void AddCategoryRows(IList<string> names, IList<string> descriptions, IList<string[][]> vals);
 		void ClearCategoryRows();
+
+	
 		int NumericRowCount { get; }
 		List<string> NumericRowNames { get; set; }
 		List<string> NumericRowDescriptions { get; set; }

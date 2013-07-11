@@ -5,6 +5,7 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Rearrange{
 	public class RemoveEmptyColumns : IMatrixProcessing{
@@ -50,7 +51,7 @@ namespace PerseusPluginLib.Rearrange{
 				data.MultiNumericColumnDescriptions = ArrayUtils.SubList(data.MultiNumericColumnDescriptions, multiNumColInds);
 			}
 			if (catColInds.Length < data.CategoryColumnCount){
-				data.CategoryColumns = ArrayUtils.SubList(data.CategoryColumns, catColInds);
+				data.CategoryColumns = PerseusPluginUtils.GetCategoryColumns(data, catColInds);
 				data.CategoryColumnNames = ArrayUtils.SubList(data.CategoryColumnNames, catColInds);
 				data.CategoryColumnDescriptions = ArrayUtils.SubList(data.CategoryColumnDescriptions, catColInds);
 			}
@@ -74,7 +75,7 @@ namespace PerseusPluginLib.Rearrange{
 		private static int[] GetValidCatCols(IMatrixData data){
 			List<int> valids = new List<int>();
 			for (int i = 0; i < data.CategoryColumnCount; i++){
-				if (!IsInvalidCatColumn(data.CategoryColumns[i])){
+				if (!IsInvalidCatColumn(data.GetCategoryColumnAt(i))){
 					valids.Add(i);
 				}
 			}

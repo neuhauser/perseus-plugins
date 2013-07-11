@@ -87,7 +87,7 @@ namespace PerseusPluginLib.Basic{
 			string[] colNames = GetColNames(mdata, cols);
 			mdata.SetData("Summary", new List<string>(names.ToArray()), exVals, new List<string>(new[]{"Columns"}),
 				new List<string[]>(new[]{colNames}), mdata.CategoryRowNames,
-				TransformCategories(mdata.CategoryRows, cols, mdata.ExpressionColumnCount), mdata.NumericRowNames,
+				TransformCategories(mdata, cols, mdata.ExpressionColumnCount), mdata.NumericRowNames,
 				TransformNumeric(mdata.NumericRows, cols, mdata.ExpressionColumnCount), new List<string>(), new List<double[][]>());
 		}
 
@@ -111,9 +111,10 @@ namespace PerseusPluginLib.Basic{
 			return result;
 		}
 
-		private static List<string[][]> TransformCategories(IEnumerable<string[][]> categoryRows, IList<int> cols, int n){
+		private static List<string[][]> TransformCategories(IMatrixData mdata, IList<int> cols, int n){
 			List<string[][]> result = new List<string[][]>();
-			foreach (string[][] categoryRow in categoryRows){
+			for (int index = 0; index < mdata.CategoryRowCount; index++){
+				string[][] categoryRow = mdata.GetCategoryRowAt(index);
 				result.Add(TransformCategories(categoryRow, cols, n));
 			}
 			return result;

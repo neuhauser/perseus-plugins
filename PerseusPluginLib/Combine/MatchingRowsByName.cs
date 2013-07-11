@@ -35,8 +35,7 @@ namespace PerseusPluginLib.Combine{
 			return 1;
 		}
 
-		public IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters,
-			ProcessInfo processInfo){
+		public IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters, ProcessInfo processInfo){
 			bool indicator = parameters.GetBoolParam("Indicator").Value;
 			int otherCol = parameters.GetSingleChoiceParam("Matching column 2").Value;
 			Func<double[], double> avExpression = GetAveraging(parameters.GetSingleChoiceParam("Combine expression values").Value);
@@ -84,115 +83,115 @@ namespace PerseusPluginLib.Combine{
 			if (indicator){
 				result.AddCategoryColumn(mdata2.Name, "", indicatorCol);
 			}
-				{
-					int[] exCols = parameters.GetMultiChoiceParam("Expression columns").Value;
-					float[,] newExColumns = new float[mdata1.RowCount,exCols.Length];
-					float[,] newQuality = new float[mdata1.RowCount,exCols.Length];
-					bool[,] newIsImputed = new bool[mdata1.RowCount,exCols.Length];
-					string[] newExColNames = new string[exCols.Length];
-					float[,] oldEx = mdata2.ExpressionValues;
-					float[,] oldQual = mdata2.QualityValues;
-					bool[,] oldImp = mdata2.IsImputed;
-					for (int i = 0; i < exCols.Length; i++){
-						newExColNames[i] = mdata2.ExpressionColumnNames[exCols[i]];
-						for (int j = 0; j < mdata1.RowCount; j++){
-							int[] inds = indexMap[j];
-							List<double> values = new List<double>();
-							List<double> qual = new List<double>();
-							List<bool> imp = new List<bool>();
-							foreach (int ind in inds){
-								double v = oldEx[ind, exCols[i]];
-								if (!double.IsNaN(v) && !double.IsInfinity(v)){
-									values.Add(v);
-									double qx = oldQual[ind, exCols[i]];
-									if (!double.IsNaN(qx) && !double.IsInfinity(qx)){
-										qual.Add(qx);
-									}
-									bool isi = oldImp[ind, exCols[i]];
-									imp.Add(isi);
+			{
+				int[] exCols = parameters.GetMultiChoiceParam("Expression columns").Value;
+				float[,] newExColumns = new float[mdata1.RowCount,exCols.Length];
+				float[,] newQuality = new float[mdata1.RowCount,exCols.Length];
+				bool[,] newIsImputed = new bool[mdata1.RowCount,exCols.Length];
+				string[] newExColNames = new string[exCols.Length];
+				float[,] oldEx = mdata2.ExpressionValues;
+				float[,] oldQual = mdata2.QualityValues;
+				bool[,] oldImp = mdata2.IsImputed;
+				for (int i = 0; i < exCols.Length; i++){
+					newExColNames[i] = mdata2.ExpressionColumnNames[exCols[i]];
+					for (int j = 0; j < mdata1.RowCount; j++){
+						int[] inds = indexMap[j];
+						List<double> values = new List<double>();
+						List<double> qual = new List<double>();
+						List<bool> imp = new List<bool>();
+						foreach (int ind in inds){
+							double v = oldEx[ind, exCols[i]];
+							if (!double.IsNaN(v) && !double.IsInfinity(v)){
+								values.Add(v);
+								double qx = oldQual[ind, exCols[i]];
+								if (!double.IsNaN(qx) && !double.IsInfinity(qx)){
+									qual.Add(qx);
 								}
+								bool isi = oldImp[ind, exCols[i]];
+								imp.Add(isi);
 							}
-							newExColumns[j, i] = values.Count == 0 ? float.NaN : (float) avExpression(values.ToArray());
-							newQuality[j, i] = qual.Count == 0 ? float.NaN : (float) avExpression(qual.ToArray());
-							newIsImputed[j, i] = imp.Count != 0 && AvImp(imp.ToArray());
 						}
-					}
-					MakeNewNames(newExColNames, result.ExpressionColumnNames);
-					AddExpressionColumns(result, newExColNames, newExColumns, newQuality, newIsImputed);
-				}
-				{
-					int[] numCols = parameters.GetMultiChoiceParam("Numerical columns").Value;
-					double[][] newNumericalColumns = new double[numCols.Length][];
-					string[] newNumColNames = new string[numCols.Length];
-					for (int i = 0; i < numCols.Length; i++){
-						double[] oldCol = mdata2.NumericColumns[numCols[i]];
-						newNumColNames[i] = mdata2.NumericColumnNames[numCols[i]];
-						newNumericalColumns[i] = new double[mdata1.RowCount];
-						for (int j = 0; j < mdata1.RowCount; j++){
-							int[] inds = indexMap[j];
-							List<double> values = new List<double>();
-							foreach (int ind in inds){
-								double v = oldCol[ind];
-								if (!double.IsNaN(v)){
-									values.Add(v);
-								}
-							}
-							newNumericalColumns[i][j] = values.Count == 0 ? double.NaN : avNumerical(values.ToArray());
-						}
-					}
-					for (int i = 0; i < numCols.Length; i++){
-						result.AddNumericColumn(newNumColNames[i], "", newNumericalColumns[i]);
+						newExColumns[j, i] = values.Count == 0 ? float.NaN : (float) avExpression(values.ToArray());
+						newQuality[j, i] = qual.Count == 0 ? float.NaN : (float) avExpression(qual.ToArray());
+						newIsImputed[j, i] = imp.Count != 0 && AvImp(imp.ToArray());
 					}
 				}
-				{
-					int[] catCols = parameters.GetMultiChoiceParam("Categorical columns").Value;
-					string[][][] newCatColumns = new string[catCols.Length][][];
-					string[] newCatColNames = new string[catCols.Length];
-					for (int i = 0; i < catCols.Length; i++){
-						string[][] oldCol = mdata2.CategoryColumns[catCols[i]];
-						newCatColNames[i] = mdata2.CategoryColumnNames[catCols[i]];
-						newCatColumns[i] = new string[mdata1.RowCount][];
-						for (int j = 0; j < mdata1.RowCount; j++){
-							int[] inds = indexMap[j];
-							List<string[]> values = new List<string[]>();
-							foreach (int ind in inds){
-								string[] v = oldCol[ind];
-								if (v.Length > 0){
-									values.Add(v);
-								}
+				MakeNewNames(newExColNames, result.ExpressionColumnNames);
+				AddExpressionColumns(result, newExColNames, newExColumns, newQuality, newIsImputed);
+			}
+			{
+				int[] numCols = parameters.GetMultiChoiceParam("Numerical columns").Value;
+				double[][] newNumericalColumns = new double[numCols.Length][];
+				string[] newNumColNames = new string[numCols.Length];
+				for (int i = 0; i < numCols.Length; i++){
+					double[] oldCol = mdata2.NumericColumns[numCols[i]];
+					newNumColNames[i] = mdata2.NumericColumnNames[numCols[i]];
+					newNumericalColumns[i] = new double[mdata1.RowCount];
+					for (int j = 0; j < mdata1.RowCount; j++){
+						int[] inds = indexMap[j];
+						List<double> values = new List<double>();
+						foreach (int ind in inds){
+							double v = oldCol[ind];
+							if (!double.IsNaN(v)){
+								values.Add(v);
 							}
-							newCatColumns[i][j] = values.Count == 0
-								? new string[0] : ArrayUtils.UniqueValues(ArrayUtils.Concat(values.ToArray()));
 						}
-					}
-					for (int i = 0; i < catCols.Length; i++){
-						result.AddCategoryColumn(newCatColNames[i], "", newCatColumns[i]);
+						newNumericalColumns[i][j] = values.Count == 0 ? double.NaN : avNumerical(values.ToArray());
 					}
 				}
-				{
-					int[] stringCols = parameters.GetMultiChoiceParam("String columns").Value;
-					string[][] newStringColumns = new string[stringCols.Length][];
-					string[] newStringColNames = new string[stringCols.Length];
-					for (int i = 0; i < stringCols.Length; i++){
-						string[] oldCol = mdata2.StringColumns[stringCols[i]];
-						newStringColNames[i] = mdata2.StringColumnNames[stringCols[i]];
-						newStringColumns[i] = new string[mdata1.RowCount];
-						for (int j = 0; j < mdata1.RowCount; j++){
-							int[] inds = indexMap[j];
-							List<string> values = new List<string>();
-							foreach (int ind in inds){
-								string v = oldCol[ind];
-								if (v.Length > 0){
-									values.Add(v);
-								}
+				for (int i = 0; i < numCols.Length; i++){
+					result.AddNumericColumn(newNumColNames[i], "", newNumericalColumns[i]);
+				}
+			}
+			{
+				int[] catCols = parameters.GetMultiChoiceParam("Categorical columns").Value;
+				string[][][] newCatColumns = new string[catCols.Length][][];
+				string[] newCatColNames = new string[catCols.Length];
+				for (int i = 0; i < catCols.Length; i++){
+					string[][] oldCol = mdata2.GetCategoryColumnAt(catCols[i]);
+					newCatColNames[i] = mdata2.CategoryColumnNames[catCols[i]];
+					newCatColumns[i] = new string[mdata1.RowCount][];
+					for (int j = 0; j < mdata1.RowCount; j++){
+						int[] inds = indexMap[j];
+						List<string[]> values = new List<string[]>();
+						foreach (int ind in inds){
+							string[] v = oldCol[ind];
+							if (v.Length > 0){
+								values.Add(v);
 							}
-							newStringColumns[i][j] = values.Count == 0 ? "" : StringUtils.Concat(";", values.ToArray());
 						}
-					}
-					for (int i = 0; i < stringCols.Length; i++){
-						result.AddStringColumn(newStringColNames[i], "", newStringColumns[i]);
+						newCatColumns[i][j] = values.Count == 0
+							? new string[0] : ArrayUtils.UniqueValues(ArrayUtils.Concat(values.ToArray()));
 					}
 				}
+				for (int i = 0; i < catCols.Length; i++){
+					result.AddCategoryColumn(newCatColNames[i], "", newCatColumns[i]);
+				}
+			}
+			{
+				int[] stringCols = parameters.GetMultiChoiceParam("String columns").Value;
+				string[][] newStringColumns = new string[stringCols.Length][];
+				string[] newStringColNames = new string[stringCols.Length];
+				for (int i = 0; i < stringCols.Length; i++){
+					string[] oldCol = mdata2.StringColumns[stringCols[i]];
+					newStringColNames[i] = mdata2.StringColumnNames[stringCols[i]];
+					newStringColumns[i] = new string[mdata1.RowCount];
+					for (int j = 0; j < mdata1.RowCount; j++){
+						int[] inds = indexMap[j];
+						List<string> values = new List<string>();
+						foreach (int ind in inds){
+							string v = oldCol[ind];
+							if (v.Length > 0){
+								values.Add(v);
+							}
+						}
+						newStringColumns[i][j] = values.Count == 0 ? "" : StringUtils.Concat(";", values.ToArray());
+					}
+				}
+				for (int i = 0; i < stringCols.Length; i++){
+					result.AddStringColumn(newStringColNames[i], "", newStringColumns[i]);
+				}
+			}
 			result.Origin = "Combination";
 			return result;
 		}
@@ -209,39 +208,40 @@ namespace PerseusPluginLib.Combine{
 		public static void SetAnnotationRows(IMatrixData result, IMatrixData mdata1, IMatrixData mdata2){
 			result.CategoryRowNames.Clear();
 			result.CategoryRowDescriptions.Clear();
-			result.CategoryRows.Clear();
+			result.ClearCategoryRows();
 			result.NumericRowNames.Clear();
 			result.NumericRowDescriptions.Clear();
 			result.NumericRows.Clear();
 			string[] allCatNames = ArrayUtils.Concat(mdata1.CategoryRowNames, mdata2.CategoryRowNames);
 			allCatNames = ArrayUtils.UniqueValues(allCatNames);
-			result.CategoryRowNames = new List<string>(allCatNames);
+			result.CategoryRowNames = new List<string>();
 			string[] allCatDescriptions = new string[allCatNames.Length];
 			for (int i = 0; i < allCatNames.Length; i++){
 				allCatDescriptions[i] = GetDescription(allCatNames[i], mdata1.CategoryRowNames, mdata2.CategoryRowNames,
 					mdata1.CategoryRowDescriptions, mdata2.CategoryRowDescriptions);
 			}
-			result.CategoryRowDescriptions = new List<string>(allCatDescriptions);
-			foreach (string t in allCatNames){
+			result.CategoryRowDescriptions = new List<string>();
+			for (int index = 0; index < allCatNames.Length; index++){
+				string t = allCatNames[index];
 				string[][] categoryRow = new string[mdata1.ExpressionColumnCount + mdata2.ExpressionColumnCount][];
 				for (int j = 0; j < categoryRow.Length; j++){
 					categoryRow[j] = new string[0];
 				}
 				int ind1 = mdata1.CategoryRowNames.IndexOf(t);
 				if (ind1 >= 0){
-					string[][] c1 = mdata1.CategoryRows[ind1];
+					string[][] c1 = mdata1.GetCategoryRowAt(ind1);
 					for (int j = 0; j < c1.Length; j++){
 						categoryRow[j] = c1[j];
 					}
 				}
 				int ind2 = mdata2.CategoryRowNames.IndexOf(t);
 				if (ind2 >= 0){
-					string[][] c2 = mdata2.CategoryRows[ind2];
+					string[][] c2 = mdata2.GetCategoryRowAt(ind2);
 					for (int j = 0; j < c2.Length; j++){
 						categoryRow[mdata1.ExpressionColumnCount + j] = c2[j];
 					}
 				}
-				result.CategoryRows.Add(categoryRow);
+				result.AddCategoryRow(allCatNames[index], allCatDescriptions[index], categoryRow);
 			}
 			string[] allNumNames = ArrayUtils.Concat(mdata1.NumericRowNames, mdata2.NumericRowNames);
 			allNumNames = ArrayUtils.UniqueValues(allNumNames);

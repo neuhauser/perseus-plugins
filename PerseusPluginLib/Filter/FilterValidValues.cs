@@ -57,7 +57,7 @@ namespace PerseusPluginLib.Filter{
 			}
 			if (modeInd != 0){
 				int gind = modeParam.GetSubParameters().GetSingleChoiceParam("Grouping").Value;
-				string[][] groupCol = mdata.CategoryRows[gind];
+				string[][] groupCol = mdata.GetCategoryRowAt(gind);
 				ValidValueFilterGroup(numValids, mdata, param, modeInd == 2, groupCol, atLeast);
 			} else{
 				ValidValueFilter1(rows, numValids, mdata, param, atLeast);

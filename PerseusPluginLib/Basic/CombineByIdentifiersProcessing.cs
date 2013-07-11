@@ -80,13 +80,13 @@ namespace PerseusPluginLib.Basic{
 				mdata.NumericColumns[i] = newCol;
 			}
 			for (int i = 0; i < mdata.CategoryColumnCount; i++){
-				string[][] c = mdata.CategoryColumns[i];
+				string[][] c = mdata.GetCategoryColumnAt(i);
 				string[][] newCol = new string[nrows][];
 				for (int k = 0; k < nrows; k++){
 					string[][] d = ArrayUtils.SubArray(c, rowInds[k]);
 					newCol[k] = Average(d);
 				}
-				mdata.CategoryColumns[i] = newCol;
+				mdata.SetCategoryColumnAt(newCol,i);
 			}
 			for (int i = 0; i < mdata.StringColumnCount; i++){
 				string[] c = mdata.StringColumns[i];

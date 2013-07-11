@@ -1,5 +1,4 @@
 ﻿using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Utils{
@@ -41,7 +40,7 @@ namespace PerseusPluginLib.Utils{
 			}
 			int indw = nameColumnIndex - 1;
 			if (indw < mdata.CategoryRowCount){
-				string[][] x = mdata.CategoryRows[indw];
+				string[][] x = mdata.GetCategoryRowAt(indw);
 				if (ind >= 0 && ind < x.Length){
 					string[] w = x[ind];
 					if (cutNames){

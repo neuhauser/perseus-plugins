@@ -5,6 +5,7 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Rearrange{
 	public class ReorderColumns : IMatrixProcessing{
@@ -49,7 +50,7 @@ namespace PerseusPluginLib.Rearrange{
 			data.MultiNumericColumns = ArrayUtils.SubList(data.MultiNumericColumns, multiNumColInds);
 			data.MultiNumericColumnNames = ArrayUtils.SubList(data.MultiNumericColumnNames, multiNumColInds);
 			data.MultiNumericColumnDescriptions = ArrayUtils.SubList(data.MultiNumericColumnDescriptions, multiNumColInds);
-			data.CategoryColumns = ArrayUtils.SubList(data.CategoryColumns, catColInds);
+			data.CategoryColumns = PerseusPluginUtils.GetCategoryColumns(data, catColInds);
 			data.CategoryColumnNames = ArrayUtils.SubList(data.CategoryColumnNames, catColInds);
 			data.CategoryColumnDescriptions = ArrayUtils.SubList(data.CategoryColumnDescriptions, catColInds);
 			data.StringColumns = ArrayUtils.SubList(data.StringColumns, textColInds);

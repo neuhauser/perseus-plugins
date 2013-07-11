@@ -45,7 +45,7 @@ namespace PerseusPluginLib.Norm{
 			if (groupInd < 0){
 				SubtractValues(rows, GetFunc(what), mdata, processInfo.NumThreads);
 			} else{
-				string[][] catRow = mdata.CategoryRows[groupInd];
+				string[][] catRow = mdata.GetCategoryRowAt(groupInd);
 				foreach (string[] t in catRow){
 					if (t.Length > 1){
 						processInfo.ErrString = "The groups are overlapping.";

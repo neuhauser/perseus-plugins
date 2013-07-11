@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using BasicLib.Forms.Table;
 using BasicLib.Num;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{
@@ -20,7 +19,7 @@ namespace PerseusPluginLib.Manual{
 			for (int i = 0; i < mdata.CategoryRowCount; i++){
 				DataAnnotationRow row = NewAnnotationRow();
 				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
-					row[j] = StringUtils.Concat(";", mdata.CategoryRows[i][j] ?? new string[0]);
+					row[j] = StringUtils.Concat(";", mdata.GetCategoryRowAt(i)[j] ?? new string[0]);
 				}
 				AddAnnotationRow(row, mdata.CategoryRowNames[i], mdata.CategoryRowDescriptions[i]);
 			}
@@ -60,7 +59,7 @@ namespace PerseusPluginLib.Manual{
 				rowData.Add(NumUtils.RoundSignificantDigits(mdata[row, i], 6));
 			}
 			for (int i = 0; i < mdata.CategoryColumnCount; i++){
-				rowData.Add(StringUtils.Concat(";", mdata.CategoryColumns[i][row] ?? new string[0]));
+				rowData.Add(StringUtils.Concat(";", mdata.GetCategoryColumnAt(i)[row] ?? new string[0]));
 			}
 			for (int i = 0; i < mdata.NumericColumnCount; i++){
 				rowData.Add(NumUtils.RoundSignificantDigits(mdata.NumericColumns[i][row], 6));

@@ -126,20 +126,20 @@ namespace PerseusPluginLib.Group{
 
 		private static void ProcessDataDelete(IMatrixData mdata, Parameters param){
 			int groupColInd = param.GetSingleChoiceParam("Category row").Value;
-			mdata.CategoryRows.RemoveAt(groupColInd);
-			mdata.CategoryRowNames.RemoveAt(groupColInd);
-			mdata.CategoryRowDescriptions.RemoveAt(groupColInd);
+			mdata.RemoveCategoryRowAt(groupColInd);
 		}
 
 		private static void ProcessDataEdit(IMatrixData mdata, Parameters param){
 			SingleChoiceWithSubParams s = param.GetSingleChoiceWithSubParams("Category row");
 			int groupColInd = s.Value;
 			Parameters sp = s.GetSubParameters();
+			string[][] newRow = new string[mdata.ExpressionColumnCount][];
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
 				string t = mdata.ExpressionColumnNames[i];
 				string x = sp.GetStringParam(t).Value;
-				mdata.CategoryRows[groupColInd][i] = x.Length > 0 ? x.Split(';') : new string[0];
+				newRow[i] = x.Length > 0 ? x.Split(';') : new string[0];
 			}
+			mdata.SetCategoryRowAt(newRow, groupColInd);
 		}
 
 		public Parameters GetEditParameters(IMatrixData mdata){
@@ -159,7 +159,7 @@ namespace PerseusPluginLib.Group{
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
 				string t = mdata.ExpressionColumnNames[i];
 				string help = "Specify a category value for the column '" + t + "'.";
-				par.Add(new StringParam(t, StringUtils.Concat(";", mdata.CategoryRows[ind][i])){Help = help});
+				par.Add(new StringParam(t, StringUtils.Concat(";", mdata.GetCategoryRowAt(ind)[i])){Help = help});
 			}
 			return new Parameters(par);
 		}

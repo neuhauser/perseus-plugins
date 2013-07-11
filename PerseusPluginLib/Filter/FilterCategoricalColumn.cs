@@ -39,7 +39,7 @@ namespace PerseusPluginLib.Filter{
 			}
 			string value = param.GetStringParam("Find").Value;
 			bool remove = param.GetSingleChoiceParam("Mode").Value == 0;
-			string[][] cats = mdata.CategoryColumns[colInd];
+			string[][] cats = mdata.GetCategoryColumnAt(colInd);
 			List<int> valids = new List<int>();
 			for (int i = 0; i < cats.Length; i++){
 				bool valid = true;

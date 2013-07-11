@@ -51,7 +51,8 @@ namespace PerseusPluginLib.Basic{
 				word[i] = word1[i].ToLower().Trim();
 			}
 			bool[] indicator = new bool[mdata.RowCount];
-			foreach (string[][] cat in catCols.Select(col => mdata.CategoryColumns[col])){
+			foreach (int col in catCols){
+				string[][] cat = mdata.GetCategoryColumnAt(col);
 				for (int i = 0; i < cat.Length; i++){
 					foreach (string s in cat[i]){
 						foreach (string s1 in word){

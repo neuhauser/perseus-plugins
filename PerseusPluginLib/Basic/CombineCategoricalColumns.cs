@@ -46,8 +46,8 @@ namespace PerseusPluginLib.Basic{
 			}
 			int colInd1 = param.GetSingleChoiceParam("First column").Value;
 			int colInd2 = param.GetSingleChoiceParam("Second column").Value;
-			string[][] col1 = mdata.CategoryColumns[colInd1];
-			string[][] col2 = mdata.CategoryColumns[colInd2];
+			string[][] col1 = mdata.GetCategoryColumnAt(colInd1);
+			string[][] col2 = mdata.GetCategoryColumnAt(colInd2);
 			string[][] result = new string[col1.Length][];
 			for (int i = 0; i < result.Length; i++){
 				result[i] = CombineTerms(col1[i], col2[i]);
@@ -56,7 +56,7 @@ namespace PerseusPluginLib.Basic{
 			mdata.AddCategoryColumn(colName, "", result);
 		}
 
-		private string[] CombineTerms(ICollection<string> x, ICollection<string> y){
+		private static string[] CombineTerms(ICollection<string> x, ICollection<string> y){
 			string[] result = new string[x.Count*y.Count];
 			int count = 0;
 			foreach (string t in x){
