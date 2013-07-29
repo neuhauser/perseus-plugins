@@ -69,6 +69,8 @@
     <Compile Include="Combine\MatchingColumnsByName.cs" />
     <Compile Include="Combine\MatchingRowsByName.cs" />
     <Compile Include="Export\TabSeparatedExport.cs" />
+    <Compile Include="Filter\FilterValidValuesColumns.cs" />
+    <Compile Include="Filter\FilterCategoricalRow.cs" />
     <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
@@ -96,11 +98,10 @@
     <Compile Include="Rearrange\ReorderColumns.cs" />
     <Compile Include="Filter\FilterCategoricalColumn.cs" />
     <Compile Include="Filter\FilterTextualColumn.cs" />
-    <Compile Include="Filter\FilterThreshold.cs" />
+    <Compile Include="Filter\FilterValidValuesRows.cs" />
     <Compile Include="Utils\ColumnNameInfo.cs" />
     <Compile Include="Utils\INameInfo.cs" />
     <Compile Include="Utils\PerseusPluginUtils.cs" />
-    <Compile Include="Filter\FilterValidValues.cs" />
     <Compile Include="Norm\Divide.cs" />
     <Compile Include="Norm\DivisionByColumn.cs" />
     <Compile Include="Norm\Rank.cs" />

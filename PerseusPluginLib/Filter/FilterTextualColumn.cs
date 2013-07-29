@@ -18,10 +18,10 @@ namespace PerseusPluginLib.Filter{
 		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
-		public string Name { get { return "Filter string column"; } }
-		public string Heading { get { return "Filter"; } }
+		public string Name { get { return "Filter rows based on text column"; } }
+		public string Heading { get { return "Filter rows"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return 7; } }
+		public float DisplayOrder { get { return 2; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
 		public int NumDocuments { get { return 0; } }
@@ -91,7 +91,7 @@ namespace PerseusPluginLib.Filter{
 								"all other rows will be kept. If 'Keep matching rows' is selected, the opposite will happen.",
 						Value = 0
 					},
-					PerseusPluginUtils.GetFilterModeParam()
+					PerseusPluginUtils.GetFilterModeParam(true)
 				});
 		}
 	}

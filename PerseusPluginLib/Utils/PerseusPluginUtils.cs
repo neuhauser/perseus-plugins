@@ -6,8 +6,9 @@ using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Utils{
 	public static class PerseusPluginUtils{
-		public static SingleChoiceParam GetFilterModeParam(){
-			return new SingleChoiceParam("Filter mode"){Values = new[]{"Reduce matrix", "Add categorical column"}};
+		public static SingleChoiceParam GetFilterModeParam(bool column){
+			return new SingleChoiceParam("Filter mode")
+			{Values = new[]{"Reduce matrix", column ? "Add categorical column" : "Add categorical row"}};
 		}
 
 		private static SingleChoiceParam GetModeParam1(){

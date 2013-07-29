@@ -6,23 +6,27 @@ using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
+using PerseusPluginLib.Properties;
 using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Filter{
 	internal enum FilteringMode{
-		Minimum,
-		Maximum,
+		Valid,
+		GreaterThan,
+		GreaterEqualThan,
+		LessThan,
+		LessEqualThan,
 		Between,
 		Outside
 	}
 
-	public class FilterThreshold : IMatrixProcessing{
-		public bool HasButton { get { return false; } }
-		public Image ButtonImage { get { return null; } }
-		public string Name { get { return "Filter threshold"; } }
-		public string Heading { get { return "Filter"; } }
+	public class FilterValidValuesRows : IMatrixProcessing{
+		public bool HasButton { get { return true; } }
+		public Image ButtonImage { get { return Resources.missingsButton_Image; } }
+		public string Name { get { return "Filter rows based on valid values"; } }
+		public string Heading { get { return "Filter rows"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return -3; } }
+		public float DisplayOrder { get { return 3; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
@@ -35,7 +39,7 @@ namespace PerseusPluginLib.Filter{
 			get{
 				return
 					"Rows/columns of the expression matrix are filtered to contain at least the specified numbers of entries that are " +
-						"greater than or equal to the specified value.";
+						"valid in the specified way.";
 			}
 		}
 		public string HelpOutput { get{
@@ -49,7 +53,7 @@ namespace PerseusPluginLib.Filter{
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
-			bool rows = param.GetSingleChoiceParam("Matrix access").Value == 0;
+			bool rows = true;
 			int minValids = param.GetIntParam("Min. number of values").Value;
 			SingleChoiceWithSubParams modeParam = param.GetSingleChoiceWithSubParams("Mode");
 			int modeInd = modeParam.Value;
@@ -65,23 +69,34 @@ namespace PerseusPluginLib.Filter{
 			Parameters subParams = x.GetSubParameters();
 			int shouldBeIndex = x.Value;
 			FilteringMode filterMode;
-			double threshold;
+			double threshold = double.NaN;
 			double threshold2 = double.NaN;
 			switch (shouldBeIndex){
 				case 0:
-					filterMode = FilteringMode.Minimum;
-					threshold = subParams.GetDoubleParam("Minimum").Value;
+					filterMode = FilteringMode.Valid;
 					break;
 				case 1:
-					filterMode = FilteringMode.Maximum;
-					threshold = subParams.GetDoubleParam("Maximum").Value;
+					filterMode = FilteringMode.GreaterThan;
+					threshold = subParams.GetDoubleParam("Minimum").Value;
 					break;
 				case 2:
+					filterMode = FilteringMode.GreaterEqualThan;
+					threshold = subParams.GetDoubleParam("Minimum").Value;
+					break;
+				case 3:
+					filterMode = FilteringMode.LessThan;
+					threshold = subParams.GetDoubleParam("Maximum").Value;
+					break;
+				case 4:
+					filterMode = FilteringMode.LessEqualThan;
+					threshold = subParams.GetDoubleParam("Maximum").Value;
+					break;
+				case 5:
 					filterMode = FilteringMode.Between;
 					threshold = subParams.GetDoubleParam("Minimum").Value;
 					threshold2 = subParams.GetDoubleParam("Maximum").Value;
 					break;
-				case 3:
+				case 6:
 					filterMode = FilteringMode.Outside;
 					threshold = subParams.GetDoubleParam("Minimum").Value;
 					threshold2 = subParams.GetDoubleParam("Maximum").Value;
@@ -103,7 +118,7 @@ namespace PerseusPluginLib.Filter{
 			List<int> valids = new List<int>();
 			string[] groupVals = ArrayUtils.UniqueValuesPreserveOrder(groupCol);
 			Array.Sort(groupVals);
-			int[][] groupInds = FilterValidValues.CalcGroupInds(groupVals, groupCol);
+			int[][] groupInds = CalcGroupInds(groupVals, groupCol);
 			for (int i = 0; i < mdata.RowCount; i++){
 				int[] counts = new int[groupVals.Length];
 				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
@@ -120,6 +135,17 @@ namespace PerseusPluginLib.Filter{
 				}
 			}
 			PerseusPluginUtils.FilterRows(mdata, param, valids.ToArray());
+		}
+
+		internal static int[][] CalcGroupInds(string[] groupVals, IList<string[]> groupCol) {
+			int[][] result = new int[groupCol.Count][];
+			for (int i = 0; i < result.Length; i++) {
+				result[i] = new int[groupCol[i].Length];
+				for (int j = 0; j < result[i].Length; j++) {
+					result[i][j] = Array.BinarySearch(groupVals, groupCol[i][j]);
+				}
+			}
+			return result;
 		}
 
 		private static void NonzeroFilter1(bool rows, int minValids, IMatrixData mdata, Parameters param, double threshold,
@@ -157,9 +183,15 @@ namespace PerseusPluginLib.Filter{
 
 		private static bool Valid(double data, double threshold, double threshold2, FilteringMode filterMode){
 			switch (filterMode){
-				case FilteringMode.Minimum:
+				case FilteringMode.Valid:
+					return !double.IsNaN(data) && !double.IsNaN(data);
+				case FilteringMode.GreaterThan:
+					return data > threshold;
+				case FilteringMode.GreaterEqualThan:
 					return data >= threshold;
-				case FilteringMode.Maximum:
+				case FilteringMode.LessThan:
+					return data < threshold;
+				case FilteringMode.LessEqualThan:
 					return data <= threshold;
 				case FilteringMode.Between:
 					return data >= threshold && data <= threshold2;
@@ -176,23 +208,21 @@ namespace PerseusPluginLib.Filter{
 			subParams[2] = new Parameters(new Parameter[]{new SingleChoiceParam("Grouping"){Values = mdata.CategoryRowNames}});
 			return
 				new Parameters(new Parameter[]{
-					new SingleChoiceParam("Matrix access"){
-						Values = new[]{"Rows", "Columns"},
-						Help = "Specifies if the analysis is performed on the rows or the columns of the matrix."
-					},
-					new DoubleParam("Threshold", 0){Help = "Value defining which entry is counted as a valid value."},
-					new IntParam("Min. number of values", 3){
-						Help =
-							"If a row/column has less than the specified number of values larger than the threshold it will be discarded in the output."
-					},
+					new IntParam("Min. number of values", 3)
+					{Help = "If a row/column has less than the specified number of valid values it will be discarded in the output."},
 					new SingleChoiceWithSubParams("Mode")
 					{Values = new[]{"In total", "In each group", "In at least one group"}, SubParams = subParams},
 					new SingleChoiceWithSubParams("Values should be"){
-						Values = new[]{"Greater than", "Less than", "Between", "Outside"},
+						Values = new[]{"Valid", "Greater than", "Greater or equal", "Less than", "Less or equal", "Between", "Outside"},
 						SubParams =
 							new[]{
+								new Parameters(new Parameter[0]),
 								new Parameters(new Parameter[]
 								{new DoubleParam("Minimum", 0){Help = "Value defining which entry is counted as a valid value."}}),
+								new Parameters(new Parameter[]
+								{new DoubleParam("Minimum", 0){Help = "Value defining which entry is counted as a valid value."}}),
+								new Parameters(new Parameter[]
+								{new DoubleParam("Maximum", 0){Help = "Value defining which entry is counted as a valid value."}}),
 								new Parameters(new Parameter[]
 								{new DoubleParam("Maximum", 0){Help = "Value defining which entry is counted as a valid value."}}),
 								new Parameters(new Parameter[]{
@@ -205,7 +235,7 @@ namespace PerseusPluginLib.Filter{
 								})
 							}
 					},
-					PerseusPluginUtils.GetFilterModeParam()
+					PerseusPluginUtils.GetFilterModeParam(false)
 				});
 		}
 	}
