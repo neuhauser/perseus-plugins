@@ -13,7 +13,7 @@ namespace PerseusApi.Matrix{
 		float[,] QualityValues { get; set; }
 		string QualityName { get; set; }
 		bool QualityBiggerIsBetter { get; set; }
-		bool HasQuality { get; set; }
+		bool HasQuality { get; }
 		bool[,] IsImputed { get; set; }
 		int ExpressionColumnCount { get; }
 		List<string> ExpressionColumnNames { get; set; }

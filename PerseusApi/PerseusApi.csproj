@@ -56,6 +56,7 @@
     <Compile Include="IAnalysisResult.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="Document\IDocumentData.cs" />
+    <Compile Include="Matrix\IMultiMatrixProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />
     <Compile Include="Matrix\IMatrixAnalysisResult.cs" />
