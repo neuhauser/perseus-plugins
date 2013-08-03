@@ -73,6 +73,7 @@
     <Compile Include="Filter\FilterCategoricalRow.cs" />
     <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />
+    <Compile Include="Impute\ReplaceImputedByNan.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
     <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
     <Compile Include="Load\GenericMatrixUpload.cs" />
@@ -88,6 +89,8 @@
     </Compile>
     <Compile Include="Manual\SelectRowsManuallyControl.Designer.cs" />
     <Compile Include="Manual\SelectRowsManuallyResult.cs" />
+    <Compile Include="Quality\CreateQualityMatrix.cs" />
+    <Compile Include="Quality\FilterQuality.cs" />
     <Compile Include="Rearrange\ChangeColumnType.cs" />
     <Compile Include="Rearrange\ColumnGroupingToMultipleRows.cs" />
     <Compile Include="Rearrange\ConvertMultiNumeric.cs" />
