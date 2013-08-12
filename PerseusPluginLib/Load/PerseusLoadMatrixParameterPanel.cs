@@ -15,7 +15,7 @@ namespace PerseusPluginLib.Load{
 				"interpro name", "prints name", "prosite name", "smart name", "sequence motifs", "reactome", "transcription factors"
 				, "microrna", "scop class", "scop fold", "scop superfamily", "scop family", "phospho motifs", "mim", "pdb", "intact"
 				, "corum", "motifs", "best motif", "reverse", "contaminant", "only identified by site", "type", "amino acid",
-				"raw file", "experiment", "charge", "modifications", "md modification", "dp aa", "dp decoy", "dp modification"
+				"raw file", "experiment", "charge", "modifications", "md modification", "dp aa", "dp decoy", "dp modification", "fraction"
 			});
 		private static readonly HashSet<string> textualCols =
 			new HashSet<string>(new[]{
