@@ -1,12 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text.RegularExpressions;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Matrix;
-using System.Collections.Generic;
-using System;
-using System.Text.RegularExpressions;
 
 namespace PluginProteomicRuler{
 	public class CopyNumbers : IMatrixProcessing{
@@ -359,7 +359,8 @@ namespace PluginProteomicRuler{
 					},
 					new MultiChoiceParam("Intensities"){
 						Help =
-							"Specify the columns that contain the intensities to be used for copy number estimation. If several columns are selected, the method will calculate the median.",
+							"Specify the columns that contain the intensities to be used for copy number estimation. If several columns " +
+								"are selected, the method will calculate the median.",
 						Values = ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames),
 						Value =
 							Match(ArrayUtils.Concat(mdata.ExpressionColumnNames, mdata.NumericColumnNames), new[]{"intensit"}, false, true,
@@ -397,7 +398,8 @@ namespace PluginProteomicRuler{
 					},
 					new BoolWithSubParams("Detectability correction", false){
 						Help =
-							"Without correction, the algorithm assumes linearity between the signal and the mass of the proteins.\nOptionally select protein-specific correction factors such as the number of theoretical peptides.",
+							"Without correction, the algorithm assumes linearity between the signal and the mass of the proteins.\n" +
+								"Optionally select protein-specific correction factors such as the number of theoretical peptides.",
 						SubParamsFalse = new Parameters(new Parameter[]{}),
 						SubParamsTrue =
 							new Parameters(new Parameter[]{

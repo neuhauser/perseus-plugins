@@ -227,5 +227,33 @@ namespace PerseusPluginLib.Utils{
 			}
 			return result;
 		}
+
+		public static string[][] CalcPvalueSignificance(double[] pvals, double threshold) {
+			string[][] result = new string[pvals.Length][];
+			for (int i = 0; i < result.Length; i++) {
+				result[i] = pvals[i] <= threshold ? new[] { "+" } : new string[0];
+			}
+			return result;
+		}
+
+		public static string[][] CalcBenjaminiHochbergFdr(double[] pvals, double threshold) {
+			int n = pvals.Length;
+			int[] o = ArrayUtils.Order(pvals);
+			int lastind = -1;
+			for (int i = 0; i < n; i++) {
+				double fdr = Math.Min(1, pvals[o[i]] * n / (1.0 + i));
+				if (fdr <= threshold) {
+					lastind = i;
+				}
+			}
+			string[][] result = new string[pvals.Length][];
+			for (int i = 0; i < result.Length; i++) {
+				result[i] = new string[0];
+			}
+			for (int i = 0; i <= lastind; i++) {
+				result[o[i]] = new[] { "+" };
+			}
+			return result;
+		}
 	}
 }
