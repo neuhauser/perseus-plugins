@@ -71,8 +71,11 @@
     <Compile Include="Export\TabSeparatedExport.cs" />
     <Compile Include="Filter\FilterValidValuesColumns.cs" />
     <Compile Include="Filter\FilterCategoricalRow.cs" />
+    <Compile Include="Group\AverageGroups.cs" />
     <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />
+    <Compile Include="Group\JoinTermsInCategoricalRow.cs" />
+    <Compile Include="Group\NameBasedGrouping.cs" />
     <Compile Include="Impute\ReplaceImputedByNan.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
     <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
@@ -186,7 +189,9 @@
   <ItemGroup>
     <None Include="Resources\histo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\average.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
