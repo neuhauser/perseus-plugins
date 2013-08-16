@@ -105,6 +105,8 @@
     <Compile Include="Filter\FilterCategoricalColumn.cs" />
     <Compile Include="Filter\FilterTextualColumn.cs" />
     <Compile Include="Filter\FilterValidValuesRows.cs" />
+    <Compile Include="Significance\SignificanceA.cs" />
+    <Compile Include="Significance\SignificanceB.cs" />
     <Compile Include="Utils\ColumnNameInfo.cs" />
     <Compile Include="Utils\INameInfo.cs" />
     <Compile Include="Utils\PerseusPluginUtils.cs" />
@@ -192,6 +194,7 @@
   <ItemGroup>
     <None Include="Resources\average.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
