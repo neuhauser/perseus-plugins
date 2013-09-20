@@ -45,9 +45,12 @@ namespace PerseusPluginLib.Group{
 			return
 				new Parameters(new Parameter[]{
 					new SingleChoiceParam("Grouping"){Values = mdata.CategoryRowNames},
-					new SingleChoiceParam("Average type")
-					{Values = new[]{"median", "mean", "sum"}, Help = "Select wether median or mean should be used for the averaging."},
-					new IntParam("Min. valid values per group", 1), new BoolParam("Keep original data", false)
+					new SingleChoiceParam("Average type"){
+						Values = new[]{"median", "mean", "sum", "geometric mean"},
+						Help = "Select wether median or mean should be used for the averaging."
+					},
+					new IntParam("Min. valid values per group", 1), new BoolParam("Keep original data", false),
+					new BoolParam("Add standard deviation")
 				});
 		}
 
@@ -61,6 +64,7 @@ namespace PerseusPluginLib.Group{
 			int groupColInd = param.GetSingleChoiceParam("Grouping").Value;
 			int validVals = param.GetIntParam("Min. valid values per group").Value;
 			bool keep = param.GetBoolParam("Keep original data").Value;
+			bool sdev = param.GetBoolParam("Add standard deviation").Value;
 			Func<IList<double>, double> func;
 			switch (avType){
 				case 0:
@@ -72,10 +76,16 @@ namespace PerseusPluginLib.Group{
 				case 2:
 					func = ArrayUtils.Sum;
 					break;
+				case 3:
+					func = ArrayUtils.GeometricMean;
+					break;
 				default:
 					throw new Exception("Never get here.");
 			}
-			if (keep){
+			if (sdev) {
+				AddStandardDeviation(groupColInd, validVals, mdata);
+			}
+			if (keep) {
 				FillMatrixKeep(groupColInd, validVals, mdata, func);
 			} else{
 				FillMatrixDontKeep(groupColInd, validVals, mdata, func);
@@ -88,25 +98,35 @@ namespace PerseusPluginLib.Group{
 			string[] groupNames = ArrayUtils.UniqueValuesPreserveOrder(groupCol);
 			int[][] colInds = PerseusPluginUtils.GetExpressionColIndices(groupCol, groupNames);
 			float[,] newExCols = new float[mdata.RowCount,groupNames.Length];
+			float[,] newQuality = new float[mdata.RowCount,groupNames.Length];
+			bool[,] newImputed = new bool[mdata.RowCount,groupNames.Length];
 			for (int i = 0; i < newExCols.GetLength(0); i++){
 				for (int j = 0; j < newExCols.GetLength(1); j++){
 					List<double> vals = new List<double>();
+					List<bool> imps = new List<bool>();
 					foreach (int ind in colInds[j]){
 						double val = mdata[i, ind];
 						if (!double.IsNaN(val) && !double.IsInfinity(val)){
 							vals.Add(val);
+							imps.Add(mdata.IsImputed[i, ind]);
 						}
 					}
+					bool imp = false;
 					float xy = float.NaN;
 					if (vals.Count >= validVals){
 						xy = (float) func(vals);
+						imp = ArrayUtils.Or(imps);
 					}
 					newExCols[i, j] = xy;
+					newQuality[i, j] = float.NaN;
+					newImputed[i, j] = imp;
 				}
 			}
 			mdata.ExpressionColumnNames = new List<string>(groupNames);
 			mdata.ExpressionColumnDescriptions = GetEmpty(groupNames);
 			mdata.ExpressionValues = newExCols;
+			mdata.QualityValues = newQuality;
+			mdata.IsImputed = newImputed;
 			mdata.RemoveCategoryRowAt(groupColInd);
 			for (int i = 0; i < mdata.CategoryRowCount; i++){
 				mdata.SetCategoryRowAt(AverageCategoryRow(mdata.GetCategoryRowAt(i), colInds), i);
@@ -122,6 +142,36 @@ namespace PerseusPluginLib.Group{
 				result.Add("");
 			}
 			return result;
+		}
+
+		private static void AddStandardDeviation(int groupColInd, int validVals, IMatrixData mdata){
+			string[][] groupCol = mdata.GetCategoryRowAt(groupColInd);
+			string[] groupNames = ArrayUtils.UniqueValuesPreserveOrder(groupCol);
+			int[][] colInds = PerseusPluginUtils.GetExpressionColIndices(groupCol, groupNames);
+			double[][] newNumCols = new double[groupNames.Length][];
+			for (int i = 0; i < newNumCols.Length; i++){
+				newNumCols[i] = new double[mdata.RowCount];
+			}
+			for (int i = 0; i < mdata.RowCount; i++){
+				for (int j = 0; j < groupNames.Length; j++){
+					List<double> vals = new List<double>();
+					foreach (int ind in colInds[j]){
+						double val = mdata[i, ind];
+						if (!double.IsNaN(val) && !double.IsInfinity(val)){
+							vals.Add(val);
+						}
+					}
+					float xy = float.NaN;
+					if (vals.Count >= validVals){
+						xy = (float) ArrayUtils.StandardDeviation(vals);
+					}
+					newNumCols[j][i] = xy;
+				}
+			}
+			for (int i = 0; i < groupNames.Length; i++){
+				string name = "stddev " + groupNames[i];
+				mdata.AddNumericColumn(name, name, newNumCols[i]);
+			}
 		}
 
 		private static void FillMatrixKeep(int groupColInd, int validVals, IMatrixData mdata, Func<IList<double>, double> func){

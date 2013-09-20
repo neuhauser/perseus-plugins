@@ -325,7 +325,7 @@ namespace PerseusPluginLib.Rearrange{
 		}
 
 		private static void ExpressionToNumeric(IList<int> colInds, IMatrixData mdata){
-			int[] remainingInds = ArrayUtils.Complement(colInds, mdata.NumericColumnCount);
+			int[] remainingInds = ArrayUtils.Complement(colInds, mdata.ExpressionColumnCount);
 			foreach (int colInd in colInds){
 				double[] d = ArrayUtils.ToDoubles(mdata.GetExpressionColumn(colInd));
 				mdata.AddNumericColumn(mdata.ExpressionColumnNames[colInd], mdata.ExpressionColumnDescriptions[colInd], d);
