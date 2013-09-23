@@ -4,7 +4,7 @@ namespace PerseusApi{
 	/// <summary>
 	/// Generic data structure holding the data that flows through the network. Typically this is <code>IMatrixData</code>.
 	/// </summary>
-	public interface IData{
+	public interface IData : IDisposable{
 		string Name { get; set; }
 		string Description { get; set; }
 		/// <summary>
