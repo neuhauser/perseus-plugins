@@ -3,7 +3,6 @@ using BasicLib.Param;
 
 namespace PerseusApi.Matrix{
 	public interface IMatrixAnalysis : IMatrixActivity, IAnalysis{
-		string Heading { get; }
 		Tuple<IMatrixProcessing, Func<Parameters, IMatrixData, Parameters, string>>[] Replacements { get; }
 		IMatrixAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo);
 

@@ -11,9 +11,9 @@ namespace PerseusPluginLib.Norm{
 		public Image ButtonImage { get { return null; } }
 		public string HelpDescription { get { return "Divide all columns by the specified column."; } }
 		public string HelpOutput { get { return "Normalized expression matrix."; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
-		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public string Name { get { return "Divide by column"; } }
@@ -21,7 +21,7 @@ namespace PerseusPluginLib.Norm{
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
-		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){

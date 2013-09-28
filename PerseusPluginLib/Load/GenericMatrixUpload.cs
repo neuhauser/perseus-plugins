@@ -26,7 +26,7 @@ namespace PerseusPluginLib.Load{
 						"using the export as a tab-separated .txt file.";
 			}
 		}
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;

@@ -16,7 +16,7 @@ namespace PerseusPluginLib.Export{
 		public string Name { get { return "Generic export"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;

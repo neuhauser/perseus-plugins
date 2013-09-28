@@ -28,8 +28,8 @@ namespace PerseusPluginLib.Combine{
 						"for textual and categorical columns.";
 			}
 		}
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
@@ -205,7 +205,7 @@ namespace PerseusPluginLib.Combine{
 			return false;
 		}
 
-		public static void SetAnnotationRows(IMatrixData result, IMatrixData mdata1, IMatrixData mdata2){
+		private static void SetAnnotationRows(IMatrixData result, IMatrixData mdata1, IMatrixData mdata2){
 			result.CategoryRowNames.Clear();
 			result.CategoryRowDescriptions.Clear();
 			result.ClearCategoryRows();

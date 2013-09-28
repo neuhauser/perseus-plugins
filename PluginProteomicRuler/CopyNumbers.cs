@@ -40,9 +40,9 @@ namespace PluginProteomicRuler{
 			}
 		}
 		public string HelpOutput { get { return "In the parameters, you can select which output you want to add to the matrix."; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
-		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public string Name { get { return "Estimate copy numbers"; } }
@@ -50,7 +50,7 @@ namespace PluginProteomicRuler{
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 2; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
-		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){

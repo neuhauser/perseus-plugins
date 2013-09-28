@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BasicLib.Util;
 
 namespace PerseusApi.Document{
 	public interface IDocumentData : IData{

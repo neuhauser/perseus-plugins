@@ -6,12 +6,12 @@ namespace PerseusApi.Matrix{
 	public interface IMultiMatrixProcessing : IMatrixActivity{
 		string Heading { get; }
 		string HelpOutput { get; }
-		HelpType HelpOutputType { get; }
+		DocumentType HelpOutputType { get; }
 		string[] HelpSupplTables { get; }
-		HelpType[] HelpSupplTablesType { get; }
+		DocumentType[] HelpSupplTablesType { get; }
 		int NumSupplTables { get; }
 		string[] HelpDocuments { get; }
-		HelpType[] HelpDocumentTypes { get; }
+		DocumentType[] HelpDocumentTypes { get; }
 		int NumDocuments { get; }
 
 		void ProcessData(IMatrixData[] inputData, Parameters param, ref IMatrixData[] outputTables,

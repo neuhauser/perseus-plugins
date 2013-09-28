@@ -14,11 +14,11 @@ namespace PerseusPluginLib.Significance{
 	public class SignificanceA : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
-		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
-		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
 		public string HelpDescription{
 			get{

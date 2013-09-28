@@ -50,12 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataType.cs" />
-    <Compile Include="DocumentType.cs" />
     <Compile Include="IActivity.cs" />
+    <Compile Include="IActivityWithHeading.cs" />
     <Compile Include="IAnalysis.cs" />
     <Compile Include="IAnalysisResult.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="Document\IDocumentData.cs" />
+    <Compile Include="IExport.cs" />
+    <Compile Include="IProcessing.cs" />
+    <Compile Include="IUpload.cs" />
     <Compile Include="Matrix\IMultiMatrixProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />

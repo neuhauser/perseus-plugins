@@ -35,7 +35,7 @@ namespace PerseusApi{
 		/// <summary>
 		/// Specifies whether the help string should be interpreted as plain text, html or rtf.
 		/// </summary>
-		HelpType HelpDescriptionType { get; }
+		DocumentType HelpDescriptionType { get; }
 
 		/// <summary>
 		/// Specifies the maximal number of threads that this acticity can make use of simultaneously.

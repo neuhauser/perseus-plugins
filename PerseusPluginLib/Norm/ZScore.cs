@@ -21,7 +21,7 @@ namespace PerseusPluginLib.Norm{
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
-		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
 		public string HelpDescription{
 			get{
@@ -29,9 +29,9 @@ namespace PerseusPluginLib.Norm{
 					"The mean of each row/column is subtracted from each value. The result is then divided by the standard deviation of the row/column.";
 			}
 		}
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
-		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return int.MaxValue;

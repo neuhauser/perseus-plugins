@@ -4,7 +4,7 @@ using BasicLib.Util;
 namespace PerseusApi.Matrix{
 	public interface IMatrixCombination : IMatrixActivity{
 		string HelpOutput { get; }
-		HelpType HelpOutputType { get; }
+		DocumentType HelpOutputType { get; }
 		string DataType1 { get; }
 		string DataType2 { get; }
 

@@ -18,8 +18,8 @@ namespace PerseusPluginLib.Combine{
 		public string DataType2 { get { return "Second matrix"; } }
 		public string HelpOutput { get { return ""; } }
 		public string HelpDescription { get { return ""; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;

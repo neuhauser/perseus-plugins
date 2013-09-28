@@ -12,18 +12,18 @@ namespace PerseusPluginLib.Rearrange{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
 		public string HelpDescription { get { return "Values in string columns can be manipulated according to a regular expression."; } }
-		public HelpType HelpDescriptionType { get { return HelpType.PlainText; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
 		public string HelpOutput { get { return ""; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
-		public HelpType HelpOutputType { get { return HelpType.PlainText; } }
-		public HelpType[] HelpSupplTablesType { get { return new HelpType[0]; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 		public int NumSupplTables { get { return 0; } }
 		public string Name { get { return "Process text column"; } }
 		public string Heading { get { return "Matrix rearrangements"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 22; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
-		public HelpType[] HelpDocumentTypes { get { return new HelpType[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
