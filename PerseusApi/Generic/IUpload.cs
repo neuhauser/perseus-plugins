@@ -1,6 +1,6 @@
 ﻿using BasicLib.Param;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	public interface IUpload : IActivity{
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the upload.

@@ -1,6 +1,7 @@
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi.Document;
+using PerseusApi.Generic;
 
 namespace PerseusApi.Matrix{
 	public interface IMultiMatrixProcessing : IMatrixActivity{

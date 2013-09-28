@@ -49,22 +49,22 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataType.cs" />
+    <Compile Include="Generic\DataType.cs" />
     <Compile Include="Document\IDocumentActivity.cs" />
     <Compile Include="Document\IDocumentAnalysis.cs" />
     <Compile Include="Document\IDocumentAnalysisResult.cs" />
     <Compile Include="Document\IDocumentExport.cs" />
     <Compile Include="Document\IDocumentProcessing.cs" />
     <Compile Include="Document\IDocumentUpload.cs" />
-    <Compile Include="IActivity.cs" />
-    <Compile Include="IActivityWithHeading.cs" />
-    <Compile Include="IAnalysis.cs" />
-    <Compile Include="IAnalysisResult.cs" />
-    <Compile Include="IData.cs" />
+    <Compile Include="Generic\IActivity.cs" />
+    <Compile Include="Generic\IActivityWithHeading.cs" />
+    <Compile Include="Generic\IAnalysis.cs" />
+    <Compile Include="Generic\IAnalysisResult.cs" />
+    <Compile Include="Generic\IData.cs" />
     <Compile Include="Document\IDocumentData.cs" />
-    <Compile Include="IExport.cs" />
-    <Compile Include="IProcessing.cs" />
-    <Compile Include="IUpload.cs" />
+    <Compile Include="Generic\IExport.cs" />
+    <Compile Include="Generic\IProcessing.cs" />
+    <Compile Include="Generic\IUpload.cs" />
     <Compile Include="Matrix\IMultiMatrixProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />
@@ -74,11 +74,11 @@
     <Compile Include="Matrix\IMatrixExport.cs" />
     <Compile Include="Matrix\IMatrixProcessing.cs" />
     <Compile Include="Matrix\IMatrixUpload.cs" />
-    <Compile Include="IVisualization.cs" />
-    <Compile Include="IVisualizationResult.cs" />
-    <Compile Include="ProcessInfo.cs" />
+    <Compile Include="Generic\IVisualization.cs" />
+    <Compile Include="Generic\IVisualizationResult.cs" />
+    <Compile Include="Generic\ProcessInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Generic\Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

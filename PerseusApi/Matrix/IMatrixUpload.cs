@@ -1,4 +1,5 @@
 using BasicLib.Param;
+using PerseusApi.Generic;
 
 namespace PerseusApi.Matrix{
 	public interface IMatrixUpload : IMatrixActivity, IUpload{

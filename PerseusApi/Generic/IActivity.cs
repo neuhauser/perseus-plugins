@@ -2,7 +2,7 @@
 using BasicLib.Param;
 using BasicLib.Util;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	/// <summary>
 	/// This interface is the base from which all other activities are derived. 
 	/// It provides properties that are common to all activities. 

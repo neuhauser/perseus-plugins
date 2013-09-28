@@ -1,4 +1,4 @@
-﻿namespace PerseusApi {
+﻿namespace PerseusApi.Generic {
 	public enum DataType {
 		Matrix,
 		Document,

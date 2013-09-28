@@ -1,4 +1,5 @@
 ﻿using BasicLib.Param;
+using PerseusApi.Generic;
 
 namespace PerseusApi.Document {
 	public interface IDocumentExport : IDocumentActivity, IExport {

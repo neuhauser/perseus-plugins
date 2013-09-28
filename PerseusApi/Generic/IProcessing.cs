@@ -1,6 +1,6 @@
 ﻿using BasicLib.Util;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	public interface IProcessing : IActivityWithHeading {
 		string HelpOutput { get; }
 		DocumentType HelpOutputType { get; }

@@ -1,4 +1,6 @@
-﻿namespace PerseusApi.Matrix{
+﻿using PerseusApi.Generic;
+
+namespace PerseusApi.Matrix{
 	/// <summary>
 	/// Marker interface indicating activities that operate on <code>IMatrixData</code>. There are currently five 
 	/// <code>IMatrixActivity</code> types implemented: <code>IMatrixUpload</code>, <code>IMatrixProcessing</code>, 

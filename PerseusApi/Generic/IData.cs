@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	/// <summary>
 	/// Generic data structure holding the data that flows through the network. Typically this is <code>IMatrixData</code>.
 	/// </summary>

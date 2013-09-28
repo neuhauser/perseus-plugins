@@ -1,4 +1,4 @@
-﻿namespace PerseusApi{
+﻿namespace PerseusApi.Generic{
 	/// <summary>
 	/// The output of a generic <code>IAnalysis</code>. It contains the data for this IAnalysis which is serialized with the session. 
 	/// </summary>

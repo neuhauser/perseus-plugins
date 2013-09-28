@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BasicLib.Util;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	public class ProcessInfo{
 		private readonly int numThreads;
 		public Settings Settings { get; private set; }

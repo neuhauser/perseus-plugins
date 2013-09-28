@@ -1,3 +1,3 @@
-﻿namespace PerseusApi{
+﻿namespace PerseusApi.Generic{
 	public interface IExport : IActivity {}
 }

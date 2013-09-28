@@ -1,6 +1,6 @@
 ﻿using BasicLib.Param;
 
-namespace PerseusApi{
+namespace PerseusApi.Generic{
 	public interface IVisualization : IActivity{
 		string[] InputNames { get; }
 		DataType[] InputDataTypes { get; }

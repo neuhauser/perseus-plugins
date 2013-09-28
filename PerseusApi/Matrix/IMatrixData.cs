@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PerseusApi.Document;
+using PerseusApi.Generic;
 
 namespace PerseusApi.Matrix{
 	/// <summary>
