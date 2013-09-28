@@ -50,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataType.cs" />
+    <Compile Include="Document\IDocumentActivity.cs" />
+    <Compile Include="Document\IDocumentAnalysis.cs" />
+    <Compile Include="Document\IDocumentAnalysisResult.cs" />
+    <Compile Include="Document\IDocumentExport.cs" />
+    <Compile Include="Document\IDocumentProcessing.cs" />
+    <Compile Include="Document\IDocumentUpload.cs" />
     <Compile Include="IActivity.cs" />
     <Compile Include="IActivityWithHeading.cs" />
     <Compile Include="IAnalysis.cs" />
