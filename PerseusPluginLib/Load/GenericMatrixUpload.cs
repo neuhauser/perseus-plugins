@@ -5,7 +5,6 @@ using System.IO;
 using BasicLib.Param;
 using BasicLib.Parse;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
@@ -16,7 +15,7 @@ namespace PerseusPluginLib.Load{
 		private static readonly HashSet<string> commentPrefixExceptions = new HashSet<string>(new[]{"#N/A", "#n/a"});
 		public bool HasButton { get { return true; } }
 		public Image ButtonImage { get { return Resources.uploadGeneric; } }
-		public string Name { get { return "Generic upload"; } }
+		public string Name { get { return "Generic matrix upload"; } }
 		public bool IsActive { get { return true; } }
 		public float DisplayOrder { get { return 0; } }
 		public string HelpDescription{
@@ -101,7 +100,7 @@ namespace PerseusPluginLib.Load{
 		private static void LoadData(IList<string> colNames, IList<string> colDescriptions, IList<int> expressionColIndices,
 			IList<int> catColIndices, IList<int> numColIndices, IList<int> textColIndices, IList<int> multiNumColIndices,
 			string filename, IMatrixData matrixData, IDictionary<string, string[]> annotationRows, Action<int> progress,
-			Action<string> status, char separator) {
+			Action<string> status, char separator){
 			Dictionary<string, string[]> catAnnotatRows;
 			Dictionary<string, string[]> numAnnotatRows;
 			status("Reading data");

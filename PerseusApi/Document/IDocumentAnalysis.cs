@@ -1,12 +1,11 @@
 ﻿using System;
 using BasicLib.Param;
 using PerseusApi.Generic;
-using PerseusApi.Matrix;
 
 namespace PerseusApi.Document {
 	public interface IDocumentAnalysis : IDocumentActivity, IAnalysis {
 		Tuple<IDocumentProcessing, Func<Parameters, IDocumentData, Parameters, string>>[] Replacements { get; }
-		IMatrixAnalysisResult AnalyzeData(IDocumentData mdata, Parameters param, ProcessInfo processInfo);
+		IAnalysisResult AnalyzeData(IDocumentData mdata, Parameters param, ProcessInfo processInfo);
 
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the analysis.

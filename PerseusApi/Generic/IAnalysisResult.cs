@@ -1,4 +1,7 @@
-﻿namespace PerseusApi.Generic{
+﻿using System;
+using System.Windows.Forms;
+
+namespace PerseusApi.Generic{
 	/// <summary>
 	/// The output of a generic <code>IAnalysis</code>. It contains the data for this IAnalysis which is serialized with the session. 
 	/// </summary>
@@ -8,5 +11,6 @@
 		/// </summary>
 		/// <returns></returns>
 		string Heading { get; }
+		Control GetControl(Action<string> updateStatus, Action<IData> newData);
 	}
 }

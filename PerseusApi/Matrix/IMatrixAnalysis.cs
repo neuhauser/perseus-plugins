@@ -5,7 +5,7 @@ using PerseusApi.Generic;
 namespace PerseusApi.Matrix{
 	public interface IMatrixAnalysis : IMatrixActivity, IAnalysis{
 		Tuple<IMatrixProcessing, Func<Parameters, IMatrixData, Parameters, string>>[] Replacements { get; }
-		IMatrixAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo);
+		IAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo);
 
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the analysis.

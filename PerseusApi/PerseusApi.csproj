@@ -52,7 +52,6 @@
     <Compile Include="Generic\DataType.cs" />
     <Compile Include="Document\IDocumentActivity.cs" />
     <Compile Include="Document\IDocumentAnalysis.cs" />
-    <Compile Include="Document\IDocumentAnalysisResult.cs" />
     <Compile Include="Document\IDocumentExport.cs" />
     <Compile Include="Document\IDocumentProcessing.cs" />
     <Compile Include="Document\IDocumentUpload.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="Matrix\IMultiMatrixProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />
-    <Compile Include="Matrix\IMatrixAnalysisResult.cs" />
     <Compile Include="Matrix\IMatrixCombination.cs" />
     <Compile Include="Matrix\IMatrixData.cs" />
     <Compile Include="Matrix\IMatrixExport.cs" />

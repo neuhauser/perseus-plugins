@@ -2,7 +2,6 @@
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
@@ -22,7 +21,7 @@ namespace PerseusPluginLib.Manual{
 			return 1;
 		}
 
-		public IMatrixAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo){
+		public IAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo){
 			return new SelectRowsManuallyResult(mdata);
 		}
 

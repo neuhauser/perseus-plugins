@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
 using BasicLib.Util;
-using PerseusApi;
+using PerseusApi.Generic;
 using PerseusApi.Matrix;
 
 namespace PerseusPluginLib.Manual{
 	public partial class SelectRowsManuallyControl : UserControl{
 		private readonly IMatrixData mdata;
-		private readonly Action<IMatrixData> createNewMatrix;
+		private readonly Action<IData> createNewMatrix;
 
-		public SelectRowsManuallyControl(IMatrixData mdata, Action<IMatrixData> createNewMatrix){
+		public SelectRowsManuallyControl(IMatrixData mdata, Action<IData> createNewMatrix){
 			InitializeComponent();
 			this.mdata = mdata;
 			this.createNewMatrix = createNewMatrix;
