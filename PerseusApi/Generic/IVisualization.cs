@@ -4,7 +4,7 @@ namespace PerseusApi.Generic{
 	public interface IVisualization : IActivity{
 		string[] InputNames { get; }
 		DataType[] InputDataTypes { get; }
-		IVisualizationResult VisualizeData(IData[] data, Parameters param, ProcessInfo processInfo);
+		IAnalysisResult VisualizeData(IData[] data, Parameters param, ProcessInfo processInfo);
 
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the visualization.
