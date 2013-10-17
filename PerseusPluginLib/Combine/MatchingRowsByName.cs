@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
@@ -79,7 +78,7 @@ namespace PerseusPluginLib.Combine{
 				indexMap[i] = ArrayUtils.UniqueValues(indexMap[i]);
 				indicatorCol[i] = indexMap[i].Length > 0 ? new[]{"+"} : new string[0];
 			}
-			IMatrixData result = mdata1.Copy();
+			IMatrixData result = (IMatrixData)mdata1.Clone();
 			SetAnnotationRows(result, mdata1, mdata2);
 			if (indicator){
 				result.AddCategoryColumn(mdata2.Name, "", indicatorCol);

@@ -2,7 +2,6 @@ using System.Drawing;
 using BasicLib.Num;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
@@ -16,7 +15,15 @@ namespace PerseusPluginLib.Basic{
 		public bool HasButton { get { return true; } }
 		public Image ButtonImage { get { return Resources.density_Image; } }
 		public string Heading { get { return "Basic"; } }
-		public string HelpDescription{
+		public string[] HelpSupplTables { get { return new string[0]; } }
+		public int NumSupplTables { get { return 0; } }
+		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
+		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
+		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
+		public string[] HelpDocuments { get { return new string[0]; } }
+		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
+		public int NumDocuments { get { return 0; } }
+		public string HelpDescription {
 			get{
 				return "The density of data points in two dimensions is calculated. Each data point is smoothed out" +
 					" by a suitable Gaussian kernel.";
@@ -29,14 +36,6 @@ namespace PerseusPluginLib.Basic{
 					" represent the third dimension of density values.";
 			}
 		}
-		public string[] HelpSupplTables { get { return new string[0]; } }
-		public int NumSupplTables { get { return 0; } }
-		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
-		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
-		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
-		public string[] HelpDocuments { get { return new string[0]; } }
-		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
-		public int NumDocuments { get { return 0; } }
 
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
@@ -69,16 +68,6 @@ namespace PerseusPluginLib.Basic{
 				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin)/points, points, yvals1, ymin,
 					(ymax - ymin)/points, points);
 				DensityEstimation.DivideByMaximum(values);
-				//if (modeInd == 1){
-				//	values = InvertRows(values);
-				//	List<string> colNames = new List<string>();
-				//	for (int i = 0; i < values.GetLength(1); i++){
-				//		colNames.Add("" + i);
-				//	}
-				//	mdata.SetData(mdata.Name, colNames, values, new List<string>(), new List<string[]>(), new List<string>(),
-				//		new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(), new List<double[][]>());
-				//	return;
-				//}
 				double[] xmat = new double[points];
 				for (int i = 0; i < points; i++){
 					xmat[i] = xmin + i*(xmax - xmin)/points;

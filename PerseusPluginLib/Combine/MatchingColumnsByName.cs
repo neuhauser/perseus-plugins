@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
@@ -142,7 +141,7 @@ namespace PerseusPluginLib.Combine{
 					}
 				}
 			}
-			IMatrixData result = mdata1.CreateNewInstance();
+			IMatrixData result = (IMatrixData)mdata1.CreateNewInstance();
 			result.ExpressionColumnNames = new List<string>(expColNames);
 			result.ExpressionColumnDescriptions = result.ExpressionColumnNames;
 			result.ExpressionValues = ex;

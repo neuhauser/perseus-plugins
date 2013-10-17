@@ -49,6 +49,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Document\IDocumentMultiProcessing.cs" />
     <Compile Include="Generic\DataType.cs" />
     <Compile Include="Document\IDocumentActivity.cs" />
     <Compile Include="Document\IDocumentAnalysis.cs" />
@@ -62,9 +63,12 @@
     <Compile Include="Generic\IData.cs" />
     <Compile Include="Document\IDocumentData.cs" />
     <Compile Include="Generic\IExport.cs" />
+    <Compile Include="Generic\IFromMatrix.cs" />
+    <Compile Include="Generic\IMultiProcessing.cs" />
     <Compile Include="Generic\IProcessing.cs" />
+    <Compile Include="Generic\IToMatrix.cs" />
     <Compile Include="Generic\IUpload.cs" />
-    <Compile Include="Matrix\IMultiMatrixProcessing.cs" />
+    <Compile Include="Matrix\IMatrixMultiProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />
     <Compile Include="Matrix\IMatrixCombination.cs" />

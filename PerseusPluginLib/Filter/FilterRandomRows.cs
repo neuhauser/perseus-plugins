@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using BasicLib.Num;
 using BasicLib.Param;
@@ -5,22 +6,23 @@ using BasicLib.Util;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
+using PerseusPluginLib.Utils;
 
-namespace PerseusPluginLib.Basic{
-	public class AddNoise : IMatrixProcessing{
+namespace PerseusPluginLib.Filter{
+	public class FilterRandomRows : IMatrixProcessing{
 		public bool HasButton { get { return false; } }
 		public Image ButtonImage { get { return null; } }
-		public string HelpDescription { get { return "Modulate the data with gaussian noise."; } }
-		public string HelpOutput { get { return "Same as input matrix with random noise added to the expression columns."; } }
+		public string HelpDescription { get { return "A given number of rows is kept based on random decisions."; } }
+		public string HelpOutput { get { return "The filtered matrix."; } }
 		public DocumentType HelpDescriptionType { get { return DocumentType.PlainText; } }
 		public DocumentType HelpOutputType { get { return DocumentType.PlainText; } }
 		public DocumentType[] HelpSupplTablesType { get { return new DocumentType[0]; } }
 		public string[] HelpSupplTables { get { return new string[0]; } }
 		public int NumSupplTables { get { return 0; } }
-		public string Name { get { return "Add noise"; } }
-		public string Heading { get { return "Basic"; } }
+		public string Name { get { return "Filter rows based on random sampling"; } }
+		public string Heading { get { return "Filter rows"; } }
 		public bool IsActive { get { return true; } }
-		public float DisplayOrder { get { return 101; } }
+		public float DisplayOrder { get { return 10; } }
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
@@ -29,21 +31,19 @@ namespace PerseusPluginLib.Basic{
 			return 1;
 		}
 
-		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
-			ref IDocumentData[] documents, ProcessInfo processInfo){
-			Random2 rand = new Random2();
-			double std = param.GetDoubleParam("Standard deviation").Value;
-			for (int i = 0; i < mdata.RowCount; i++){
-				for (int j = 0; j < mdata.ExpressionColumnCount; j++){
-					mdata[i, j] += (float) rand.NextGaussian(0, std);
-				}
-			}
-		}
-
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
 				new Parameters(new Parameter[]
-				{new DoubleParam("Standard deviation", 0.1){Help = "Standard deviation of the noise distribution."}});
+				{new IntParam("Number of rows", mdata.RowCount), PerseusPluginUtils.GetFilterModeParam(true)});
+		}
+
+		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+			ref IDocumentData[] documents, ProcessInfo processInfo){
+			int nrows = param.GetIntParam("Number of rows").Value;
+			nrows = Math.Min(nrows, mdata.RowCount);
+			Random2 rand = new Random2();
+			int[] rows = ArrayUtils.SubArray(rand.NextPermutation(mdata.RowCount), nrows);
+			PerseusPluginUtils.FilterRows(mdata, param, rows);
 		}
 	}
 }

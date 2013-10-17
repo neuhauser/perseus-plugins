@@ -22,7 +22,7 @@ namespace PerseusPluginLib.Manual{
 			if (sel.Length == 0){
 				MessageBox.Show("Please select some rows.");
 			}
-			IMatrixData mx = mdata.Copy();
+			IMatrixData mx = (IMatrixData)mdata.Clone();
 			mx.ExtractExpressionRows(ArrayUtils.Complement(sel, matrixDataGridView.RowCount));
 			createNewMatrix(mx);
 		}
@@ -32,7 +32,7 @@ namespace PerseusPluginLib.Manual{
 			if (sel.Length == 0){
 				MessageBox.Show("Please select some rows.");
 			}
-			IMatrixData mx = mdata.Copy();
+			IMatrixData mx = (IMatrixData)mdata.Clone();
 			mx.ExtractExpressionRows(sel);
 			createNewMatrix(mx);
 		}

@@ -2,8 +2,10 @@
 
 namespace PerseusApi.Generic{
 	public interface IVisualization : IActivity{
-		string[] InputNames { get; }
-		DataType[] InputDataTypes { get; }
+		int MinNumInput { get; }
+		int MaxNumInput { get; }
+		string GetInputName(int index);
+		DataType GetInputDataType(int index);
 		IAnalysisResult VisualizeData(IData[] data, Parameters param, ProcessInfo processInfo);
 
 		/// <summary>

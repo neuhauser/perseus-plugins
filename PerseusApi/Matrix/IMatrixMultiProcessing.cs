@@ -1,21 +1,10 @@
 using BasicLib.Param;
-using BasicLib.Util;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 
 namespace PerseusApi.Matrix{
-	public interface IMultiMatrixProcessing : IMatrixActivity{
-		string Heading { get; }
-		string HelpOutput { get; }
-		DocumentType HelpOutputType { get; }
-		string[] HelpSupplTables { get; }
-		DocumentType[] HelpSupplTablesType { get; }
-		int NumSupplTables { get; }
-		string[] HelpDocuments { get; }
-		DocumentType[] HelpDocumentTypes { get; }
-		int NumDocuments { get; }
-
-		void ProcessData(IMatrixData[] inputData, Parameters param, ref IMatrixData[] outputTables,
+	public interface IMatrixMultiProcessing : IMatrixActivity, IMultiProcessing {
+		IMatrixData ProcessData(IMatrixData[] inputData, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo);
 
 		/// <summary>

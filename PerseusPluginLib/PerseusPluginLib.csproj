@@ -69,6 +69,7 @@
     <Compile Include="Combine\MatchingColumnsByName.cs" />
     <Compile Include="Combine\MatchingRowsByName.cs" />
     <Compile Include="Export\TabSeparatedExport.cs" />
+    <Compile Include="Filter\FilterRandomRows.cs" />
     <Compile Include="Filter\FilterValidValuesColumns.cs" />
     <Compile Include="Filter\FilterCategoricalRow.cs" />
     <Compile Include="Group\AverageGroups.cs" />

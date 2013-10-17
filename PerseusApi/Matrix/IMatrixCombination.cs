@@ -1,16 +1,16 @@
+using System;
 using BasicLib.Param;
 using BasicLib.Util;
 using PerseusApi.Generic;
 
 namespace PerseusApi.Matrix{
+	[Obsolete]
 	public interface IMatrixCombination : IMatrixActivity{
 		string HelpOutput { get; }
 		DocumentType HelpOutputType { get; }
 		string DataType1 { get; }
 		string DataType2 { get; }
-
-		IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters,
-			ProcessInfo processInfo);
+		IMatrixData CombineData(IMatrixData mdata1, IMatrixData mdata2, Parameters parameters, ProcessInfo processInfo);
 
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the combination.

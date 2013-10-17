@@ -4,7 +4,7 @@ namespace PerseusApi.Generic{
 	/// <summary>
 	/// Generic data structure holding the data that flows through the network. Typically this is <code>IMatrixData</code>.
 	/// </summary>
-	public interface IData : IDisposable{
+	public interface IData : IDisposable, ICloneable{
 		string Name { get; set; }
 		string Description { get; set; }
 		/// <summary>
@@ -17,5 +17,8 @@ namespace PerseusApi.Generic{
 		/// Name of the user who created this data item.
 		/// </summary>
 		string User { get; set; }
+		IData CreateNewInstance();
+		IData CreateNewInstance(DataType type);
+		void Clear();
 	}
 }

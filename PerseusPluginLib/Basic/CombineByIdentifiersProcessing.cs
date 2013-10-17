@@ -4,7 +4,6 @@ using System.Drawing;
 using BasicLib.Data;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
