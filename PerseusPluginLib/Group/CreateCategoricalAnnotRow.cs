@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using BasicLib.Param;
 using BasicLib.Parse;
 using BasicLib.Util;
@@ -41,19 +43,22 @@ namespace PerseusPluginLib.Group{
 				case 0:
 					ProcessDataCreate(mdata, spar);
 					break;
-				case 1:
+                case 1:
+                    ProcessDataCreateFromGoupNames(mdata, spar);
+                    break;
+				case 2:
 					ProcessDataEdit(mdata, spar);
 					break;
-				case 2:
+				case 3:
 					ProcessDataRename(mdata, spar);
 					break;
-				case 3:
+				case 4:
 					ProcessDataDelete(mdata, spar);
 					break;
-				case 4:
+				case 5:
 					ProcessDataWriteTemplateFile(mdata, spar);
 					break;
-				case 5:
+				case 6:
 					string err = ProcessDataReadFromFile(mdata, spar);
 					if (err != null){
 						processInfo.ErrString = err;
@@ -176,6 +181,34 @@ namespace PerseusPluginLib.Group{
 			mdata.AddCategoryRow(name, name, groupCol);
 		}
 
+        private static void ProcessDataCreateFromGoupNames(IMatrixData mdata, Parameters param){
+            string regexString = param.GetSingleChoiceWithSubParams("Pattern").Value < GetSelectableRegexes().Count
+                ? GetSelectableRegexes()[param.GetSingleChoiceWithSubParams("Pattern").Value][1]
+                : param.GetSingleChoiceWithSubParams("Pattern").GetSubParameters().GetStringParam("Regex").Value;
+            Regex regex;
+            try
+            {
+                regex = new Regex(regexString);
+            }
+            catch (ArgumentException)
+            {
+                //processInfo.ErrString = "The regular expression you provided has invalid syntax.";
+                return;
+            }
+            List<string> sampleNames = mdata.ExpressionColumnNames;
+            List<string[]> groupNames = new List<string[]>();
+            foreach (string sampleName in sampleNames)
+            {
+                string groupName = regex.Match(sampleName).Groups[1].Value;
+                if (string.IsNullOrEmpty(groupName))
+                {
+                    groupName = sampleName;
+                }
+                groupNames.Add(new[] { groupName });
+            }
+            mdata.AddCategoryRow("Grouping", "", groupNames.ToArray());
+        }
+
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			SingleChoiceWithSubParams scwsp = new SingleChoiceWithSubParams("Action"){
 				Values = new[]{"Create", "Edit", "Rename", "Delete", "Write template file", "Read from file"},
@@ -226,6 +259,35 @@ namespace PerseusPluginLib.Group{
 				par.Add(new StringParam(t){Value = t, Help = help});
 			}
 			return new Parameters(par);
+		}
+
+        public Parameters GetCreateFromGroupNamesParameters(IMatrixData mdata, ref string errorString){
+            List<string[]> selectableRegexes = GetSelectableRegexes();
+            
+            List<string> vals = new List<string>();
+            foreach (string[] s in selectableRegexes)
+            {
+                vals.Add(s[0]);
+            }
+            vals.Add("define regular expression");
+            List<Parameters> subparams = new List<Parameters>();
+            for (int i = 0; i < selectableRegexes.Count; i++)
+            {
+                subparams.Add(new Parameters(new Parameter[] { }));
+            }
+            subparams.Add(new Parameters(new Parameter[] { new StringParam("Regex", "") }));
+            return
+                new Parameters(new Parameter[]{
+					new SingleChoiceWithSubParams("Pattern", 0)
+					{Values = vals, SubParams = subparams, ParamNameWidth = 100, TotalWidth = 400}
+				});
+        }
+
+        private static List<string[]> GetSelectableRegexes(){
+			return new List<string[]>{
+				new[]{"..._01,02,03", "^(.*)_[0-9]*$"}, new[]{"(LFQ) intensity ..._01,02,03", "^(?:LFQ )?[Ii]ntensity (.*)_[0-9]*$"},
+				new[]{"(Normalized) ratio H/L ..._01,02,03", "^(?:Normalized )?[Rr]atio(?: [HML]/[HML]) (.*)_[0-9]*$"}
+			};
 		}
 	}
 }
