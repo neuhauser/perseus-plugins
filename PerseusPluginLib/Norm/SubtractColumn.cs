@@ -83,7 +83,7 @@ namespace PerseusPluginLib.Norm{
 			data.ExpressionColumnNames.RemoveAt(index);
 			data.ExpressionColumnDescriptions.RemoveAt(index);
 			for (int i = 0; i < data.CategoryRowCount; i++){
-				data.SetCategoryColumnAt(ArrayUtils.RemoveAtIndex(data.GetCategoryColumnAt(i), index), i);
+				data.SetCategoryRowAt(ArrayUtils.RemoveAtIndex(data.GetCategoryRowAt(i), index), i);
 			}
 			for (int i = 0; i < data.NumericRowCount; i++){
 				data.NumericColumns[i] = ArrayUtils.RemoveAtIndex(data.NumericColumns[i], index);
