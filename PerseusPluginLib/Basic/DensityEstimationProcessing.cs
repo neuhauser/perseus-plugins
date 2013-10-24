@@ -23,7 +23,7 @@ namespace PerseusPluginLib.Basic{
 		public string[] HelpDocuments { get { return new string[0]; } }
 		public DocumentType[] HelpDocumentTypes { get { return new DocumentType[0]; } }
 		public int NumDocuments { get { return 0; } }
-		public string HelpDescription {
+		public string HelpDescription{
 			get{
 				return "The density of data points in two dimensions is calculated. Each data point is smoothed out" +
 					" by a suitable Gaussian kernel.";
@@ -53,7 +53,7 @@ namespace PerseusPluginLib.Basic{
 				processInfo.ErrString = "Please select the same number of columns in the boxes for the first and second columns.";
 				return;
 			}
-			bool conditional = param.GetBoolParam("Conditional probability P(y|x)").Value;
+			int typeInd = param.GetSingleChoiceParam("Distribution type").Value;
 			int points = param.GetIntParam("Number of points").Value;
 			for (int k = 0; k < colIndx.Length; k++){
 				float[] xvals = GetColumn(mdata, colIndx[k]);
@@ -68,8 +68,11 @@ namespace PerseusPluginLib.Basic{
 				DensityEstimation.CalcRanges(xvals1, yvals1, out xmin, out xmax, out ymin, out ymax);
 				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin)/points, points, yvals1, ymin,
 					(ymax - ymin)/points, points);
-				if (conditional){
-					MakeConditional(values);
+				if (typeInd == 1 || typeInd == 3) {
+					MakeConditional1(values);
+				}
+				if (typeInd == 2 || typeInd == 3) {
+					MakeConditional2(values);
 				}
 				DensityEstimation.DivideByMaximum(values);
 				double[] xmat = new double[points];
@@ -106,10 +109,10 @@ namespace PerseusPluginLib.Basic{
 			}
 		}
 
-		private static void MakeConditional(float[,] values){
+		private static void MakeConditional1(float[,] values) {
 			float[] m = new float[values.GetLength(0)];
-			for (int i = 0; i < m.Length; i++){
-				for (int j = 0; j < values.GetLength(1); j++){
+			for (int i = 0; i < m.Length; i++) {
+				for (int j = 0; j < values.GetLength(1); j++) {
 					m[i] += values[i, j];
 				}
 			}
@@ -120,7 +123,21 @@ namespace PerseusPluginLib.Basic{
 			}
 		}
 
-		private static float[] GetColumn(IMatrixData matrixData, int ind){
+		private static void MakeConditional2(float[,] values) {
+			float[] m = new float[values.GetLength(1)];
+			for (int i = 0; i < m.Length; i++) {
+				for (int j = 0; j < values.GetLength(0); j++) {
+					m[i] += values[j, i];
+				}
+			}
+			for (int i = 0; i < m.Length; i++) {
+				for (int j = 0; j < values.GetLength(0); j++) {
+					values[j, i] /= m[i];
+				}
+			}
+		}
+
+		private static float[] GetColumn(IMatrixData matrixData, int ind) {
 			if (ind < matrixData.ExpressionColumnCount){
 				return matrixData.GetExpressionColumn(ind);
 			}
@@ -190,7 +207,7 @@ namespace PerseusPluginLib.Basic{
 							"This parameter defines the resolution of the density map. It specifies the number of pixels per dimension. Large " +
 								"values may lead to increased computing times."
 					},
-					new BoolParam("Conditional probability P(y|x)") 
+					new SingleChoiceParam("Distribution type"){Values = new[]{"P(x,y)", "P(y|x)", "P(x|y)", "P(x,y)/(P(x)*P(y))"}}
 				});
 		}
 	}
