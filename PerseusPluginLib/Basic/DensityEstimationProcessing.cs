@@ -68,10 +68,10 @@ namespace PerseusPluginLib.Basic{
 				DensityEstimation.CalcRanges(xvals1, yvals1, out xmin, out xmax, out ymin, out ymax);
 				float[,] values = DensityEstimation.GetValuesOnGrid(xvals1, xmin, (xmax - xmin)/points, points, yvals1, ymin,
 					(ymax - ymin)/points, points);
-				if (typeInd == 1 || typeInd == 3) {
+				if (typeInd == 1 || typeInd == 3){
 					MakeConditional1(values);
 				}
-				if (typeInd == 2 || typeInd == 3) {
+				if (typeInd == 2 || typeInd == 3){
 					MakeConditional2(values);
 				}
 				DensityEstimation.DivideByMaximum(values);
@@ -109,35 +109,35 @@ namespace PerseusPluginLib.Basic{
 			}
 		}
 
-		private static void MakeConditional1(float[,] values) {
+		private static void MakeConditional1(float[,] values){
 			float[] m = new float[values.GetLength(0)];
-			for (int i = 0; i < m.Length; i++) {
-				for (int j = 0; j < values.GetLength(1); j++) {
+			for (int i = 0; i < m.Length; i++){
+				for (int j = 0; j < values.GetLength(1); j++){
 					m[i] += values[i, j];
 				}
 			}
-			for (int i = 0; i < m.Length; i++) {
-				for (int j = 0; j < values.GetLength(1); j++) {
+			for (int i = 0; i < m.Length; i++){
+				for (int j = 0; j < values.GetLength(1); j++){
 					values[i, j] /= m[i];
 				}
 			}
 		}
 
-		private static void MakeConditional2(float[,] values) {
+		private static void MakeConditional2(float[,] values){
 			float[] m = new float[values.GetLength(1)];
-			for (int i = 0; i < m.Length; i++) {
-				for (int j = 0; j < values.GetLength(0); j++) {
+			for (int i = 0; i < m.Length; i++){
+				for (int j = 0; j < values.GetLength(0); j++){
 					m[i] += values[j, i];
 				}
 			}
-			for (int i = 0; i < m.Length; i++) {
-				for (int j = 0; j < values.GetLength(0); j++) {
+			for (int i = 0; i < m.Length; i++){
+				for (int j = 0; j < values.GetLength(0); j++){
 					values[j, i] /= m[i];
 				}
 			}
 		}
 
-		private static float[] GetColumn(IMatrixData matrixData, int ind) {
+		private static float[] GetColumn(IMatrixData matrixData, int ind){
 			if (ind < matrixData.ExpressionColumnCount){
 				return matrixData.GetExpressionColumn(ind);
 			}
