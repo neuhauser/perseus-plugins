@@ -40,6 +40,10 @@ namespace PerseusPluginLib.Load{
 				, "dp cluster index", "dp cluster mass", "dp cluster mass sd", "dp cluster size total", "dp cluster size forward",
 				"dp cluster size reverse", "dp peptide length difference"
 			});
+		private static readonly HashSet<string> multiNumericCols =
+			new HashSet<string>(new[]{
+				"mass deviations [da]", "mass deviations [ppm]"
+			});
 		public string Filter { get; set; }
 		public PerseusLoadMatrixParameterPanel() : this(new string[0]) {}
 		public PerseusLoadMatrixParameterPanel(IList<string> items) : this(items, null) {}
@@ -191,11 +195,15 @@ namespace PerseusPluginLib.Load{
 					multiListSelector1.SetSelected(3, i, true);
 					continue;
 				}
-				if (numericCols.Contains(colNames[i].ToLower())){
+				if (numericCols.Contains(colNames[i].ToLower())) {
 					multiListSelector1.SetSelected(1, i, true);
 					continue;
 				}
-				switch (guessedType){
+				if (multiNumericCols.Contains(colNames[i].ToLower())) {
+					multiListSelector1.SetSelected(4, i, true);
+					continue;
+				}
+				switch (guessedType) {
 					case 's':
 						if (colNames[i].StartsWith("Norm. Intensity")){
 							multiListSelector1.SetSelected(0, i, true);
