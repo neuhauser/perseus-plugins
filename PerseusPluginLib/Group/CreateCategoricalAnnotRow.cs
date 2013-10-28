@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using BasicLib.Param;
 using BasicLib.Parse;
 using BasicLib.Util;
@@ -9,6 +11,7 @@ using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
 using PerseusPluginLib.Properties;
+using PerseusPluginLib.Utils;
 
 namespace PerseusPluginLib.Group{
 	public class CreateCategoricalAnnotRow : IMatrixProcessing{
@@ -41,19 +44,22 @@ namespace PerseusPluginLib.Group{
 				case 0:
 					ProcessDataCreate(mdata, spar);
 					break;
-				case 1:
+                case 1:
+                    ProcessDataCreateFromGoupNames(mdata, spar, processInfo);
+                    break;
+				case 2:
 					ProcessDataEdit(mdata, spar);
 					break;
-				case 2:
+				case 3:
 					ProcessDataRename(mdata, spar);
 					break;
-				case 3:
+				case 4:
 					ProcessDataDelete(mdata, spar);
 					break;
-				case 4:
+				case 5:
 					ProcessDataWriteTemplateFile(mdata, spar);
 					break;
-				case 5:
+				case 6:
 					string err = ProcessDataReadFromFile(mdata, spar);
 					if (err != null){
 						processInfo.ErrString = err;
@@ -143,6 +149,24 @@ namespace PerseusPluginLib.Group{
 			mdata.SetCategoryRowAt(newRow, groupColInd);
 		}
 
+        private static int DetermineGroup(IList<int[]> colInds, IEnumerable<int> inds){
+            for (int i = 0; i < colInds.Count; i++){
+                if (CompletelyContained(colInds[i], inds)){
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private static bool CompletelyContained(int[] colInds1, IEnumerable<int> inds){
+            foreach (int ind in inds){
+                if (Array.BinarySearch(colInds1, ind) < 0){
+                    return false;
+                }
+            }
+            return true;
+        }
+
 		public Parameters GetEditParameters(IMatrixData mdata){
 			Parameters[] subParams = new Parameters[mdata.CategoryRowCount];
 			for (int i = 0; i < subParams.Length; i++){
@@ -176,12 +200,52 @@ namespace PerseusPluginLib.Group{
 			mdata.AddCategoryRow(name, name, groupCol);
 		}
 
+        private static void ProcessDataCreateFromGoupNames(IMatrixData mdata, Parameters param, ProcessInfo processInfo){
+            SingleChoiceWithSubParams scwsp = param.GetSingleChoiceWithSubParams("Pattern");
+            Parameters spar = scwsp.GetSubParameters();
+            string regexString = "";
+            string replacement = "";
+            switch (scwsp.Value) { 
+                case 0:
+                case 1:
+                case 2:
+                    regexString = GetSelectableRegexes()[scwsp.Value][1];
+                    break;
+                case 3:
+                    regexString = spar.GetStringParam("Regex").Value;
+                    break;
+                case 4:
+                    regexString = spar.GetStringParam("Regex").Value;
+                    replacement = spar.GetStringParam("Replace with").Value;
+                    break;
+                default:
+                    break;
+            }               
+            Regex regex;
+            try{
+                regex = new Regex(regexString);
+            }
+            catch (ArgumentException){
+                processInfo.ErrString = "The regular expression you provided has invalid syntax.";
+                return;
+            }
+            List<string[]> groupNames = new List<string[]>();
+            foreach (string sampleName in mdata.ExpressionColumnNames) {
+                string groupName = scwsp.Value < 4 ? regex.Match(sampleName).Groups[1].Value : regex.Replace(sampleName, replacement);
+                if (string.IsNullOrEmpty(groupName))
+                    groupName = sampleName;
+                groupNames.Add(new[] { groupName });
+            }
+            mdata.AddCategoryRow("Grouping", "", groupNames.ToArray());
+        }
+
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			SingleChoiceWithSubParams scwsp = new SingleChoiceWithSubParams("Action"){
-				Values = new[]{"Create", "Edit", "Rename", "Delete", "Write template file", "Read from file"},
+				Values = new[]{"Create", "Create from experiment name", "Edit", "Rename", "Delete", "Write template file", "Read from file"},
 				SubParams =
 					new[]{
-						GetCreateParameters(mdata), GetEditParameters(mdata), GetRenameParameters(mdata), GetDeleteParameters(mdata),
+						GetCreateParameters(mdata), GetCreateFromExperimentNamesParameters(mdata, ref errorString), GetEditParameters(mdata), 
+                        GetRenameParameters(mdata), GetDeleteParameters(mdata),
 						GetWriteTemplateFileParameters(mdata), GetReadFromFileParameters(mdata)
 					},
 				ParamNameWidth = 136, TotalWidth = 731
@@ -206,7 +270,7 @@ namespace PerseusPluginLib.Group{
 			return new Parameters(par);
 		}
 
-		public Parameters GetReadFromFileParameters(IMatrixData mdata){
+        public Parameters GetReadFromFileParameters(IMatrixData mdata){
 			List<Parameter> par = new List<Parameter>
 			{new FileParam("Input file"){Filter = "Tab separated file (*.txt)|*.txt", Save = false}};
 			return new Parameters(par);
@@ -226,6 +290,35 @@ namespace PerseusPluginLib.Group{
 				par.Add(new StringParam(t){Value = t, Help = help});
 			}
 			return new Parameters(par);
+		}
+
+        /// <remarks>author: Marco Hein</remarks>>
+        public Parameters GetCreateFromExperimentNamesParameters(IMatrixData mdata, ref string errorString){
+            List<string[]> selectableRegexes = GetSelectableRegexes();            
+            List<string> vals = new List<string>();
+            foreach (string[] s in selectableRegexes){
+                vals.Add(s[0]);
+            }
+            vals.Add("match regular expression");
+            vals.Add("replace regular expression");
+            List<Parameters> subparams = new List<Parameters>();
+            for (int i = 0; i < selectableRegexes.Count; i++){
+                subparams.Add(new Parameters(new Parameter[] { }));
+            }
+            subparams.Add(new Parameters(new Parameter[] { new StringParam("Regex", "") }));
+            subparams.Add(new Parameters(new Parameter[] { new StringParam("Regex", ""), new StringParam("Replace with","")}));
+            return
+                new Parameters(new Parameter[]{
+					new SingleChoiceWithSubParams("Pattern", 0)
+					{Values = vals, SubParams = subparams, ParamNameWidth = 100, TotalWidth = 400}
+				});
+        }
+
+        private static List<string[]> GetSelectableRegexes(){
+			return new List<string[]>{
+				new[]{"..._01,02,03", "^(.*)_[0-9]*$"}, new[]{"(LFQ) intensity ..._01,02,03", "^(?:LFQ )?[Ii]ntensity (.*)_[0-9]*$"},
+				new[]{"(Normalized) ratio H/L ..._01,02,03", "^(?:Normalized )?[Rr]atio(?: [HML]/[HML]) (.*)_[0-9]*$"}
+			};
 		}
 	}
 }

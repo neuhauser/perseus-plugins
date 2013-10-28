@@ -76,7 +76,6 @@
     <Compile Include="Group\CreateCategoricalAnnotRow.cs" />
     <Compile Include="Group\CreateNumericalAnnotRow.cs" />
     <Compile Include="Group\JoinTermsInCategoricalRow.cs" />
-    <Compile Include="Group\NameBasedGrouping.cs" />
     <Compile Include="Impute\ReplaceImputedByNan.cs" />
     <Compile Include="Impute\ReplaceMissingByConstant.cs" />
     <Compile Include="Impute\ReplaceMissingFromGaussian.cs" />
