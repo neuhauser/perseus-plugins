@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
@@ -141,7 +140,7 @@ namespace PerseusPluginLib.Rearrange{
 		private static double[] Transform(IList<double[]> doubles){
 			double[] result = new double[doubles.Count];
 			for (int i = 0; i < result.Length; i++){
-				result[i] = doubles[i][0];
+				result[i] = doubles[i].Length > 0 ? doubles[i][0] : double.NaN;
 			}
 			return result;
 		}
