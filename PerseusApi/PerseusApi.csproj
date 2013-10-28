@@ -71,7 +71,6 @@
     <Compile Include="Matrix\IMatrixMultiProcessing.cs" />
     <Compile Include="Matrix\IMatrixActivity.cs" />
     <Compile Include="Matrix\IMatrixAnalysis.cs" />
-    <Compile Include="Matrix\IMatrixCombination.cs" />
     <Compile Include="Matrix\IMatrixData.cs" />
     <Compile Include="Matrix\IMatrixExport.cs" />
     <Compile Include="Matrix\IMatrixProcessing.cs" />
