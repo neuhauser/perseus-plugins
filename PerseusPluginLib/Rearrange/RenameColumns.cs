@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
@@ -33,25 +32,65 @@ namespace PerseusPluginLib.Rearrange{
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
 			List<string> expressionColumnNames = new List<string>();
+			HashSet<string> taken = new HashSet<string>();
 			for (int i = 0; i < mdata.ExpressionColumnCount; i++){
-				expressionColumnNames.Add(param.GetStringParam(mdata.ExpressionColumnNames[i]).Value);
+				string newName = param.GetStringParam(mdata.ExpressionColumnNames[i]).Value;
+				if (taken.Contains(newName)){
+					processInfo.ErrString = "Name " + newName + " is contained multiple times";
+					return;
+				}
+				taken.Add(newName);
+				expressionColumnNames.Add(newName);
 			}
 			mdata.ExpressionColumnNames = expressionColumnNames;
+			taken = new HashSet<string>();
 			List<string> numericColumnNames = new List<string>();
 			for (int i = 0; i < mdata.NumericColumnCount; i++){
-				numericColumnNames.Add(param.GetStringParam(mdata.NumericColumnNames[i]).Value);
+				string newName = param.GetStringParam(mdata.NumericColumnNames[i]).Value;
+				if (taken.Contains(newName)){
+					processInfo.ErrString = "Name " + newName + " is contained multiple times";
+					return;
+				}
+				taken.Add(newName);
+				numericColumnNames.Add(newName);
 			}
 			mdata.NumericColumnNames = numericColumnNames;
+			taken = new HashSet<string>();
 			List<string> categoryColumnNames = new List<string>();
 			for (int i = 0; i < mdata.CategoryColumnCount; i++){
-				categoryColumnNames.Add(param.GetStringParam(mdata.CategoryColumnNames[i]).Value);
+				string newName = param.GetStringParam(mdata.CategoryColumnNames[i]).Value;
+				if (taken.Contains(newName)){
+					processInfo.ErrString = "Name " + newName + " is contained multiple times";
+					return;
+				}
+				taken.Add(newName);
+				categoryColumnNames.Add(newName);
 			}
 			mdata.CategoryColumnNames = categoryColumnNames;
+			taken = new HashSet<string>();
 			List<string> stringColumnNames = new List<string>();
 			for (int i = 0; i < mdata.StringColumnCount; i++){
-				stringColumnNames.Add(param.GetStringParam(mdata.StringColumnNames[i]).Value);
+				string newName = param.GetStringParam(mdata.StringColumnNames[i]).Value;
+				if (taken.Contains(newName)){
+					processInfo.ErrString = "Name " + newName + " is contained multiple times";
+					return;
+				}
+				taken.Add(newName);
+				stringColumnNames.Add(newName);
 			}
 			mdata.StringColumnNames = stringColumnNames;
+			taken = new HashSet<string>();
+			List<string> multiNumericColumnNames = new List<string>();
+			for (int i = 0; i < mdata.MultiNumericColumnCount; i++){
+				string newName = param.GetStringParam(mdata.MultiNumericColumnNames[i]).Value;
+				if (taken.Contains(newName)){
+					processInfo.ErrString = "Name " + newName + " is contained multiple times";
+					return;
+				}
+				taken.Add(newName);
+				multiNumericColumnNames.Add(newName);
+			}
+			mdata.MultiNumericColumnNames = multiNumericColumnNames;
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
@@ -69,6 +108,10 @@ namespace PerseusPluginLib.Rearrange{
 				par.Add(new StringParam(t){Value = t, Help = help});
 			}
 			foreach (string t in mdata.StringColumnNames){
+				string help = "Specify the new name for the column '" + t + "'.";
+				par.Add(new StringParam(t){Value = t, Help = help});
+			}
+			foreach (string t in mdata.MultiNumericColumnNames){
 				string help = "Specify the new name for the column '" + t + "'.";
 				par.Add(new StringParam(t){Value = t, Help = help});
 			}

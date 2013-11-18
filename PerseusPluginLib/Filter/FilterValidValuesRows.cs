@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
@@ -54,16 +53,12 @@ namespace PerseusPluginLib.Filter{
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
-			bool rows = true;
+			const bool rows = true;
 			int minValids = param.GetIntParam("Min. number of values").Value;
 			SingleChoiceWithSubParams modeParam = param.GetSingleChoiceWithSubParams("Mode");
 			int modeInd = modeParam.Value;
 			if (modeInd != 0 && mdata.CategoryRowNames.Count == 0){
 				processInfo.ErrString = "No grouping is defined.";
-				return;
-			}
-			if (modeInd != 0 && !rows){
-				processInfo.ErrString = "Group-wise filtering can only be appled to rows.";
 				return;
 			}
 			SingleChoiceWithSubParams x = param.GetSingleChoiceWithSubParams("Values should be");

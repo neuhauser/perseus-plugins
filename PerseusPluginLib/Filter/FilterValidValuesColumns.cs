@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using BasicLib.Param;
 using BasicLib.Util;
-using PerseusApi;
 using PerseusApi.Document;
 using PerseusApi.Generic;
 using PerseusApi.Matrix;
@@ -43,7 +42,7 @@ namespace PerseusPluginLib.Filter{
 
 		public void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
-			bool rows = false;
+			const bool rows = false;
 			int minValids = param.GetIntParam("Min. number of values").Value;
 			SingleChoiceWithSubParams modeParam = param.GetSingleChoiceWithSubParams("Mode");
 			int modeInd = modeParam.Value;
@@ -51,7 +50,7 @@ namespace PerseusPluginLib.Filter{
 				processInfo.ErrString = "No grouping is defined.";
 				return;
 			}
-			if (modeInd != 0 && !rows){
+			if (modeInd != 0){
 				processInfo.ErrString = "Group-wise filtering can only be appled to rows.";
 				return;
 			}
@@ -192,16 +191,14 @@ namespace PerseusPluginLib.Filter{
 		}
 
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
-			Parameters[] subParams = new Parameters[3];
+			Parameters[] subParams = new Parameters[1];
 			subParams[0] = new Parameters(new Parameter[0]);
-			subParams[1] = new Parameters(new Parameter[]{new SingleChoiceParam("Grouping"){Values = mdata.CategoryRowNames}});
-			subParams[2] = new Parameters(new Parameter[]{new SingleChoiceParam("Grouping"){Values = mdata.CategoryRowNames}});
 			return
 				new Parameters(new Parameter[]{
 					new IntParam("Min. number of values", 3)
 					{Help = "If a row/column has less than the specified number of valid values it will be discarded in the output."},
 					new SingleChoiceWithSubParams("Mode")
-					{Values = new[]{"In total", "In each group", "In at least one group"}, SubParams = subParams},
+					{Values = new[]{"In total"}, SubParams = subParams},
 					new SingleChoiceWithSubParams("Values should be"){
 						Values = new[]{"Valid", "Greater than", "Greater or equal", "Less than", "Less or equal", "Between", "Outside"},
 						SubParams =

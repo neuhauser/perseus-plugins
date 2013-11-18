@@ -23,8 +23,9 @@ namespace PerseusPluginLib.Load{
 				"protein ids", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl", "ensg", "ensp", "enst",
 				"mgi", "kegg ortholog", "dip", "hprd interactors", "sequence window", "sequence", "orf name", "names", "proteins",
 				"positions within proteins", "leading proteins", "md sequence", "md proteins", "md gene names", "md protein names",
-				"dp base sequence", "dp probabilities", "dp proteins", "dp gene names", "dp protein names", "name"
+				"dp base sequence", "dp probabilities", "dp proteins", "dp gene names", "dp protein names", "name","dn sequence"
 			});
+
 		private static readonly HashSet<string> numericCols =
 			new HashSet<string>(new[]{
 				"length", "position", "total position", "peptides (seq)", "razor peptides (seq)", "unique peptides (seq)",
@@ -38,7 +39,8 @@ namespace PerseusPluginLib.Load{
 				"ms/ms count", "ms/ms m/z", "md base scan number", "md mass error", "md time difference", "dp mass difference",
 				"dp time difference", "dp score", "dp pep", "dp positional probability", "dp base scan number", "dp mod scan number"
 				, "dp cluster index", "dp cluster mass", "dp cluster mass sd", "dp cluster size total", "dp cluster size forward",
-				"dp cluster size reverse", "dp peptide length difference"
+				"dp cluster size reverse", "dp peptide length difference", "dn score","dn normalized score","dn nterm mass","dn cterm mass",
+				"dn score diff"
 			});
 		private static readonly HashSet<string> multiNumericCols =
 			new HashSet<string>(new[]{

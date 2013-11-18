@@ -163,6 +163,21 @@ namespace PerseusPluginLib.Utils{
 			return result.ToArray();
 		}
 
+		public static int[] GetIndicesOfCol(IMatrixData data, string categoryName, HashSet<string> values){
+			int index = GetIndexOfCol(data, categoryName);
+			List<int> result = new List<int>();
+			for (int i = 0; i < data.ExpressionColumnCount; i++){
+				string[] s = data.GetCategoryRowAt(index)[i];
+				foreach (string s1 in s){
+					if (values.Contains(s1)){
+						result.Add(i);
+						break;
+					}
+				}
+			}
+			return result.ToArray();
+		}
+
 		public static int[] GetIndicesOf(IMatrixData data, string categoryName, string value){
 			int index = GetIndexOf(data, categoryName);
 			List<int> result = new List<int>();
@@ -170,6 +185,21 @@ namespace PerseusPluginLib.Utils{
 				string[] s = data.GetCategoryColumnAt(index)[i];
 				foreach (string s1 in s){
 					if (s1.Equals(value)){
+						result.Add(i);
+						break;
+					}
+				}
+			}
+			return result.ToArray();
+		}
+
+		public static int[] GetIndicesOf(IMatrixData data, string categoryName, HashSet<string> values){
+			int index = GetIndexOf(data, categoryName);
+			List<int> result = new List<int>();
+			for (int i = 0; i < data.RowCount; i++){
+				string[] s = data.GetCategoryColumnAt(index)[i];
+				foreach (string s1 in s){
+					if (values.Contains(s1)){
 						result.Add(i);
 						break;
 					}
@@ -228,30 +258,30 @@ namespace PerseusPluginLib.Utils{
 			return result;
 		}
 
-		public static string[][] CalcPvalueSignificance(double[] pvals, double threshold) {
+		public static string[][] CalcPvalueSignificance(double[] pvals, double threshold){
 			string[][] result = new string[pvals.Length][];
-			for (int i = 0; i < result.Length; i++) {
-				result[i] = pvals[i] <= threshold ? new[] { "+" } : new string[0];
+			for (int i = 0; i < result.Length; i++){
+				result[i] = pvals[i] <= threshold ? new[]{"+"} : new string[0];
 			}
 			return result;
 		}
 
-		public static string[][] CalcBenjaminiHochbergFdr(double[] pvals, double threshold) {
+		public static string[][] CalcBenjaminiHochbergFdr(double[] pvals, double threshold){
 			int n = pvals.Length;
 			int[] o = ArrayUtils.Order(pvals);
 			int lastind = -1;
-			for (int i = 0; i < n; i++) {
-				double fdr = Math.Min(1, pvals[o[i]] * n / (1.0 + i));
-				if (fdr <= threshold) {
+			for (int i = 0; i < n; i++){
+				double fdr = Math.Min(1, pvals[o[i]]*n/(1.0 + i));
+				if (fdr <= threshold){
 					lastind = i;
 				}
 			}
 			string[][] result = new string[pvals.Length][];
-			for (int i = 0; i < result.Length; i++) {
+			for (int i = 0; i < result.Length; i++){
 				result[i] = new string[0];
 			}
-			for (int i = 0; i <= lastind; i++) {
-				result[o[i]] = new[] { "+" };
+			for (int i = 0; i <= lastind; i++){
+				result[o[i]] = new[]{"+"};
 			}
 			return result;
 		}
